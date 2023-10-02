@@ -15,6 +15,7 @@
 
     static $instance;
 
+    public $loaded_scripts;
 
 
     public function __construct() {
@@ -26,6 +27,13 @@
         add_shortcode( 'page_title', [ $this, 'page_title_sc'] );
         add_shortcode( 'list_terms', [ $this, 'list_terms_sc' ] );
         add_shortcode( 'singular_plural', [ $this, 'singular_plural_sc' ] );
+        add_shortcode( 'website_author', [ $this, 'website_author_sc' ] );
+
+        
+
+        add_filter( 'breakdance_render_rendered_html', [ $this, 'load_scripts_based_on_class' ], 10, 3 );
+        add_filter( 'breakdance_render_rendered_html', [ $this, 'breakdance_search_replace_rendered_html' ], 10, 3 );
+
 
     }
 
@@ -112,7 +120,9 @@
 
     public function page_title_sc( $atts ) {
 
-        $atts = shortcode_atts( [], $atts );
+        $atts = shortcode_atts( [
+            'archive_title' => false,
+        ], $atts );
 
 
         global $post;
@@ -133,7 +143,25 @@
 
         } elseif ( !empty( $post->post_title ) ) {
 
-            return $post->post_title;
+            if ( $atts['archive_title'] ) {
+
+                if ( $post->post_type == 'post' ) {
+
+                    $page_for_posts = get_post( get_option( 'page_for_posts' ) );
+
+                    $archive_title = $page_for_posts->post_title;
+
+                }
+
+                return $archive_title;
+
+            } else {
+                
+                return $post->post_title;
+
+            }
+
+
 
         }
 
@@ -267,6 +295,95 @@
 
     }
 
+
+
+
+
+
+    /**
+     *  Get the Website Author using the constants
+     * 
+     * 
+     */
+
+     public function website_author_sc( $atts ) {
+
+        $atts = shortcode_atts( [
+            'developer_name' => defined( 'DEVELOPER_NAME' ) ? DEVELOPER_NAME : 'Website Author Name',
+            'developer_url' => defined( 'DEVELOPER_URL' ) ? DEVELOPER_URL : "#",
+            'pre_text' => 'Website&nbsp;by&nbsp;'
+        ], $atts );
+
+
+        return sprintf( '%s <a href="%s" target="_blank">%s</a>', $atts['pre_text'], $atts['developer_url'], $atts['developer_name'] );
+
+
+     }
+
+
+
+
+
+
+
+     /**
+      *  Load Scripts based on certain classes appearing
+      */
+
+    public function load_scripts_based_on_class( $html, $post_id, $node_id ) {
+
+        //Don't do this if we're in a repeater
+        if ( !empty( $node_id ) ) {
+            return $html;
+        }
+
+
+        //Do it for accordion. We assume that our selector is unique enough to not set off a false positive. but it could happen
+        // TODO: regex for class="... bs-accordion ..." and then make that our conditional
+        if ( strpos( $html, 'bs-accordion' ) !== false ) {
+
+            wp_enqueue_script( 'bs-partial', plugin_dir_url( '/breakdance-bootstrap' ) . 'breakdance-bootstrap/assets/js/bootstrap-partial.min.js', [], '1', true );
+            wp_enqueue_style( 'bs-accordion', plugin_dir_url( '/breakdance-bootstrap') . 'breakdance-bootstrap/assets/css/accordion.min.css' );
+
+            //Keeping track but I don't think we need to
+            $this->loaded_scripts['bootstrap-partial'] = 1;
+        }
+
+
+        return $html;
+
+    }
+
+
+
+     /**
+      *  Replace placeholders with dynamic text
+      *     
+      */
+
+     public function breakdance_search_replace_rendered_html( $html, $post_id, $repeater_item_node_id ) {
+
+
+
+        //Only do things if this is a repeater item
+        if ( $repeater_item_node_id ) {
+
+            //Replace nodeId with unique ID of the item (for things that need uniqueness)
+            //Using camel case becuase {node_id} doesn't work for id field in BD
+            $html = str_replace( 'nodeId', "$repeater_item_node_id", $html );
+
+            //Look for bde-button element with "has-collapse-button"
+            if ( strpos( $html, 'has-collapse-button' ) !== false ) {
+                $html = str_replace( 'button-atom ', 'button-atom collapsed ', $html );
+            }
+
+
+        }
+
+
+        return $html;
+
+     }
 
 
 
