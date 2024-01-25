@@ -1,0 +1,10 @@
+.breakdance .accordion-collapse.collapse:not(.show) {
+  display: none;
+}
+.breakdance .accordion-collapse.collapsing {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
+
+/*# sourceMappingURL=accordion.css.map */

@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "clean-css-cli": "^5.6.2",
+    "sass": "^1.68.0",
+    "uglify-js": "^3.17.4"
+  },
+  "scripts": {
+    "copy_bs_accordion": "mkdir -p assets/js/dist && cp node_modules/bootstrap/js/dist/util/index.js assets/js/dist/0-index.js && cp node_modules/bootstrap/js/dist/dom/event-handler.js assets/js/dist/1-event-handler.js && cp node_modules/bootstrap/js/dist/dom/data.js assets/js/dist/2-data.js && cp node_modules/bootstrap/js/dist/dom/manipulator.js assets/js/dist/3-manipulator.js && cp node_modules/bootstrap/js/dist/util/config.js assets/js/dist/4-config.js && cp node_modules/bootstrap/js/dist/base-component.js assets/js/dist/5-base-component.js && cp node_modules/bootstrap/js/dist/util/component-functions.js assets/js/dist/6-component-functions.js && cp node_modules/bootstrap/js/dist/dom/selector-engine.js assets/js/dist/7-selector-engine.js && cp node_modules/bootstrap/js/dist/collapse.js assets/js/dist/8-collapse.js",
+    "concat:js": "mkdir -p assets/js && cd assets/js/dist && uglifyjs 0-index.js 1-event-handler.js 2-data.js 3-manipulator.js 4-config.js 5-base-component.js 6-component-functions.js 7-selector-engine.js 8-collapse.js -o ../bootstrap-partial.min.js",
+    "css:compile": "mkdir -p assets/css/dist && sass assets/src/scss/accordion.scss assets/css/dist/accordion.css",
+    "css:min": "cleancss -o assets/css/accordion.min.css assets/css/dist/accordion.css",
+    "css:deploy": "npm run css:compile && npm run css:min"
+  }
+}
