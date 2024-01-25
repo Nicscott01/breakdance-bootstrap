@@ -8,6 +8,7 @@
  * 
  */
 
+  
 
 
  class BreakdanceBS {
@@ -27,6 +28,9 @@
         add_shortcode( 'list_terms', [ $this, 'list_terms_sc' ] );
         add_shortcode( 'singular_plural', [ $this, 'singular_plural_sc' ] );
 
+
+        add_filter( 'get_the_archive_title', [ $this, 'get_the_archive_title' ]);
+
     }
 
 
@@ -42,6 +46,32 @@
 
         add_theme_support( 'custom-logo' );
         
+    }
+
+
+
+
+    /**
+     *  Use Page for Posts title for Archive Page
+     * 
+     * 
+     */
+
+    public function get_the_archive_title( $title ) {
+
+        if ( ( get_post_type() == 'post' ) ) {
+  
+            //Get post page
+            $page_for_posts = get_option( 'page_for_posts' );
+            
+            $pfp = get_post( $page_for_posts );
+            
+            return $pfp->post_title;
+            
+        } 
+   
+        return $title;
+
     }
 
 
