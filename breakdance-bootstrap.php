@@ -8,7 +8,7 @@
  * 
  */
 
-  
+ include_once( __DIR__ . '/custom-elements-loader.php' ); 
 
 
  class BreakdanceBS {
@@ -39,7 +39,61 @@
 
         add_filter( 'get_the_archive_title', [ $this, 'get_the_archive_title' ]);
 
+
+        //Save ACF in local JSON
+        add_filter( 'acf/settings/save_json', [ $this, 'acf_json_save_point' ] );
+
+
+
+
+
+        add_action('init', function() {
+            // Check if Breakdance is installed and class/function exists
+            if (!function_exists('\Breakdance\DynamicData\registerField') || !class_exists('\Breakdance\DynamicData\Field')) {
+                return;
+            }
+        
+            require_once 'dynamic-data-fields/CrearePostId.php';
+            require_once 'dynamic-data-fields/CrearePostSlug.php';
+        
+            \Breakdance\DynamicData\registerField(new CrearePostId());
+            \Breakdance\DynamicData\registerField(new CrearePostSlug());
+
+        });
+
+
+
+
+//Disabled
+        add_action( 'breakdance_render_element_template_d', function( $element, $props ) {
+
+
+            if ( !is_admin() && $element == 'EssentialElements\BusinessHours' ) {
+
+                $hours = $props['content'];
+
+                $this->test_hours = json_encode( $hours );
+            
+                add_action( 'wp_head', [ $this, 'print_hours_json'] );
+            }
+           
+
+        }, 10, 3);
+
+
     }
+
+
+
+    public function print_hours_json() {
+
+        ?>
+<script type="application/ld+json">
+    <?php echo $this->test_hours; ?>
+
+</script>
+        <?php
+    } 
 
 
 
@@ -60,6 +114,38 @@
 
 
     /**
+     * Local JSON Save Point for ACF Fields
+     * 
+     * 
+     */
+
+    public function acf_json_save_point( $path ) {
+
+        //Get the uploads folder
+        $wp_uploads = wp_upload_dir( false );
+
+        $acf_json_dir = $wp_uploads['basedir'] . '/acf/local-json/';
+
+        error_log( $acf_json_dir );
+
+        if ( is_dir( $acf_json_dir ) ) {
+
+            return $acf_json_dir;
+
+        } elseif ( wp_mkdir_p( $acf_json_dir ) ) { //make the directory if it doesn't exist. returns bool of success
+            
+            return $acf_json_dir;
+
+        }
+
+        return $path;
+
+    }
+
+
+
+
+    /**
      *  Use Page for Posts title for Archive Page
      * 
      * 
@@ -67,7 +153,7 @@
 
     public function get_the_archive_title( $title ) {
 
-        if ( ( get_post_type() == 'post' ) && is_post_type_archive() ) {
+        if ( ( get_post_type() == 'post' ) ) {
   
             //Get post page
             $page_for_posts = get_option( 'page_for_posts' );
@@ -372,8 +458,8 @@
         // TODO: regex for class="... bs-accordion ..." and then make that our conditional
         if ( strpos( $html, 'bs-accordion' ) !== false ) {
 
-            wp_enqueue_script( 'bs-partial', plugin_dir_url( '/breakdance-bootstrap' ) . 'breakdance-bootstrap/assets/js/bootstrap-partial.min.js', [], '1', true );
-            wp_enqueue_style( 'bs-accordion', plugin_dir_url( '/breakdance-bootstrap') . 'breakdance-bootstrap/assets/css/accordion.min.css' );
+            //wp_enqueue_script( 'bs-partial', plugin_dir_url( '/breakdance-bootstrap' ) . 'breakdance-bootstrap/assets/js/bootstrap-partial.min.js', [], '1', true );
+            //wp_enqueue_style( 'bs-accordion', plugin_dir_url( '/breakdance-bootstrap') . 'breakdance-bootstrap/assets/css/accordion.min.css' );
 
             //Keeping track but I don't think we need to
             $this->loaded_scripts['bootstrap-partial'] = 1;
@@ -392,6 +478,7 @@
       */
 
      public function breakdance_search_replace_rendered_html( $html, $post_id, $repeater_item_node_id ) {
+
 
 
 
