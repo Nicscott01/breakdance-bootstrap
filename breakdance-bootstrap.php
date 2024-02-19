@@ -67,7 +67,7 @@
 
     public function get_the_archive_title( $title ) {
 
-        if ( ( get_post_type() == 'post' ) ) {
+        if ( ( get_post_type() == 'post' ) && is_post_type_archive() ) {
   
             //Get post page
             $page_for_posts = get_option( 'page_for_posts' );
