@@ -3,7 +3,7 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.1
+ *  Version: 0.2
  * 
  * 
  */
