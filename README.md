@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 2/22/24 v0.3
+- Add BD element for Jobvite embed
 
 ### 2/19/24 v0.2
 - Added custom breakdance blocks for Dynamic Accordion so you can load an accordion from post types
