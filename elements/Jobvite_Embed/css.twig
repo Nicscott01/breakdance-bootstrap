@@ -1,0 +1,10 @@
+%%SELECTOR%% { 
+	width: {{ design.new_section.width.style }};
+  {{ macros.spacing_padding_all(design.new_section.padding) }}
+  background-color: {{ design.new_section.background }}
+  {{ macros.typography(design.new_section.typography, globalSettings) }}
+}
+
+.jv-wrapper h2 {
+  {{ macros.typography(design.new_section.typography, globalSettings) }}
+}
