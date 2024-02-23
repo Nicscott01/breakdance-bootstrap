@@ -1,13 +1,13 @@
 <?php
 
-namespace BreakdanceCustomElements;
+namespace BricBreakdanceElements;
 
 use function Breakdance\Elements\c;
 use function Breakdance\Elements\PresetSections\getPresetSection;
 
 
 \Breakdance\ElementStudio\registerElementForEditing(
-    "BreakdanceCustomElements\\DynamicAccordion",
+    "BricBreakdanceElements\\DynamicAccordion",
     \Breakdance\Util\getdirectoryPathRelativeToPluginFolder(__DIR__)
 );
 

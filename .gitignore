@@ -47,5 +47,5 @@ wp-config.php
 # uncomment the next line
 #/wp-content/themes
 
-
+.DS_Store
 node_modules
