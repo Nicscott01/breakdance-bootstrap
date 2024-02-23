@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 2/23/24 v0.4.1
+- fix stuff
 ### 2/23/24 v0.4
 - Change namespace for elements
 

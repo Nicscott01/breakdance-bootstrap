@@ -8,6 +8,7 @@ class Jobvite {
 
     static $instance;
 
+    public $got_one;
 
     public function __construct()
     {

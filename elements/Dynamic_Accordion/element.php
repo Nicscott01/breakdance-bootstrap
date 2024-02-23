@@ -86,12 +86,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
 
     static function designControls()
     {
-        return [getPresetSection(
-      "EssentialElements\\posts-list-design",
-      "List",
-      "list",
-       ['type' => 'popout']
-     ), c(
+        return [c(
         "post",
         "Post",
         [c(
@@ -144,11 +139,6 @@ class DynamicAccordion extends \Breakdance\Elements\Element
         false,
         [],
       ), getPresetSection(
-      "EssentialElements\\posts-pagination-design",
-      "Pagination",
-      "pagination",
-       ['condition' => ['0' => ['0' => ['path' => 'content.filter_bar.enable', 'operand' => 'is not set', 'value' => '']]], 'type' => 'popout']
-     ), getPresetSection(
       "EssentialElements\\tabs_design",
       "Filter Bar",
       "filter_bar",
@@ -291,17 +281,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
         false,
         false,
         [],
-      ), getPresetSection(
-      "EssentialElements\\posts-pagination-content",
-      "Pagination",
-      "pagination",
-       ['condition' => ['0' => ['0' => ['path' => 'content.filter_bar.enable', 'operand' => 'is not set', 'value' => '']]], 'type' => 'popout']
-     ), getPresetSection(
-      "EssentialElements\\posts-filter-bar",
-      "Filter Bar",
-      "filter_bar",
-       ['type' => 'popout']
-     )];
+      )];
     }
 
     static function settingsControls()
@@ -311,35 +291,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
 
     static function dependencies()
     {
-        return ['0' =>  ['scripts' => ['%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/swiper@8/swiper-bundle.min.js','%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/breakdance-swiper/breakdance-swiper.js'],'styles' => ['%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/swiper@8/swiper-bundle.min.css','%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/swiper@8/breakdance-swiper-preset-defaults.css'],'builderCondition' => 'return {{ design.list.layout == \'slider\' }};','frontendCondition' => 'return {{ design.list.layout == \'slider\' }};','title' => 'Slider',],'1' =>  ['title' => 'Slider - Frontend','inlineScripts' => ['window.BreakdanceSwiper().update({
-  id: \'%%UNIQUESLUG%%\', selector:\'%%SELECTOR%%\',
-  settings:{{ design.list.slider.settings|json_encode }},
-  paginationSettings:{{ design.list.slider.pagination|json_encode }},
-});'],'frontendCondition' => 'return {{ design.list.layout == \'slider\' }};','builderCondition' => 'return false;',],'2' =>  ['inlineScripts' => ['window.BreakdancePostsList?.loadMorePostsInit(
-  {
-    selector: "%%SELECTOR%%",
-    postId: "%%POSTID%%",
-    id: "%%ID%%"
-  }
-)'],'frontendCondition' => '{% if content.pagination.pagination == "load_more" and not content.filter_bar.enable %}
-return true;
-{% else%}
- return false;
-{% endif %}','builderCondition' => 'return false;','scripts' => ['%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/breakdance-pagination@1/pagination.js'],'title' => 'Pagination - Load more',],'3' =>  ['inlineScripts' => ['window.BreakdancePostsList?.infiniteScrollInit(
-  {
-    selector: "%%SELECTOR%%",
-    postId: "%%POSTID%%",
-    id: "%%ID%%"
-  }
-)'],'frontendCondition' => '{% if content.pagination.pagination == "infinite" and not content.filter_bar.enable %}
-return true;
-{% else%}
- return false;
-{% endif %}','builderCondition' => 'return false;','scripts' => ['%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/breakdance-pagination@1/pagination.js'],'title' => 'Pagination - Infinite scroll',],'4' =>  ['title' => 'Filter Bar','scripts' => ['%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/isotope-layout@3.0.6/isotope.pkgd.min.js','%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/breakdance-filter@1/filter.js','%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/custom-tabs@1/tabs.js'],'builderCondition' => 'return {{ content.filter_bar.enable ? \'true\' : \'false\' }};','frontendCondition' => 'return {{ content.filter_bar.enable ? \'true\' : \'false\' }};','styles' => ['%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/custom-tabs@1/tabs.css'],],'5' =>  ['title' => 'Filter Bar - Frontend','inlineScripts' => ['new BreakdanceFilter(\'%%SELECTOR%%\', {
-  layout: \'{{ design.list.layout }}\',
-  isVertical: {{ design.filter_bar.vertical|json_encode }},
-  horizontalAt: {{ design.filter_bar.horizontal_at|json_encode }}
-});'],'frontendCondition' => 'return {{ content.filter_bar.enable ? \'true\' : \'false\' }};','builderCondition' => 'return false;',],];
+        return ['0' =>  ['scripts' => ['%%BREAKDANCE_REUSABLE_BS_PARTIAL_JS%%'],'title' => 'Bootstrap Partials/Accordion','styles' => ['%%BREAKDANCE_REUSABLE_BS_ACCORDION_CSS%%'],],];
     }
 
     static function settings()
@@ -443,7 +395,7 @@ window.BreakdanceSwiper().update({
 
     static function dynamicPropertyPaths()
     {
-        return ['0' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string']];
+        return ['0' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '1' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '2' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '3' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '4' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '5' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '6' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '7' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '8' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '9' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '10' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string']];
     }
 
     static function additionalClasses()

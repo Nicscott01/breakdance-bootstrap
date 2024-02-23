@@ -1,1 +1,26 @@
- 
+.breakdance .creare--dynamic-accordion-item .accordion-button:not(.collapsed) .accordion-icon {
+  transform:rotate(90deg);
+}
+
+
+.breakdance .creare--dynamic-accordion-item .accordion-button {
+  cursor:pointer;
+}
+
+.breakdance .creare--dynamic-accordion-item .accordion-button .accordion-icon {
+  transition-timing-function: ease-in-out;
+  transition-property: transform,background-color;
+  transition-duration: var(--bde-transition-duration);
+}
+
+
+.breakdance .creare--dynamic-accordion-item .accordion-icon > svg { 
+    font-size: inherit;
+    width: 1em;
+    height: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+}
+
+
