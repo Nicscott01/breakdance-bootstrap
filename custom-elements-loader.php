@@ -9,7 +9,7 @@ add_action('breakdance_loaded', function () {
         getDirectoryPathRelativeToPluginFolder(__DIR__) . '/elements',
         'BricBreakdanceElements',
         'element',
-        'Custom Elements',
+        'Bric Elements',
         false
     );
 
@@ -17,7 +17,7 @@ add_action('breakdance_loaded', function () {
         getDirectoryPathRelativeToPluginFolder(__DIR__) . '/macros',
         'BricBreakdanceElements',
         'macro',
-        'Custom Macros',
+        'Bric Macros',
         false,
     );
 
@@ -25,7 +25,7 @@ add_action('breakdance_loaded', function () {
         getDirectoryPathRelativeToPluginFolder(__DIR__) . '/presets',
         'BricBreakdanceElements',
         'preset',
-        'Custom Presets',
+        'Bric Presets',
         false,
     );
 },
