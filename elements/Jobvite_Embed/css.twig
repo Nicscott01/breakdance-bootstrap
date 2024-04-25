@@ -6,5 +6,17 @@
 }
 
 .jv-wrapper h2 {
-  {{ macros.typography(design.new_section.typography, globalSettings) }}
+  {{ macros.typography(design.typography.h2, globalSettings) }}
+}
+
+.jv-wrapper h3 {
+  {{ macros.typography(design.typography.h3, globalSettings) }}
+}
+
+.jv-page-body {
+  {{ macros.typography(design.typography.global, globalSettings) }}
+}
+
+.jv-wrapper a {
+ {{ macros.typography(design.typography.links, globalSettings) }}
 }

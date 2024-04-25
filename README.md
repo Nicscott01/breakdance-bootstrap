@@ -2,6 +2,9 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 2/23/24 v0.4
+- Change namespace for elements
+
 ### 2/22/24 v0.3
 - Add BD element for Jobvite embed
 

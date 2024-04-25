@@ -1,4 +1,5 @@
 <?php
+namespace BricBreakdance;
 
 use Breakdance\DynamicData\StringField;
 use Breakdance\DynamicData\StringData;

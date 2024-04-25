@@ -1,13 +1,13 @@
 <?php 
 
-namespace BreakdanceCustomElements;
+namespace BricBreakdanceElements;
 
 use function Breakdance\Util\getDirectoryPathRelativeToPluginFolder;
 
 add_action('breakdance_loaded', function () {
     \Breakdance\ElementStudio\registerSaveLocation(
         getDirectoryPathRelativeToPluginFolder(__DIR__) . '/elements',
-        'BreakdanceCustomElements',
+        'BricBreakdanceElements',
         'element',
         'Custom Elements',
         false
@@ -15,7 +15,7 @@ add_action('breakdance_loaded', function () {
 
     \Breakdance\ElementStudio\registerSaveLocation(
         getDirectoryPathRelativeToPluginFolder(__DIR__) . '/macros',
-        'BreakdanceCustomElements',
+        'BricBreakdanceElements',
         'macro',
         'Custom Macros',
         false,
@@ -23,7 +23,7 @@ add_action('breakdance_loaded', function () {
 
     \Breakdance\ElementStudio\registerSaveLocation(
         getDirectoryPathRelativeToPluginFolder(__DIR__) . '/presets',
-        'BreakdanceCustomElements',
+        'BricBreakdanceElements',
         'preset',
         'Custom Presets',
         false,

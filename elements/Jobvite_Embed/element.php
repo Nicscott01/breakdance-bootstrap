@@ -1,13 +1,13 @@
 <?php
 
-namespace BreakdanceCustomElements;
+namespace BricBreakdanceElements;
 
 use function Breakdance\Elements\c;
 use function Breakdance\Elements\PresetSections\getPresetSection;
 
 
 \Breakdance\ElementStudio\registerElementForEditing(
-    "BreakdanceCustomElements\\JobviteEmbed",
+    "BricBreakdanceElements\\JobviteEmbed",
     \Breakdance\Util\getdirectoryPathRelativeToPluginFolder(__DIR__)
 );
 
@@ -115,10 +115,33 @@ class JobviteEmbed extends \Breakdance\Elements\Element
       "Padding",
       "padding",
        ['type' => 'popout']
+     )],
+        ['type' => 'section'],
+        false,
+        false,
+        [],
+      ), c(
+        "typography",
+        "Typography",
+        [getPresetSection(
+      "EssentialElements\\typography",
+      "Global",
+      "global",
+       ['type' => 'popout']
      ), getPresetSection(
       "EssentialElements\\typography",
-      "Typography",
-      "typography",
+      "H2",
+      "h2",
+       ['type' => 'popout']
+     ), getPresetSection(
+      "EssentialElements\\typography",
+      "H3",
+      "h3",
+       ['type' => 'popout']
+     ), getPresetSection(
+      "EssentialElements\\typography",
+      "Links",
+      "links",
        ['type' => 'popout']
      )],
         ['type' => 'section'],
@@ -246,7 +269,7 @@ class JobviteEmbed extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return ['0' => ['accepts' => 'image_url', 'path' => 'design.new_section.background.layers[].image']];
+        return ['0' => ['accepts' => 'image_url', 'path' => 'design.new_section.background.layers[].image'], '1' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '2' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string']];
     }
 
     static function additionalClasses()

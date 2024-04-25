@@ -8,7 +8,10 @@
  * 
  */
 
+
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
+ include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
+ include_once( __DIR__ . '/inc/jobvite.php' ); 
 
 
  class BreakdanceBS {
@@ -47,20 +50,6 @@
 
 
 
-        add_action('init', function() {
-            // Check if Breakdance is installed and class/function exists
-            if (!function_exists('\Breakdance\DynamicData\registerField') || !class_exists('\Breakdance\DynamicData\Field')) {
-                return;
-            }
-        
-            require_once 'dynamic-data-fields/CrearePostId.php';
-            require_once 'dynamic-data-fields/CrearePostSlug.php';
-        
-            \Breakdance\DynamicData\registerField(new CrearePostId());
-            \Breakdance\DynamicData\registerField(new CrearePostSlug());
-
-        });
-
 
 
 
@@ -82,6 +71,17 @@
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
