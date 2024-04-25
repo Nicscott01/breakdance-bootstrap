@@ -3,7 +3,7 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.3
+ *  Version: 0.5
  * 
  * 
  */
@@ -46,7 +46,8 @@
         //Save ACF in local JSON
         add_filter( 'acf/settings/save_json', [ $this, 'acf_json_save_point' ] );
 
-
+        //Move Yoast SEO Metabox to end
+        add_filter( 'wpseo_metabox_prio', [ $this, 'prio_low' ] );
 
 
 
@@ -148,7 +149,7 @@
     /**
      *  Use Page for Posts title for Archive Page
      * 
-     * 
+     *  TODO: This doesn't work on archive pages (if you want the category name to appear)
      */
 
     public function get_the_archive_title( $title ) {
@@ -505,8 +506,14 @@
 
 
 
+     
+    /**
+     *   Set Metabox Priority to Low
+    */
 
-
+     public function prio_low() {
+        return 'low';
+    }
 
 
 
