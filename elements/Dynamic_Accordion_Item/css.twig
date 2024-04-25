@@ -1,1 +1,15 @@
-%%SELECTOR%% { }
+%%SELECTOR%% .heading {
+  {{ macros.typography(design.title.typography, globalSettings) }}
+}
+
+
+%%SELECTOR%% .accordion-button {
+{{ macros.layout(design.title.layout) }}
+  width: {{ design.title.width.style }};
+}
+
+{{ macros.atomV1IconCss(design.icon.icon, 'accordion-icon', '%%SELECTOR%%', true) }}
+
+
+
+    

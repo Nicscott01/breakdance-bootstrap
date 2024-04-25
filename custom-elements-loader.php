@@ -9,7 +9,7 @@ add_action('breakdance_loaded', function () {
         getDirectoryPathRelativeToPluginFolder(__DIR__) . '/elements',
         'BricBreakdanceElements',
         'element',
-        'Custom Elements',
+        'Bric Elements',
         false
     );
 
@@ -17,7 +17,7 @@ add_action('breakdance_loaded', function () {
         getDirectoryPathRelativeToPluginFolder(__DIR__) . '/macros',
         'BricBreakdanceElements',
         'macro',
-        'Custom Macros',
+        'Bric Macros',
         false,
     );
 
@@ -25,13 +25,22 @@ add_action('breakdance_loaded', function () {
         getDirectoryPathRelativeToPluginFolder(__DIR__) . '/presets',
         'BricBreakdanceElements',
         'preset',
-        'Custom Presets',
+        'Bric Presets',
         false,
     );
 },
     // register elements before loading them
     9
 );
+
+
+/**
+ *  TODO: Register a Save Location for Custom Elements
+ *  tied to a project, not necessarily for distribution
+ * 
+ * 
+ */
+
 
 
 

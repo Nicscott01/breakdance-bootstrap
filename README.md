@@ -2,6 +2,15 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+<<<<<<< HEAD
+=======
+### 4/17/24 v0.5
+- Add an improved version of the Stats Grid element
+- Re-arrange code for easier extensibility
+
+### 2/23/24 v0.4.1
+- fix stuff
+>>>>>>> 52c3c071ffebff5640b409e5cbc8059e643d6c92
 ### 2/23/24 v0.4
 - Change namespace for elements
 
