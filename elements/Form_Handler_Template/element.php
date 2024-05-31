@@ -107,6 +107,30 @@ class FormHandlerTemplate extends \Breakdance\Elements\Element
         false,
         false,
         [],
+      ), c(
+        "map_data",
+        "Map Data",
+        [c(
+        "field",
+        "Field",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'variableOptions' => ['enabled' => false, 'populate' => ['path' => 'content.new_section.fields', 'text' => 'field', 'value' => 'map_to']], 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'bdbs_fetch_fluentcrm_fields', 'fetchContextPath' => null, 'refetchPaths' => []]]],
+        false,
+        false,
+        [],
+      ), c(
+        "value",
+        "Value",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'variableOptions' => ['enabled' => true, 'populate' => ['path' => '', 'text' => '', 'value' => '']]],
+        false,
+        false,
+        [],
+      )],
+        ['type' => 'repeater', 'layout' => 'vertical'],
+        false,
+        false,
+        [],
       )];
     }
 
@@ -162,7 +186,7 @@ class FormHandlerTemplate extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return false;
+        return ['0' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string']];
     }
 
     static function additionalClasses()

@@ -9,12 +9,14 @@
  */
 
 use BricBreakdance\GatedDownloadFormHandler;
+use BricBreakdance\FluentCrmFormHandler;
 
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
  include_once( __DIR__ . '/inc/jobvite.php' ); 
  include_once( __DIR__ . '/inc/team-members.php' ); 
  include_once( __DIR__ . '/inc/gated-download.php' ); 
+
 
 
  class BreakdanceBS {
@@ -77,11 +79,115 @@ use BricBreakdance\GatedDownloadFormHandler;
             
             require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
 
-            //\Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+            \Breakdance\Forms\Actions\registerAction(new FluentCrmFormHandler());
 
         });
 
+/**
+ * TEMP
+ */
 
+
+ add_action( 'admin_init_d', function() {
+
+    var_dump( fluentcrm_get_custom_contact_fields() );
+
+ });
+
+add_action( 'init_d', function() {
+
+
+    \Breakdance\AJAX\register_handler(
+        'bdbs_fetch_fluentcrm_fields',
+        /**
+         * @return array
+         */
+        function () {
+            /** @var FormRequestContext $requestdata */
+          
+
+
+            return [
+                [
+                    'value' => 'user_id',
+                    'text' => 'User ID'
+                ], [
+                    'value' => 'company_id',
+                    'text' => 'Company ID'
+                ], [
+                    'value' => 'prefix',
+                    'text' => 'Prefix'
+                ], [
+                    'value' => 'first_name',
+                    'text' => 'First Name'
+                ], [
+                    'value' => 'last_name',
+                    'text' => 'Last Name'
+                ], [
+                    'value' => 'email',
+                    'text' => 'Email'
+                ], [
+                    'value' => 'timezone',
+                    'text' => 'Timezone'
+                ], [
+                    'value' => 'address_line_1',
+                    'text' => 'Address Line 1'
+                ], [
+                    'value' => 'address_line_2',
+                    'text' => 'Address Line 2'
+                ], [
+                    'value' => 'postal_code',
+                    'text' => 'Postal Code'
+                ], [
+                    'value' => 'city',
+                    'text' => 'City'
+                ], [
+                    'value' => 'state',
+                    'text' => 'State'
+                ], [
+                    'value' => 'country',
+                    'text' => 'Country'
+                ], [
+                    'value' => 'ip',
+                    'text' => 'IP Address'
+                ], [
+                    'value' => 'latitude',
+                    'text' => 'Latitude'
+                ], [
+                    'value' => 'longitude',
+                    'text' => 'Longitude'
+                ], [
+                    'value' => 'phone',
+                    'text' => 'Phone'
+                ], [
+                    'value' => 'status',
+                    'text' => 'Possible Values: pending/subscribed/bounced/unsubscribed'
+                ], [
+                    'value' => 'contact_tye',
+                    'text' => 'lead/customer'
+                ], [
+                    'value' => 'source',
+                    'text' => 'Source'
+                ], [
+                    'value' => 'avatar',
+                    'text' => 'Custom Contact Photo URL'
+                ], [
+                    'value' => 'date_of_birth',
+                    'text' => 'Date of Birth in Y-m-d format'
+                ], [
+                    'value' => 'last_activity',
+                    'text' => 'Last Activity'
+                ], [
+                    'value' => 'updated_at',
+                    'text' => 'Updated At'
+                ]
+            ];
+        },
+        'edit'
+    );
+
+
+});
 
 
 
