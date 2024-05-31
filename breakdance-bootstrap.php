@@ -3,15 +3,18 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.5
+ *  Version: 0.6
  * 
  * 
  */
 
+use BricBreakdance\GatedDownloadFormHandler;
 
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
  include_once( __DIR__ . '/inc/jobvite.php' ); 
+ include_once( __DIR__ . '/inc/team-members.php' ); 
+ include_once( __DIR__ . '/inc/gated-download.php' ); 
 
 
  class BreakdanceBS {
@@ -52,6 +55,34 @@
 
 
 
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once(__DIR__ . '/inc/gated-download-form-handler.php' );
+            
+            \Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
+
+            //\Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
 
 
 //Disabled
@@ -69,6 +100,7 @@
            
 
         }, 10, 3);
+
 
 
     }

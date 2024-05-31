@@ -2,7 +2,11 @@
 
 namespace BricBreakdanceElements;
 
-use function Breakdance\Util\getDirectoryPathRelativeToPluginFolder;
+use function \Breakdance\Util\getDirectoryPathRelativeToPluginFolder;
+use function \Breakdance\Elements\controlSection;
+use function \Breakdance\Elements\c;
+use function \Breakdance\Elements\PresetSections\getPresetSection;
+
 
 add_action('breakdance_loaded', function () {
     \Breakdance\ElementStudio\registerSaveLocation(
@@ -53,3 +57,66 @@ add_action('breakdance_reusable_dependencies_urls', function ($urls) {
     return $urls;
 
  });
+
+
+
+
+
+
+ /**
+  *     Global Settings
+  *
+  *
+  *
+  */
+
+add_filter('breakdance_global_settings_control_sections_append', function ($appendedControlSections) {
+
+   $control = [c(
+        "spacing",
+        "Spacing",
+        [getPresetSection(
+      "EssentialElements\\spacing_margin_y",
+      "Paragraphs",
+      "paragraphs",
+       ['type' => 'popout']
+     ), getPresetSection(
+      "EssentialElements\\spacing_margin_y",
+      "Headings",
+      "headings",
+       ['type' => 'popout']
+     ), getPresetSection(
+      "EssentialElements\\spacing_margin_y",
+      "Buttons",
+      "buttons",
+       ['type' => 'popout']
+     )],
+        ['type' => 'section'],
+        false,
+        false,
+        [],
+      )];
+
+      $spacing_controls = controlSection( 'bric_global_spacing', 'Global Spacing', $control );
+
+      return array_merge( $appendedControlSections, [$spacing_controls] ); 
+
+
+});
+
+
+
+
+
+add_filter('breakdance_global_settings_css_twig_template_append', function ($appendedTwigTemplate) {
+
+    error_log(  __DIR__ . '/global-settings/css.twig');
+
+    $global_css_twig = file_get_contents( __DIR__ . '/global-settings/css.twig' );
+
+    return $appendedTwigTemplate . $global_css_twig;
+
+});
+
+
+
