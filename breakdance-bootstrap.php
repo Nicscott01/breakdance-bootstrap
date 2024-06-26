@@ -16,6 +16,7 @@ use BricBreakdance\FluentCrmFormHandler;
  include_once( __DIR__ . '/inc/jobvite.php' ); 
  include_once( __DIR__ . '/inc/team-members.php' ); 
  include_once( __DIR__ . '/inc/gated-download.php' ); 
+ include_once( __DIR__ . '/inc/shortcodes.php' ); 
 
 
 
