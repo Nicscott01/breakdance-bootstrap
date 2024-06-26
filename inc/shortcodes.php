@@ -22,9 +22,9 @@ function time_diff_sc( $atts ) {
 
         $diff = $now->diff( $start_date );
 
-        if ( $diff->$atts['return_format'] > 0 ) {
+        if ( $diff->{$atts['return_format']} > 0 ) {
             
-            return strval( $diff->$atts['return_format'] );
+            return strval( $diff->{$atts['return_format']} );
         
         } else {
             
