@@ -87,8 +87,8 @@ class JobviteEmbed extends \Breakdance\Elements\Element
     static function designControls()
     {
         return [c(
-        "new_section",
-        "New Section",
+        "container",
+        "Container",
         [c(
         "width",
         "Width",
@@ -269,7 +269,7 @@ class JobviteEmbed extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return ['0' => ['accepts' => 'image_url', 'path' => 'design.new_section.background.layers[].image'], '1' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '2' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string']];
+        return ['0' => ['accepts' => 'image_url', 'path' => 'design.new_section.background.layers[].image'], '1' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '2' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '3' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string']];
     }
 
     static function additionalClasses()
