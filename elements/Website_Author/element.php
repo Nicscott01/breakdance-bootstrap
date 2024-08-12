@@ -86,15 +86,7 @@ class WebsiteAuthor extends \Breakdance\Elements\Element
 
     static function designControls()
     {
-        return [c(
-        "new_section",
-        "New Section",
-        [],
-        ['type' => 'section'],
-        false,
-        false,
-        [],
-      ), getPresetSection(
+        return [getPresetSection(
       "EssentialElements\\typography",
       "Typography",
       "typography",

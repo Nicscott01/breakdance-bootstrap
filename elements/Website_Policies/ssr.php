@@ -8,7 +8,7 @@ $policies = $propertiesData['content']['data']['policies'];
 
 if ( !empty( $policies ) ) {
 
-    echo '<ul class="policies">';
+//    echo '<ul class="policies">';
 
     foreach( $policies as $policy ) {
 
@@ -27,5 +27,5 @@ if ( !empty( $policies ) ) {
 
     }
 
-    echo '</ul>';
+  //  echo '</ul>';
 }

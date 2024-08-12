@@ -20,7 +20,7 @@ class WebsitePolicies extends \Breakdance\Elements\Element
 
     static function tag()
     {
-        return 'div';
+        return 'ul';
     }
 
     static function tagOptions()
@@ -87,11 +87,27 @@ class WebsitePolicies extends \Breakdance\Elements\Element
     static function designControls()
     {
         return [getPresetSection(
-      "EssentialElements\\LayoutV2",
+      "EssentialElements\\layout_basic_flex",
       "Layout",
       "layout",
        ['type' => 'popout']
      ), c(
+        "spacing",
+        "Spacing",
+        [c(
+        "gap",
+        "Gap",
+        [],
+        ['type' => 'unit', 'layout' => 'inline'],
+        false,
+        false,
+        [],
+      )],
+        ['type' => 'section'],
+        false,
+        false,
+        [],
+      ), c(
         "typography",
         "Typography",
         [getPresetSection(
@@ -222,7 +238,7 @@ class WebsitePolicies extends \Breakdance\Elements\Element
 
     static function additionalClasses()
     {
-        return false;
+        return [['name' => 'policies', 'template' => 'yes']];
     }
 
     static function projectManagement()
