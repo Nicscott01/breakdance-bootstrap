@@ -1,0 +1,20 @@
+%%SELECTOR%% .link > a { 
+{{ macros.typography(design.typography.links, globalSettings) }}
+}
+
+%%SELECTOR%%  {
+  {{ macros.typography(design.typography.default, globalSettings) }}
+}
+
+
+{# Layout #}
+{{ macros.layoutV2(design.layout_v2, breakpoint, isBaseBreakpoint, '%%SELECTOR%% .policies') }}
+
+
+
+
+%%SELECTOR%% .link:after {
+   content:"{{ content.data.separator }}";
+   margin-left: {{ design.layout.h_gap.style }};
+   margin-right: {{ design.layout.h_gap.style }}; 
+}

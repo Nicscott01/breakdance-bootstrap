@@ -3,7 +3,7 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.6
+ *  Version: 0.7
  * 
  * 
  */
@@ -15,9 +15,19 @@ use BricBreakdance\FluentCrmFormHandler;
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
  include_once( __DIR__ . '/inc/jobvite.php' ); 
  include_once( __DIR__ . '/inc/team-members.php' ); 
+ include_once( __DIR__ . '/inc/website-policies.php' ); 
  include_once( __DIR__ . '/inc/gated-download.php' ); 
  include_once( __DIR__ . '/inc/shortcodes.php' ); 
+ include_once( __DIR__ . '/inc/facetwp.php' ); 
 
+
+ add_filter( 'perfmatters_delay_js_exclusions', function( $scripts ) {
+
+
+    var_dump( $scripts );
+
+    return $scripts;
+ });
 
 
  class BreakdanceBS {

@@ -1,0 +1,12 @@
+%%SELECTOR%% {
+  {{ macros.simpleLayout(design.layout.simplelayout, breakpoint) }}
+  gap: {{ design.layout.gap.style }};
+  width: {{ design.layout.width.style }};
+}
+  
+%%SELECTOR%% > *:after { 
+  content: "{{ content.data.separator }}";
+  margin-left: {{ design.layout.gap.style }};
+}
+
+

@@ -55,6 +55,19 @@ add_action('breakdance_reusable_dependencies_urls', function ($urls) {
     //    $urls['bsAccordion'] = plugin_dir_url( __FILE__ ) . 'dependencies-files/bootstrap-partials@1/bootstrap-partial.min.js';
     $urls['bsPartialJs'] = plugin_dir_url(__FILE__) . 'assets/js/bootstrap-partial.min.js';
     $urls['bsAccordionCss'] = plugin_dir_url(__FILE__) . 'assets/css/accordion.min.css';
+    
+    //%%BREAKDANCE_REUSABLE_GOOGLE_MAPS_JS%%
+    //<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=marker"></script>
+
+    // Fetch the API key from Breakdance
+    $google_maps_api_key = \Breakdance\APIKeys\getKey(BREAKDANCE_GOOGLE_MAPS_API_KEY_NAME);
+
+    $urls['googleMapsJs'] = 'https://maps.googleapis.com/maps/api/js?libraries=marker&v=weekly&key=' . $google_maps_api_key;
+
+    //%%BREAKDANCE_REUSABLE_GOOGLE_MAPS_LOCATIONS_INIT_JS%%
+    $urls['googleMapsLocationsInitJs'] = plugin_dir_url( __FILE__ ) . 'assets/src/js/google-maps-locations-init.js';
+    //%%BREAKDANCE_REUSABLE_BRIC_GOOGLE_MAPS_LOCATIONS_JS%%
+    $urls['bricGoogleMapsLocationsJs'] = plugin_dir_url( __FILE__ ) . 'assets/src/js/bric-google-maps-locations.js';
 
     return $urls;
 });

@@ -1,0 +1,13 @@
+{% set start_date = content.data.start_date %}
+
+{% set start_year = start_date|date("Y") %}
+{% set current_year = "now"|date("Y") %}
+{% set year_string = "" %}
+
+{% if start_year == current_year %}
+    {% set year_string = current_year %}
+{% else %}
+    {% set year_string = start_year ~ '-' ~ current_year %}
+{% endif %}
+
+&copy; {{ year_string }} {{ content.data.copyright_holder }}

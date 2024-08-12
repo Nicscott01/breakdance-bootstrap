@@ -2,6 +2,11 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 8/8/2024 v0.7
+- Add filter to add Breakdance class to FWP reset button
+- Add Google Maps Locations Element
+- Add elements for footer: List Items, Website Copyright, Website Author, Policies Section
+
 ### 5/8/24 v0.6
 - Add in the gated content popups system. You can now make a popup as a global block template and have it apply to any particual DLM download
 - TODO: check for DLM plugin
