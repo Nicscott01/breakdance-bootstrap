@@ -148,9 +148,9 @@
 
 
 
-    function getLocations() {
+    function getLocations( id ) {
 
-        const location_data = document.querySelectorAll('.data-locations .location');
+        const location_data = document.querySelectorAll('#locations-' + id +' .location');
 
         const locations = Array.from(location_data).map(location => {
     
@@ -175,10 +175,10 @@
     }
 
 
-    function addLocations( mapInstance, locations = {}, options = {} ) {
+    function addLocations( mapInstance, locations = {}, options = {}, id ) {
 
         if ( !locations.length ) {
-            locations = getLocations();
+            locations = getLocations( id );
         }
 
 
@@ -244,7 +244,7 @@
     
 
       const defaultOptions = {
-        "center": { lat: 43.1873235, lng: -70.6156473},
+        "center": { lat: 43.1873235, lng: -70.6156473 },
         "zoom": 8,
         "mapId": "53f02eb8c6c3b17b", //todo: pass this through the element for distribution
         "mapTypeId": "roadmap",
@@ -252,12 +252,12 @@
 
       const userOptions = {
         "zoom": options.zoom ? Number(options.zoom.number) : 8,
-        "mapTypeId": options.type,
+        "mapTypeId": options.type || 'roadmap',
         "streetViewControl": options.streetViewControl || false,
         "mapTypeControl": options.mapTypeControl || false,
         "scaleControl": options.scaleControl || false,
         "rotateControl": options.rotateControl || false,
-        "zoomControl": options.zoomControl || false,
+        "zoomControl": options.zoomControl || true,
         "fullscreenControl": options.fullscreenControl || false,
         "iconsColor" : options.iconsColor || false,
         "iconsSize" : options.iconsSize || false,
@@ -272,7 +272,7 @@
         center = options.center.split(",");
         userOptions.center = { lat: parseFloat(center[0]), lng: parseFloat(center[1]) };
       
-     }
+     } 
       
 
       // Merge with user settings
@@ -292,7 +292,7 @@
         [id]: mapInstance,
       };
 
-      addLocations( mapInstance, locations, mapOptions );
+      addLocations( mapInstance, locations, mapOptions, id );
 
       if ( document.querySelector('.maps-data') ) {
     
