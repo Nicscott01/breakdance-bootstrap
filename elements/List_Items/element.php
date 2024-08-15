@@ -115,7 +115,12 @@ class ListItems extends \Breakdance\Elements\Element
         false,
         false,
         [],
-      )];
+      ), getPresetSection(
+      "EssentialElements\\typography",
+      "Typography",
+      "typography",
+       ['type' => 'popout']
+     )];
     }
 
     static function contentControls()

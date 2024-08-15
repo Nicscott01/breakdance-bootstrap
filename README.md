@@ -2,6 +2,9 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 8/15/2024 v0.8
+- Add Suffix field to copyright
+
 ### 8/12/2024 v0.71
 - Tweak styles on the policies links
 
