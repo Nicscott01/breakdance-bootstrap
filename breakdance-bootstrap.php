@@ -10,6 +10,7 @@
 
 use BricBreakdance\GatedDownloadFormHandler;
 use BricBreakdance\FluentCrmFormHandler;
+use BricBreakdance\GatedDownloadFormHandler;
 
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
@@ -29,6 +30,8 @@ use BricBreakdance\FluentCrmFormHandler;
 
     return $scripts;
  });
+ include_once( __DIR__ . '/inc/team-members.php' ); 
+ include_once( __DIR__ . '/inc/gated-download.php' ); 
 
 
  class BreakdanceBS {
@@ -66,6 +69,62 @@ use BricBreakdance\FluentCrmFormHandler;
         //Move Yoast SEO Metabox to end
         add_filter( 'wpseo_metabox_prio', [ $this, 'prio_low' ] );
 
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once(__DIR__ . '/inc/gated-download-form-handler.php' );
+            
+            \Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
+
+            //\Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once(__DIR__ . '/inc/gated-download-form-handler.php' );
+            
+            \Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
+
+            //\Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
 
 
 
@@ -277,7 +336,7 @@ add_action( 'init_d', function() {
 
         $acf_json_dir = $wp_uploads['basedir'] . '/acf/local-json/';
 
-        error_log( $acf_json_dir );
+//        error_log( $acf_json_dir );
 
         if ( is_dir( $acf_json_dir ) ) {
 
@@ -690,3 +749,6 @@ add_action( 'init_d', function() {
 
 
 BreakdanceBS::get_instance();
+
+
+

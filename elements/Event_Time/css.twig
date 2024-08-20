@@ -1,0 +1,21 @@
+%%SELECTOR%% .date { 
+{{ macros.typography(design.typography.date, globalSettings) }}
+}
+
+%%SELECTOR%% .time {
+{{ macros.typography(design.typography.time, globalSettings) }}
+}
+
+%%SELECTOR%% .day-time-separator {
+{{ macros.typography(design.typography.day_time_separator, globalSettings) }}
+  {{ macros.spacing_margin_x(design.spacing.day_time_separator) }}
+}
+
+%%SELECTOR%% .time-separator {
+{{ macros.typography(design.typography.time_separator, globalSettings) }}
+}
+
+%%SELECTOR%% {
+  {{ macros.spacing_margin_y(design.spacing.wrapper) }}
+  {{ macros.layout_basic_flex(design.layout) }}
+}
