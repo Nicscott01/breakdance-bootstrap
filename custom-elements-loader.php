@@ -7,10 +7,6 @@ use function \Breakdance\Elements\controlSection;
 use function \Breakdance\Elements\c;
 use function \Breakdance\Elements\PresetSections\getPresetSection;
 
-use function \Breakdance\Util\getDirectoryPathRelativeToPluginFolder;
-use function \Breakdance\Elements\controlSection;
-use function \Breakdance\Elements\c;
-use function \Breakdance\Elements\PresetSections\getPresetSection;
 
 
 add_action('breakdance_loaded', function () {
