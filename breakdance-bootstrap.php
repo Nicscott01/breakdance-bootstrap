@@ -10,7 +10,7 @@
 
 use BricBreakdance\GatedDownloadFormHandler;
 use BricBreakdance\FluentCrmFormHandler;
-use BricBreakdance\GatedDownloadFormHandler;
+
 
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
