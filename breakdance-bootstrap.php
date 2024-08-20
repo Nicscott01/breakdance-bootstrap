@@ -159,7 +159,7 @@ use BricBreakdance\GatedDownloadFormHandler;
 
         $acf_json_dir = $wp_uploads['basedir'] . '/acf/local-json/';
 
-        error_log( $acf_json_dir );
+//        error_log( $acf_json_dir );
 
         if ( is_dir( $acf_json_dir ) ) {
 
@@ -572,3 +572,6 @@ use BricBreakdance\GatedDownloadFormHandler;
 
 
 BreakdanceBS::get_instance();
+
+
+

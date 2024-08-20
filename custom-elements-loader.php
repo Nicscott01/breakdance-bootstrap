@@ -110,7 +110,7 @@ add_filter('breakdance_global_settings_control_sections_append', function ($appe
 
 add_filter('breakdance_global_settings_css_twig_template_append', function ($appendedTwigTemplate) {
 
-    error_log(  __DIR__ . '/global-settings/css.twig');
+    //error_log(  __DIR__ . '/global-settings/css.twig');
 
     $global_css_twig = file_get_contents( __DIR__ . '/global-settings/css.twig' );
 
