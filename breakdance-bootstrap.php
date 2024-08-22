@@ -12,6 +12,7 @@
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
  include_once( __DIR__ . '/inc/jobvite.php' ); 
+ include_once( __DIR__ . '/inc/loop-popup.php' ); 
 
 
  class BreakdanceBS {
@@ -20,6 +21,8 @@
     static $instance;
 
     public $loaded_scripts;
+
+    public $acf_json_dir;
 
 
     public function __construct() {
@@ -44,7 +47,8 @@
 
 
         //Save ACF in local JSON
-        add_filter( 'acf/settings/save_json', [ $this, 'acf_json_save_point' ] );
+       // add_filter( 'acf/settings/save_json', [ $this, 'acf_json_save_point' ] );
+       // add_filter( 'acf/settings/load_json	', [ $this, 'acf_json_load_point' ] );
 
         //Move Yoast SEO Metabox to end
         add_filter( 'wpseo_metabox_prio', [ $this, 'prio_low' ] );
@@ -126,23 +130,40 @@
         //Get the uploads folder
         $wp_uploads = wp_upload_dir( false );
 
-        $acf_json_dir = $wp_uploads['basedir'] . '/acf/local-json/';
+        $this->acf_json_dir = $wp_uploads['basedir'] . '/acf/local-json/';
 
-        error_log( $acf_json_dir );
+        error_log( $this->acf_json_dir );
 
-        if ( is_dir( $acf_json_dir ) ) {
+        if ( is_dir( $this->acf_json_dir ) ) {
 
-            return $acf_json_dir;
+            return $this->acf_json_dir;
 
-        } elseif ( wp_mkdir_p( $acf_json_dir ) ) { //make the directory if it doesn't exist. returns bool of success
+        } elseif ( wp_mkdir_p( $this->acf_json_dir ) ) { //make the directory if it doesn't exist. returns bool of success
             
-            return $acf_json_dir;
+            return $this->acf_json_dir;
 
         }
 
         return $path;
 
     }
+
+
+
+
+
+    public function acf_json_load_point( $paths ) {
+
+        error_log( json_encode( $paths ) );
+
+        $paths[] = $this->acf_json_dir;
+
+        return $paths;
+
+    }
+
+
+
 
 
 

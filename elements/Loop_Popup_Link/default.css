@@ -1,0 +1,11 @@
+.breakdance .bric-loop-popup-link button {
+  display:flex;
+  flex-direction:column;
+  background-color: inherit;
+  border:inherit;
+  text-align:inherit;
+}
+
+.breakdance .bric-loop-popup-link button:hover {
+  cursor:pointer;
+}
