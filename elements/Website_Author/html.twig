@@ -1,0 +1,11 @@
+{% set prefix = content.data.prefix is not empty ? content.data.prefix : 'Website by' %}
+{% set agency_name = content.data.agency_name %}
+{% set agency_url = content.data.agency_url %}
+
+
+{{ prefix }}
+{% if agency_url %}
+    <a href="{{ agency_url }}" target="_blank">{{ agency_name }}</a>
+{% else %}
+    {{ agency_name }}
+{% endif %}

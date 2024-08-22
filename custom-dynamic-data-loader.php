@@ -11,9 +11,11 @@ add_action('init', function() {
 
     require_once 'dynamic-data-fields/CrearePostId.php';
     require_once 'dynamic-data-fields/CrearePostSlug.php';
+    require_once 'dynamic-data-fields/WooTermImage.php';
 
     \Breakdance\DynamicData\registerField(new CrearePostId());
     \Breakdance\DynamicData\registerField(new CrearePostSlug());
+    \Breakdance\DynamicData\registerField(new WooTermImage());
 
 });
 

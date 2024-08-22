@@ -1,0 +1,9 @@
+.breakdance .bric-list-items {
+  display:flex;
+  flex-wrap: wrap !important;
+}
+
+.breakdance .bric-list-items  > *:last-child:after {
+  content:"";
+  margin:0;
+}

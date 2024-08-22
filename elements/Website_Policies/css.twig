@@ -1,0 +1,26 @@
+%%SELECTOR%% .link > a { 
+{{ macros.typography(design.typography.links, globalSettings) }}
+}
+
+%%SELECTOR%%  {
+  {{ macros.typography(design.typography.default, globalSettings) }}
+}
+
+%%SELECTOR%% .link:after {
+  content:"{{ content.data.separator }}";;
+  color:inherit;
+  position:relative;
+  display:inline-flex;
+  margin-left: {{ design.spacing.gap.style }};
+}
+
+%%SELECTOR%% .link:last-child:after {
+  content:"";
+  margin-left:0;
+}
+
+%%SELECTOR%% {
+  {{ macros.layout_basic_flex(design.layout) }};
+  display:inline-flex;
+   gap: {{ design.spacing.gap.style }};
+}

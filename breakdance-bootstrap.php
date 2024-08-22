@@ -3,16 +3,27 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.4.1
+ *  Version: 0.9
  * 
  * 
  */
+
+use BricBreakdance\GatedDownloadFormHandler;
+use BricBreakdance\FluentCrmFormHandler;
 
 
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
  include_once( __DIR__ . '/inc/jobvite.php' ); 
  include_once( __DIR__ . '/inc/loop-popup.php' ); 
+ include_once( __DIR__ . '/inc/team-members.php' ); 
+ include_once( __DIR__ . '/inc/website-policies.php' ); 
+ include_once( __DIR__ . '/inc/gated-download.php' ); 
+ include_once( __DIR__ . '/inc/shortcodes.php' ); 
+ include_once( __DIR__ . '/inc/facetwp.php' ); 
+ include_once( __DIR__ . '/inc/google-maps-locations.php' ); 
+
+
 
 
  class BreakdanceBS {
@@ -54,8 +65,195 @@
         add_filter( 'wpseo_metabox_prio', [ $this, 'prio_low' ] );
 
 
-       
 
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once(__DIR__ . '/inc/gated-download-form-handler.php' );
+            
+            \Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
+
+            //\Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once(__DIR__ . '/inc/gated-download-form-handler.php' );
+            
+            \Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
+
+            //\Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once(__DIR__ . '/inc/gated-download-form-handler.php' );
+            
+            \Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
+
+            \Breakdance\Forms\Actions\registerAction(new FluentCrmFormHandler());
+
+        });
+
+/**
+ * TEMP
+ */
+
+
+ add_action( 'admin_init_d', function() {
+
+    var_dump( fluentcrm_get_custom_contact_fields() );
+
+ });
+
+add_action( 'init_d', function() {
+
+
+    \Breakdance\AJAX\register_handler(
+        'bdbs_fetch_fluentcrm_fields',
+        /**
+         * @return array
+         */
+        function () {
+            /** @var FormRequestContext $requestdata */
+          
+
+
+            return [
+                [
+                    'value' => 'user_id',
+                    'text' => 'User ID'
+                ], [
+                    'value' => 'company_id',
+                    'text' => 'Company ID'
+                ], [
+                    'value' => 'prefix',
+                    'text' => 'Prefix'
+                ], [
+                    'value' => 'first_name',
+                    'text' => 'First Name'
+                ], [
+                    'value' => 'last_name',
+                    'text' => 'Last Name'
+                ], [
+                    'value' => 'email',
+                    'text' => 'Email'
+                ], [
+                    'value' => 'timezone',
+                    'text' => 'Timezone'
+                ], [
+                    'value' => 'address_line_1',
+                    'text' => 'Address Line 1'
+                ], [
+                    'value' => 'address_line_2',
+                    'text' => 'Address Line 2'
+                ], [
+                    'value' => 'postal_code',
+                    'text' => 'Postal Code'
+                ], [
+                    'value' => 'city',
+                    'text' => 'City'
+                ], [
+                    'value' => 'state',
+                    'text' => 'State'
+                ], [
+                    'value' => 'country',
+                    'text' => 'Country'
+                ], [
+                    'value' => 'ip',
+                    'text' => 'IP Address'
+                ], [
+                    'value' => 'latitude',
+                    'text' => 'Latitude'
+                ], [
+                    'value' => 'longitude',
+                    'text' => 'Longitude'
+                ], [
+                    'value' => 'phone',
+                    'text' => 'Phone'
+                ], [
+                    'value' => 'status',
+                    'text' => 'Possible Values: pending/subscribed/bounced/unsubscribed'
+                ], [
+                    'value' => 'contact_tye',
+                    'text' => 'lead/customer'
+                ], [
+                    'value' => 'source',
+                    'text' => 'Source'
+                ], [
+                    'value' => 'avatar',
+                    'text' => 'Custom Contact Photo URL'
+                ], [
+                    'value' => 'date_of_birth',
+                    'text' => 'Date of Birth in Y-m-d format'
+                ], [
+                    'value' => 'last_activity',
+                    'text' => 'Last Activity'
+                ], [
+                    'value' => 'updated_at',
+                    'text' => 'Updated At'
+                ]
+            ];
+        },
+        'edit'
+    );
+
+
+});
 
 
 
@@ -74,6 +272,7 @@
            
 
         }, 10, 3);
+
 
 
     }
@@ -132,7 +331,11 @@
 
         $this->acf_json_dir = $wp_uploads['basedir'] . '/acf/local-json/';
 
+<<<<<<< HEAD
         error_log( $this->acf_json_dir );
+=======
+//        error_log( $acf_json_dir );
+>>>>>>> 41765133a6b355b588c86f57337162d7e8c9b355
 
         if ( is_dir( $this->acf_json_dir ) ) {
 
@@ -562,3 +765,6 @@
 
 
 BreakdanceBS::get_instance();
+
+
+
