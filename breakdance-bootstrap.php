@@ -331,11 +331,7 @@ add_action( 'init_d', function() {
 
         $this->acf_json_dir = $wp_uploads['basedir'] . '/acf/local-json/';
 
-<<<<<<< HEAD
-        error_log( $this->acf_json_dir );
-=======
 //        error_log( $acf_json_dir );
->>>>>>> 41765133a6b355b588c86f57337162d7e8c9b355
 
         if ( is_dir( $this->acf_json_dir ) ) {
 
