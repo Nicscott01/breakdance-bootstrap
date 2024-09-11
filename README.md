@@ -2,6 +2,9 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 9/11/2024 v0.9.1
+- Fix the prev/next controls on loops with the popup link. These now group using the Breakdance action breakdance_posts_loop_before_loop when a new post loop is being processed.
+
 ### 8/22/2024 v0.9
 - Add the popup element
 
