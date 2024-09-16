@@ -408,16 +408,15 @@ window.BricGoogleMapsLocations().update({
     "rotateControl": {{ design.controls.rotate|json_encode|raw }},
     "zoomControl": {{ design.controls.zoom|json_encode|raw }},
 	"fullscreenControl": {{design.controls.full_screen|json_encode|raw}},
-    "iconsColor" : "{{ design.icons.color|raw }}",
-	"iconsSize" : {{ design.icons.size.number }}
+   "iconsSize" : {{ design.icons and design.icons.size and design.icons.size.number ? design.icons.size.number : \'null\' }},
+    "iconsColor" : "{{ design.icons.color|raw }}"	
 };
 
 window.BricGoogleMapsLocations().update({
  id: "%%ID%%",
   selector: "%%SELECTOR%%",
   options: GoogleMapsOptions
-});
-',
+});',
 ],],
 
 'onMountedElement' => [['script' => 'var GoogleMapsOptions = {
@@ -430,8 +429,8 @@ window.BricGoogleMapsLocations().update({
     "rotateControl": {{ design.controls.rotate|json_encode|raw }},
     "zoomControl": {{ design.controls.zoom|json_encode|raw }},
 	"fullscreenControl": {{design.controls.full_screen|json_encode|raw}},
-    "iconsColor" : "{{ design.icons.color|raw }}",
-	"iconsSize" : {{ design.icons.size.number }}
+   "iconsSize" : {{ design.icons and design.icons.size and design.icons.size.number ? design.icons.size.number : \'null\' }},
+    "iconsColor" : "{{ design.icons.color|raw }}"	
 };
 
 window.BricGoogleMapsLocations().update({

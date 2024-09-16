@@ -1,8 +1,12 @@
+
+   
 <div class="map-embed">
 <div class="google-map"></div>
 </div>
-<div class="data-locations locations-icons">
-  
+<div id="locations-%%ID%%" class="data-locations locations-icons">
+  <p>Post ID: %%POSTID%% </p>  
+     
+      
 {% for key, location in content.data.locations %}
   <div id="icon-{{key}}" class="location" data-name="{{ location.name }}" data-address="{{ location.address }}" data-coordinates="{{location.coordinates}}" data-icon-color="{{ location.icon_color }}" data-icon-size="{{ location.icon_size.number }}">{{location.icon.svgCode | raw}}</div>
 {% endfor %}

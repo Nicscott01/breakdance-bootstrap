@@ -68,9 +68,9 @@ class Jobvite {
        $post_css_path = $ScriptAndStyleHolder->getPostGeneratedCssFilePaths( $postId );
        $global_css_path = $ScriptAndStyleHolder->getGlobalGeneratedCssFilePaths();
 
-        error_log( json_encode( $post_css_path ) );
+        //error_log( json_encode( $post_css_path ) );
 
-        error_log( json_encode( $global_css_path ) );
+        //error_log( json_encode( $global_css_path ) );
 
 
         $post_css_get = wp_remote_get( $post_css_path['postCssFilePath'] );
@@ -82,8 +82,8 @@ class Jobvite {
         if ( $global_css_get['response']['code'] == 200 ) {
             $global_css_code = $global_css_get['body'];
         }
-        error_log( $global_css_code );
-        error_log( $post_css_code );
+        //error_log( $global_css_code );
+       // error_log( $post_css_code );
 
         //Now, lets' put these two files together
         $jobvite_css = $global_css_code . $post_css_code;       
@@ -136,7 +136,7 @@ class Jobvite {
 
         foreach( $nodes as $node ) {
 
-            error_log( $node->data->type );
+            //( $node->data->type );
 
             if ( $node->data->type == 'BreakdanceCustomElements\JobviteEmbed' ) {
 

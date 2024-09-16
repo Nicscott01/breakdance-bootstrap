@@ -10,4 +10,11 @@
     {% set year_string = start_year ~ '-' ~ current_year %}
 {% endif %}
 
-&copy; {{ year_string }} {{ content.data.copyright_holder }}
+{% if content.data.suffix is not empty %}
+	{% set suffix = content.data.suffix %}
+{% else %}
+	{% set suffix = "All Rights Reserved" %}
+{% endif %}
+
+
+&copy; {{ year_string }} {{ content.data.copyright_holder }} {{ suffix }}

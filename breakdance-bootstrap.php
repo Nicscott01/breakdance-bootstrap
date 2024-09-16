@@ -3,7 +3,7 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.9
+ *  Version: 0.9.1
  * 
  * 
  */
@@ -22,7 +22,6 @@ use BricBreakdance\FluentCrmFormHandler;
  include_once( __DIR__ . '/inc/shortcodes.php' ); 
  include_once( __DIR__ . '/inc/facetwp.php' ); 
  include_once( __DIR__ . '/inc/google-maps-locations.php' ); 
-
 
 
 

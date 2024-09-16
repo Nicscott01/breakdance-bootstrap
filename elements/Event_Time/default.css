@@ -1,0 +1,11 @@
+ .breakdance .bric-event-time {
+   display:flex;
+}
+
+.breakdance .bric-event-time .start-date,
+.breakdance .bric-event-time .end-date,
+.breakdance .bric-event-time .time-block {
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+}
