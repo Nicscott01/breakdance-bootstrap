@@ -1,0 +1,47 @@
+%%SELECTOR%% .rs-sc-selections-no-calendar-wrapper { 
+  flex-direction: {{design.layout.stack}};
+  justify-content: {{design.layout.align }};
+  align-items: {{ design.layout.align }};
+  align-content: {{ design.layout.align }};
+  {{ macros.typography(design.typography, globalSettings) }}
+}
+
+
+{{ macros.atomV1ButtonCss(design.form.button, 'ui-button', '%%SELECTOR%%', breakpoint, globalSettings) }}
+    
+
+%%SELECTOR%% .hasDatepick > div {
+  max-width: {{ design.calendar.max_width.style }};
+}
+
+
+{% if design.calendar.hide_check_in_check_out %}
+%%SELECTOR%% .rs-sc-arrival-wrapper,
+%%SELECTOR%% .rs-sc-departure-wrapper {
+  display: none;
+}
+{% endif %}
+
+
+
+{% if breakpoint == design.layout.hide_at_breakpoint %}
+ %%SELECTOR%% #rscalendar-%%ID%% {
+   display: none;
+}
+%%SELECTOR%% {
+   --bric-rez-button-display:block;
+}
+{% endif %}
+
+
+
+
+{{ macros.atomV1ButtonCss(design.form.mobile_button, 'mobile-booking-button', '%%SELECTOR%%', breakpoint, globalSettings) }}
+    
+%%SELECTOR%% {
+  --bde-form-input-padding-top: {{ design.form.input_size.padding.top.style }};
+  --bde-form-input-padding-bottom: {{ design.form.input_size.padding.bottom.style }}; 
+  --bde-form-input-padding-left: {{ design.form.input_size.padding.left.style }}; 
+  --bde-form-input-padding-right: {{ design.form.input_size.padding.right.style }}; 
+  --bde-form-font-size: {{ design.form.font_size.style }};
+}
