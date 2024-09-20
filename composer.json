@@ -1,0 +1,13 @@
+{
+    "name": "bric/breakdance-bootstrap",
+    "description": "Add-on tools to make developing websites faster. Includes extra elements and scripts.",
+    "type": "plugin",
+    "authors": [
+        {
+            "name": "Nic",
+            "email": "nic@crearewebsolutions.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
