@@ -8,6 +8,10 @@
   display:flex;
 }
 
+.breakdance .bric-rs-calendar  .rs-sc-field {
+  flex: 1 1 auto;
+}
+
 .breakdance .bric-rs-calendar .rs-sc-field select {
 	width:100%;
 }
@@ -18,6 +22,11 @@
   flex-direction:row;
   justify-content:center;
   align-items:center;
+}
+
+.breakdance .bric-rs-calendar .rs-sc-field label span {
+  width:auto;
+  flex:1 1 100px;
 }
 
 .breakdance .bric-rs-calendar .rs-sc-wrapper {
