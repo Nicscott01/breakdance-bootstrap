@@ -4,6 +4,7 @@ Bootstrap features for Breakdance sites
 ## Changelog
 ### 9/20/2024 v0.9.3
 - Improve Fluent CRM action. Allow real double opt-in now. New setup enables a "check to be added to list" with checkbox or hidden field value to "pending".
+- Add Element for Child Pages navigation
 - Add WP User form action to add form submission as user
 - Add auto-login script when optin link is clicked...allows direct tracking of mailing list subscribers to their user.
 - Tweak RezStream element
