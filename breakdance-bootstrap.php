@@ -14,6 +14,7 @@ use BricBreakdance\FluentCrmFormHandler;
 
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
+ include_once( __DIR__ . '/inc/form-action-utils.php' ); 
  include_once( __DIR__ . '/inc/jobvite.php' ); 
  include_once( __DIR__ . '/inc/loop-popup.php' ); 
  include_once( __DIR__ . '/inc/team-members.php' ); 
@@ -22,6 +23,7 @@ use BricBreakdance\FluentCrmFormHandler;
  include_once( __DIR__ . '/inc/shortcodes.php' ); 
  include_once( __DIR__ . '/inc/facetwp.php' ); 
  include_once( __DIR__ . '/inc/google-maps-locations.php' ); 
+ include_once( __DIR__ . '/inc/fluent-crm-auto-login-handler.php' ); 
 
 
 
@@ -115,6 +117,8 @@ use BricBreakdance\FluentCrmFormHandler;
                 return;
             }
             
+            //Check that Fluent CRM is available
+
             require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
 
             //\Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
@@ -143,9 +147,33 @@ use BricBreakdance\FluentCrmFormHandler;
                 return;
             }
             
-            require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
+            if ( function_exists( 'FluentCrmApi' ) ) {
+
+                require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
+
+            }
+
 
             \Breakdance\Forms\Actions\registerAction(new FluentCrmFormHandler());
+
+        });
+
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            
+
+            require_once( __DIR__ . '/inc/wp-user-form-handler.php' ); 
+
+            
+
+
+            \Breakdance\Forms\Actions\registerAction(new BricBreakdance\WPUserFormHandler());
 
         });
 

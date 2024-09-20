@@ -4,7 +4,6 @@ window.rezCalendarQueued = window.rezCalendarQueued || [];
 
 // Function to queue calendars
 window.queueRezCalendar = (element_id, config) => {
-    console.log('Queueing config:', config);
     window.rezCalendarQueue.push({
         calElements: element_id,
         ...config
@@ -34,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize calendars when rezStreamLoader is ready
 document.addEventListener('rezStreamLoaderReady', () => {
-    console.log('rezStreamLoaderReady', 'Queue:', window.rezCalendarQueue, 'Queued Count:', window.rezCalendarQueued.length);
 
     const loadCalendars = () => {
         window.rezCalendarQueue.forEach(config => {

@@ -17,6 +17,8 @@ namespace BricBreakdance;
 use function Breakdance\Elements\control;
 use function Breakdance\Elements\controlSection;
 use function Breakdance\Elements\repeaterControl;
+use function Breakdance\Elements\c;
+use function \BricBreakdance\Forms\getMappedFieldValuesFromFormData;
 
 class FluentCrmFormHandler extends \Breakdance\Forms\Actions\Action {
 
@@ -241,63 +243,115 @@ class FluentCrmFormHandler extends \Breakdance\Forms\Actions\Action {
 
     /**
      * @return array
+     * 
+     * Note: Important to use formField as the slug for mapped repeaters 
+     * so we can use the breakdance function \Breakdance\Forms\getMappedFieldValuesFromFormData()
      */
     public function controls()
     {
-        return [
-            control('lists', 'Lists', [
-                'type' => 'multiselect',
-                'layout' => 'vertical',
-                'placeholder' => 'No lists selected',
-                'multiselectOptions' => [
-                    'populate' => [
-                        'fetchDataAction' => 'bdbs_fetch_fluentcrm_lists',
-                    ],
-                ],
-            ]),
-
-            control('tags', 'Tags', [
-                'type' => 'multiselect',
-                'layout' => 'vertical',
-                'placeholder' => 'No tags selected',
-                'multiselectOptions' => [
-                    'populate' => [
-                        'fetchDataAction' => 'bdbs_fetch_fluentcrm_tags',
-                    ],
-                ],
-            ]),
-
-
-            repeaterControl('fields', 'Field Map', [
-                control('fluent_crm_field', 'CRM Field Name', [
-                    'type' => 'dropdown',
-                    'layout' => 'vertical',
-                    'placeholder' => 'No field selected',
-                    'dropdownOptions' => [
-                        'populate' => [
-                            'fetchDataAction' => 'bdbs_fetch_fluentcrm_fields',
-                        ],
-                    ]
-                ]),
-
-                control('formField', 'Form Field Value', [
-                    'type' => 'text',
-                    'layout' => 'vertical',
-                    'placeholder' => '',
-                    'variableOptions' => [
-                        'enabled' => true,
-                        'populate' => [
-                            'path' => 'content.form.fields',
-                            'text' => 'label',
-                            'value' => 'advanced.id',
-                        ]
-                    ],
-                ]),
-            ])
-            
-        ];
+        return [c(
+        "lists",
+        "Lists",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [], 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'bdbs_fetch_fluentcrm_lists', 'fetchContextPath' => 'content.controls.lists', 'refetchPaths' => []]]],
+        false,
+        false,
+        [],
+      ), c(
+        "tags",
+        "Tags",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [], 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'bdbs_fetch_fluentcrm_tags', 'fetchContextPath' => 'content.controls.lists', 'refetchPaths' => []]]],
+        false,
+        false,
+        [],
+      ), c(
+        "field_map",
+        "Field Map",
+        [c(
+        "crm_field",
+        "CRM Field",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'dropdownOptions' => ['populate' => ['path' => 'content.controls.field_map', 'text' => '', 'value' => '', 'fetchDataAction' => 'bdbs_fetch_fluentcrm_fields', 'fetchContextPath' => 'content.controls.field_map.crm_field', 'refetchPaths' => []]]],
+        false,
+        false,
+        [],
+      ), c(
+        "formfield",
+        "Form Field",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'variableOptions' => ['enabled' => true, 'populate' => ['path' => 'content.form.fields', 'text' => 'label', 'value' => 'advanced.id']], 'dropdownOptions' => ['populate' => ['path' => 'content.form.fields', 'text' => 'label', 'value' => 'advanced.id', 'fetchDataAction' => '', 'fetchContextPath' => '', 'refetchPaths' => []]]],
+        false,
+        false,
+        [],
+      )],
+        ['type' => 'repeater', 'layout' => 'vertical', 'repeaterOptions' => ['titleTemplate' => '{crm_field}', 'defaultTitle' => '', 'buttonName' => '']],
+        false,
+        false,
+        [],
+      ), c(
+        "about_double_opt_in",
+        "About Double Opt In",
+        [],
+        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'warning', 'content' => '<p>Only disable double opt-in if you know what you\'re doing. This could lead to a very dirty list and blacklisting by email providers.</p>']],
+        false,
+        false,
+        [],
+      ), c(
+        "disable_double_opt_in",
+        "Disable Double Opt-In",
+        [],
+        ['type' => 'toggle', 'layout' => 'vertical'],
+        false,
+        false,
+        [],
+      )];
     }
 
+
+
+
+
+    /**
+     *  Helper: put fields with key prefix custom_field_ 
+     *  into an array custom_values
+     * 
+     */
+
+    public function prepare_custom_fields( $merged_data ) {
+
+        if ( empty( $merged_data ) ) {
+            return $merged_data;
+        }
+
+        $custom_values = [];
+
+        foreach( $merged_data as $key => $val ) {
+
+            if( strpos( $key, 'custom_field_' ) === 0 ) {
+
+                //Custom values park in their own subarray 
+                /*'custom_values' => [
+                'custom_field_slug_1' => 'custom_field_value_1',
+                'custom_field_slug_2' => 'custom_field_value_2',
+                ]*/
+
+                $slug = str_replace( 'custom_field_', '', $key );
+                
+                $custom_values[ $slug ] = $val;
+
+
+            }
+
+        }
+
+        if ( !empty( $custom_values ) ) {
+            $merged_data['custom_values'] = $custom_values;
+        }
+
+        return $merged_data;
+
+    }
 
 
 
@@ -315,128 +369,98 @@ class FluentCrmFormHandler extends \Breakdance\Forms\Actions\Action {
     public function run($form, $settings, $extra)
     {
 
-
-        ob_start();
-
-var_dump( $form );
-
-echo '
+error_log( print_r( $settings, 1 ) );
+error_log( print_r( $form, 1 ) );
 
 
-';
-
-var_dump( $settings );
-
-echo '
-
-
-';
-
-var_dump( $extra );
-
-$log = ob_get_clean();
-
-error_log( $log );
 
 
 
         try {
            
             //Add or update email in Fluent, and tag them with the form they filled out
+            /*$data = [
+                'first_name' => $extra['fields']['fname'],
+                'last_name' => $extra['fields']['lname'],
+                'email' => $extra['fields']['email'], // requied
+                'status' => 'pending',
+                'tags' => [1,2,3, 'Dynamic Tag'], // tag ids/slugs/title as an array
+                'lists' => [4, 'Dynamic List'] // list ids/slugs/title as an array,
+                'detach_tags' => [6, 'another_tag'] // tag ids/slugs/title as an array,
+                'detach_lists' => [10, 'list_slug'] // list ids/slugs/title as an array,
+                'custom_values' => [
+                    'custom_field_slug_1' => 'custom_field_value_1',
+                    'custom_field_slug_2' => 'custom_field_value_2',
+                ]
+            ];*/
+
+
             if ( function_exists( 'FluentCrmApi' ) ) {
-             
+
+                $fieldsRepeater = $settings['actions']['fluent_crm']['field_map'];
+
+                $mapped_values = \BricBreakdance\Forms\getMappedFieldValuesFromFormData($fieldsRepeater, $form, 'crm_field', 'formfield' );
+                error_log( 'Mapped values: ' . print_r( $mapped_values, 1 ) );
+
+
+
                 $contactApi = FluentCrmApi('contacts');
+            
+                //Bail if no email:
+                if ( !isset( $mapped_values['email']) || empty( $mapped_values['email'] ) ) {
+                    return ['type' => 'error', 'message' => 'The CRM action has been incorrectly configured. No Email present.'];
+                }
+
+                //Re-jigger custom fields
+                $mapped_values = $this->prepare_custom_fields( $mapped_values );
 
 
-                $data_for_crm = [];
+                //Set lists
+                $mapped_values['lists'] = [ $settings['actions']['fluent_crm']['lists'] ] ?? [];
 
-                foreach( $settings['actions']['fluent_crm']['fields'] as $field ) {
+                //Set tags                
+                $mapped_values['tags'] = [ $settings['actions']['fluent_crm']['tags'] ] ?? [];
+                
 
-                    if ( empty( $field ) ) {
-                        continue;
+                error_log( 'Mapped values: ' . print_r( $mapped_values, 1 ) );
+
+                $disable_double_opt_in = $settings['actions']['fluent_crm']['disable_double_opt_in'] ?? false;
+
+                
+                
+                //Set status to unsubscribed if not set in form
+                if ( ( !isset( $mapped_values['status'] ) || $mapped_values['status'] == '' ) && !$disable_double_opt_in  ) {
+
+                    //See if the contact exists
+                    $existing_contact = $contactApi->getContact( $mapped_values['email'] );
+
+                    if( empty( $existing_contact ) ) {
+                        $mapped_values['status'] = 'transactional';
                     }
+                } elseif ( $disable_double_opt_in ) {
 
-                    if( strpos( $field['fluent_crm_field'], 'custom_field_' ) === 0 ) {
-
-                        //Custom values park in their own subarray 
-                        /*'custom_values' => [
-                        'custom_field_slug_1' => 'custom_field_value_1',
-                        'custom_field_slug_2' => 'custom_field_value_2',
-                        ]*/
-
-                        if ( strpos( $field['formField'], '{') === 0 ) {
-
-                            $data_for_crm['custom_values'][ str_replace( 'custom_field_', '', $field['fluent_crm_field'] )] = $extra['fields'][ str_replace( [ '{', '}'], '',  $field['formField'] ) ];
-
-                        } else {
-
-                            $data_for_crm['custom_values'][ str_replace( 'custom_field_', '', $field['fluent_crm_field'] )] =  $field['formField'];
-
-                        }
-
-
-                    } else {
-
-                        //Get the value from the extra
-                        if ( strpos( $field['formField'], '{') === 0 ) {
-                            
-                            $data_for_crm[$field['fluent_crm_field']] = $extra['fields'][ str_replace( [ '{', '}'], '',  $field['formField'] ) ];
-
-                        } else {
-
-                            $data_for_crm[$field['fluent_crm_field']] = $field['formField'];
-
-                        }
-
-
-                    }
+                    $mapped_values['status'] = 'subscribed';
 
                 }
 
-
-                //Set tags
-                $data_for_crm['tags'] = $settings['actions']['fluent_crm']['tags'];
-                
-                //Set lists
-                $data_for_crm['lists'] = $settings['actions']['fluent_crm']['lists'];
-
-
-
-                ob_start();
-                var_dump( $data_for_crm );
-                $log = ob_get_clean();
-                error_log( $log );
-
-                $contact = $contactApi->createOrUpdate( $data_for_crm );
-                
-                
                 /*
                 * Update/Insert a contact
                 * You can create or update a contact in a single call
                 */
 
-                $data = [
-                    'first_name' => $extra['fields']['fname'],
-                    'last_name' => $extra['fields']['lname'],
-                    'email' => $extra['fields']['email'], // requied
-                    'status' => 'pending',
-                    //'tags' => [1,2,3, 'Dynamic Tag'], // tag ids/slugs/title as an array
-                    //'lists' => [4, 'Dynamic List'] // list ids/slugs/title as an array,
-                    //'detach_tags' => [6, 'another_tag'] // tag ids/slugs/title as an array,
-                    //'detach_lists' => [10, 'list_slug'] // list ids/slugs/title as an array,
-                    /*'custom_values' => [
-                        'custom_field_slug_1' => 'custom_field_value_1',
-                        'custom_field_slug_2' => 'custom_field_value_2',
-                    ]*/
-                ];
+                $contact = $contactApi->createOrUpdate( $mapped_values );
+                
+                /**
+                 * Double Opt In
+                 */
 
-                //$contact = $contactApi->createOrUpdate($data);
+                $disable_double_opt_in = $settings['actions']['fluent_crm']['disable_double_opt_in'] ?? false;
 
                 // send a double opt-in email if the status is pending
-              /*  if($contact && $contact->status == 'pending') {
+                if($contact && $contact->status == 'pending' && !$disable_double_opt_in ) {
                     $contact->sendDoubleOptinEmail();
                 }
-                */
+                
 
             } 
 
