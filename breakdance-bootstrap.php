@@ -3,7 +3,7 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.9.3
+ *  Version: 0.9.4
  * 
  * 
  */
@@ -24,6 +24,7 @@ use BricBreakdance\FluentCrmFormHandler;
  include_once( __DIR__ . '/inc/facetwp.php' ); 
  include_once( __DIR__ . '/inc/google-maps-locations.php' ); 
  include_once( __DIR__ . '/inc/fluent-crm-auto-login-handler.php' ); 
+ include_once( __DIR__ . '/inc/icon-terms.php' ); 
 
 
 
@@ -56,7 +57,7 @@ use BricBreakdance\FluentCrmFormHandler;
 
 
 
-        add_filter( 'get_the_archive_title', [ $this, 'get_the_archive_title' ]);
+        //add_filter( 'get_the_archive_title', [ $this, 'get_the_archive_title' ]);
 
 
         //Save ACF in local JSON

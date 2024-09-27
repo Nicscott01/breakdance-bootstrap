@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 9/27/2024 v0.9.4
+- Add Term Icon Element so you can display a term as an icon for a post
 ### 9/20/2024 v0.9.3
 - Improve Fluent CRM action. Allow real double opt-in now. New setup enables a "check to be added to list" with checkbox or hidden field value to "pending".
 - Add Element for Child Pages navigation
