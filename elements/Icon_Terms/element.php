@@ -7,11 +7,11 @@ use function Breakdance\Elements\PresetSections\getPresetSection;
 
 
 \Breakdance\ElementStudio\registerElementForEditing(
-    "BricBreakdanceElements\\WebsiteCopyright",
+    "BricBreakdanceElements\\IconTerms",
     \Breakdance\Util\getdirectoryPathRelativeToPluginFolder(__DIR__)
 );
 
-class WebsiteCopyright extends \Breakdance\Elements\Element
+class IconTerms extends \Breakdance\Elements\Element
 {
     static function uiIcon()
     {
@@ -35,12 +35,12 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
 
     static function name()
     {
-        return 'Website Copyright';
+        return 'Icon Terms';
     }
 
     static function className()
     {
-        return 'bric-website-copyright';
+        return 'bric-icon-terms';
     }
 
     static function category()
@@ -70,7 +70,7 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
 
     static function defaultProperties()
     {
-        return ['content' => ['data' => ['copyright_holder' => '[breakdance_dynamic field=\'site_title\']', 'copyright_holder_dynamic_meta' => ['field' => ['category' => 'Site Info', 'subcategory' => '', 'label' => 'Site Title', 'slug' => 'site_title', 'returnTypes' => ['string'], 'defaultAttributes' => (object)[], 'controls' => [['slug' => 'advanced', 'label' => 'Advanced', 'children' => [['slug' => 'beforeContent', 'label' => 'Prepend', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'afterContent', 'label' => 'Append', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'truncate', 'label' => 'Limit Characters', 'children' => [], 'options' => ['type' => 'number', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'fallback', 'label' => 'Fallback', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['multiline' => false]], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []]], 'options' => ['type' => 'section', 'sectionOptions' => ['type' => 'popout']], 'enableMediaQueries' => false, 'enableHover' => false]], 'proOnly' => true], 'shortcode' => '[breakdance_dynamic field=\'site_title\']', 'attributes' => (object)[]]]]];
+        return false;
     }
 
     static function defaultChildren()
@@ -87,9 +87,9 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
     static function designControls()
     {
         return [getPresetSection(
-      "EssentialElements\\typography",
-      "Typography",
-      "typography",
+      "EssentialElements\\AtomV1IconDesignWithHover",
+      "Icon",
+      "icon",
        ['type' => 'popout']
      )];
     }
@@ -97,37 +97,37 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
     static function contentControls()
     {
         return [c(
-        "data",
-        "Data",
+        "controls",
+        "Controls",
         [c(
-        "info",
-        "Info",
+        "taxonomy",
+        "Taxonomy",
         [],
-        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'info', 'content' => '<p>Use this to set the begin date for the website copyright. The end date will automagically update each year!</p>']],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'breakdance_get_taxonomies', 'fetchContextPath' => 'content.controls.taxonomy', 'refetchPaths' => []]]],
         false,
         false,
         [],
       ), c(
-        "start_date",
-        "Start Date",
+        "terms",
+        "Terms",
+        [c(
+        "term",
+        "Term",
         [],
-        ['type' => 'date_picker', 'layout' => 'vertical'],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'bdbs_fetch_terms', 'fetchContextPath' => 'content.controls.taxonomy', 'refetchPaths' => ['content.controls.taxonomy']]]],
         false,
         false,
         [],
       ), c(
-        "copyright_holder",
-        "Copyright Holder",
+        "icon",
+        "Icon",
         [],
-        ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'Company name'],
+        ['type' => 'icon', 'layout' => 'vertical'],
         false,
         false,
         [],
-      ), c(
-        "suffix",
-        "Suffix",
-        [],
-        ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'All Rights Reserved'],
+      )],
+        ['type' => 'repeater', 'layout' => 'vertical', 'repeaterOptions' => ['titleTemplate' => 'Term', 'defaultTitle' => '', 'buttonName' => 'Add term'], 'condition' => [[['path' => 'content.controls.taxonomy', 'operand' => 'is set', 'value' => '']]]],
         false,
         false,
         [],
@@ -191,7 +191,7 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return [['accepts' => 'string', 'path' => 'content.data.copyright_holder']];
+        return [];
     }
 
     static function additionalClasses()

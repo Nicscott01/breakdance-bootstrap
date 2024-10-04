@@ -2,6 +2,25 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 9/27/2024 v0.9.4
+- Add Term Icon Element so you can display a term as an icon for a post
+### 9/20/2024 v0.9.3
+- Improve Fluent CRM action. Allow real double opt-in now. New setup enables a "check to be added to list" with checkbox or hidden field value to "pending".
+- Add Element for Child Pages navigation
+- Add WP User form action to add form submission as user
+- Add auto-login script when optin link is clicked...allows direct tracking of mailing list subscribers to their user.
+- Tweak RezStream element
+### 9/16/2024 v0.9.2
+- Add RezStream Element in BD builder
+### 9/11/2024 v0.9.1
+- Fix the prev/next controls on loops with the popup link. These now group using the Breakdance action breakdance_posts_loop_before_loop when a new post loop is being processed.
+
+### 8/22/2024 v0.9
+- Add the popup element
+
+### 8/15/2024 v0.8
+- Add Suffix field to copyright
+
 ### 8/12/2024 v0.71
 - Tweak styles on the policies links
 - Fix Maps not rendering in builder due to improper handling of objects

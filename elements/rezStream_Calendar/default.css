@@ -1,0 +1,71 @@
+.breakdance .bric-rs-calendar,
+.rs-sc-selections-with-calendar-wrapper,
+.ui-datepicker {
+   width:100%;
+}
+
+.breakdance .bric-rs-calendar .rs-sc-selections-no-calendar-wrapper { 
+  display:flex;
+}
+
+.breakdance .bric-rs-calendar  .rs-sc-field {
+  flex: 1 1 auto;
+}
+
+.breakdance .bric-rs-calendar .rs-sc-field select {
+	width:100%;
+}
+
+.breakdance .bric-rs-calendar .rs-sc-field label,
+.breakdance .bric-rs-calendar .rs-sc-wrapper {
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+  align-items:center;
+}
+
+.breakdance .bric-rs-calendar .rs-sc-field label span {
+  width:auto;
+  flex:1 1 100px;
+}
+
+.breakdance .bric-rs-calendar .rs-sc-wrapper {
+  flex-direction:column;
+}
+
+.breakdance .bric-rs-calendar .rs-sc-arrival-wrapper {
+  max-width:200px;
+}
+
+.datepick-popup .ui-datepicker {
+  max-width: 300px; 
+}
+
+.breakdance .bric-rs-calendar .rscalendar-wrapper {
+  display:flex;
+  flex-direction:column;
+}
+
+.breakdance .bric-rs-calendar .ui-datepicker-group .ui-datepicker-title {
+  display:flex;
+  flex-direction:row;
+}
+
+
+.breakdance .bric-rs-calendar .ui-datepicker-group .datepick-month-year {
+  flex: 0 1 auto;
+}
+
+.breakdance .bric-rs-calendar .ui-datepicker-group .datepick-month-year:last-child {
+  flex: 0 1 45%;
+}
+
+
+
+.breakdance .bric-rs-calendar {
+	--bric-rez-button-display:none;
+}
+
+.breakdance .bric-rs-calendar .mobile-booking-button {
+  display:var(--bric-rez-button-display);
+}

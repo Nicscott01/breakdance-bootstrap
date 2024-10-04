@@ -7,11 +7,11 @@ use function Breakdance\Elements\PresetSections\getPresetSection;
 
 
 \Breakdance\ElementStudio\registerElementForEditing(
-    "BricBreakdanceElements\\ListItems",
+    "BricBreakdanceElements\\LoopPopupLink",
     \Breakdance\Util\getdirectoryPathRelativeToPluginFolder(__DIR__)
 );
 
-class ListItems extends \Breakdance\Elements\Element
+class LoopPopupLink extends \Breakdance\Elements\Element
 {
     static function uiIcon()
     {
@@ -35,17 +35,17 @@ class ListItems extends \Breakdance\Elements\Element
 
     static function name()
     {
-        return 'List Items';
+        return 'Loop Popup Link';
     }
 
     static function className()
     {
-        return 'bric-list-items';
+        return 'bric-loop-popup-link';
     }
 
     static function category()
     {
-        return 'other';
+        return 'dynamic';
     }
 
     static function badge()
@@ -55,7 +55,7 @@ class ListItems extends \Breakdance\Elements\Element
 
     static function slug()
     {
-        return __CLASS__;
+        return get_class();
     }
 
     static function template()
@@ -86,41 +86,7 @@ class ListItems extends \Breakdance\Elements\Element
 
     static function designControls()
     {
-        return [c(
-        "layout",
-        "Layout",
-        [getPresetSection(
-      "EssentialElements\\simpleLayout",
-      "Layout",
-      "simplelayout",
-       ['type' => 'popout']
-     ), c(
-        "gap",
-        "Gap",
-        [],
-        ['type' => 'unit', 'layout' => 'inline'],
-        false,
-        false,
-        [],
-      ), c(
-        "width",
-        "Width",
-        [],
-        ['type' => 'unit', 'layout' => 'inline'],
-        false,
-        false,
-        [],
-      )],
-        ['type' => 'section'],
-        false,
-        false,
-        [],
-      ), getPresetSection(
-      "EssentialElements\\typography",
-      "Typography",
-      "typography",
-       ['type' => 'popout']
-     )];
+        return [];
     }
 
     static function contentControls()
@@ -129,10 +95,10 @@ class ListItems extends \Breakdance\Elements\Element
         "data",
         "Data",
         [c(
-        "separator",
-        "Separator",
+        "popup",
+        "Popup",
         [],
-        ['type' => 'text', 'layout' => 'vertical', 'placeholder' => '//'],
+        ['type' => 'global_block_chooser', 'layout' => 'vertical'],
         false,
         false,
         [],
@@ -196,7 +162,7 @@ class ListItems extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return [];
+        return ['0' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '1' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string']];
     }
 
     static function additionalClasses()
@@ -211,7 +177,7 @@ class ListItems extends \Breakdance\Elements\Element
 
     static function propertyPathsToWhitelistInFlatProps()
     {
-        return ['design.layout.layout', 'design.layout.h_vertical_at', 'design.layout.h_alignment_when_vertical', 'design.layout.a_display', 'design.layout.simplelayout.horizontal.vertical_at', 'content.data.separator'];
+        return false;
     }
 
     static function propertyPathsToSsrElementWhenValueChanges()

@@ -1,0 +1,79 @@
+%%SELECTOR%% .modal {
+ --bric-modal-width: {{ design.modal.width.style }};
+ --bric-modal-z-index:{{ design.modal.z_index }};
+ --bric-modal-padding:  {{ design.modal.padding.style }};
+  --bric-modal-margin: {{ design.modal.margin.style }};
+  --bric-modal-bg: {{ design.modal.background_color }};
+  --bric-modal-footer-gap: 0.5rem;
+  --bric-modal-footer-bg: ;
+  --bric-modal-footer-border-color: var(--bs-border-color);
+  --bric-modal-footer-border-width: 1px;
+}
+
+{{ macros.atomV1IconCss(design.navigation.icon_style, 'nav-icon', '%%SELECTOR%%', false) }}
+
+%%SELECTOR%% .nav-icon:hover > svg {
+  fill: {{ design.navigation.icon_style.color_hover }} !important;
+}
+
+%%SELECTOR%% .modal-dialog {
+  display:flex;
+  align-items: {{design.modal.vertical_align}};
+}
+
+
+%%SELECTOR%% .modal-content {
+  {{ macros.borders(design.modal.borders) }}
+  {{ macros.spacing_padding_all(design.modal.padding) }}
+}
+
+{{ macros.atomV1IconCss(design.close_button.icon_style, 'modal-close-button', '%%SELECTOR%%', false) }}
+
+%%SELECTOR%% .modal-close-button:hover > svg {
+  fill: {{ design.close_button.icon_style.color_hover }} !important;
+}
+
+%%SELECTOR%% .modal-close-button {
+  font-size: {{ design.close_button.size.style }};
+}
+
+%%SELECTOR%% .modal-close-button > svg {
+  fill: {{ design.close_button.color }};
+}
+
+%%SELECTOR%% .modal-close-button:hover > svg {
+  fill: {{ design.close_button.color_hover }};
+}
+
+%%SELECTOR%% .modal-nav {
+  background-image: {{ design.navigation.background.value }};
+}
+
+%%SELECTOR%% .modal-nav {
+  {{ macros.spacing_padding_x(design.navigation.padding) }}
+}
+
+
+{% if content.data.allow_scroll %}
+	%%SELECTOR%% .modal-dialog {
+		 height: calc(100% - var(--bric-modal-margin) * 2);
+	}
+    %%SELECTOR%% .modal-content {
+      max-height: 100%;
+      overflow: hidden;
+    }
+	%%SELECTOR%% .modal-body {
+      overflow-y: auto;
+    }
+{% endif %}
+
+
+
+
+
+
+.modal-backdrop.show {
+  --bric-modal-backdrop-bg: {{ design.backdrop.background_color }};
+  --bric-modal-backdrop-opacity: {{ design.backdrop.opacity }};
+}
+

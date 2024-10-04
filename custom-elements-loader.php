@@ -8,16 +8,15 @@ use function \Breakdance\Elements\c;
 use function \Breakdance\Elements\PresetSections\getPresetSection;
 
 
-add_action(
-    'breakdance_loaded',
-    function () {
-        \Breakdance\ElementStudio\registerSaveLocation(
-            getDirectoryPathRelativeToPluginFolder(__DIR__) . '/elements',
-            'BricBreakdanceElements',
-            'element',
-            'Bric Elements',
-            false
-        );
+
+add_action('breakdance_loaded', function () {
+    \Breakdance\ElementStudio\registerSaveLocation(
+        getDirectoryPathRelativeToPluginFolder(__DIR__) . '/elements',
+        'BricBreakdanceElements',
+        'element',
+        'Bric Elements',
+        false
+    );
 
         \Breakdance\ElementStudio\registerSaveLocation(
             getDirectoryPathRelativeToPluginFolder(__DIR__) . '/macros',
@@ -69,51 +68,63 @@ add_action('breakdance_reusable_dependencies_urls', function ($urls) {
     //%%BREAKDANCE_REUSABLE_BRIC_GOOGLE_MAPS_LOCATIONS_JS%%
     $urls['bricGoogleMapsLocationsJs'] = plugin_dir_url( __FILE__ ) . 'assets/src/js/bric-google-maps-locations.js';
 
+
+    //RezStream
+    //%%BREAKDANCE_REUSABLE_REZ_STREAM_LOADER_JS%%
+    //https://guest.rezstream.com/cdn/content/js/rezstreamLoader.min.js
+    $urls['rezStreamLoaderJs'] = 'https://guest.rezstream.com/cdn/content/js/rezstreamLoader.min.js';
+    //%%BREAKDANCE_REUSABLE_REZ_STREAM_INIT_JS%%
+    $urls['rezStreamInitJs'] = plugin_dir_url(__FILE__) . 'assets/src/js/initRezStream.js';
+
+
     return $urls;
-});
+
+ });
 
 
 
 
 
 
-/**
- *     Global Settings
- *
- *
- *
- */
+ /**
+  *     Global Settings
+  *
+  *
+  *
+  */
 
 add_filter('breakdance_global_settings_control_sections_append', function ($appendedControlSections) {
 
-    $control = [c(
+   $control = [c(
         "spacing",
         "Spacing",
         [getPresetSection(
-            "EssentialElements\\spacing_margin_y",
-            "Paragraphs",
-            "paragraphs",
-            ['type' => 'popout']
-        ), getPresetSection(
-            "EssentialElements\\spacing_margin_y",
-            "Headings",
-            "headings",
-            ['type' => 'popout']
-        ), getPresetSection(
-            "EssentialElements\\spacing_margin_y",
-            "Buttons",
-            "buttons",
-            ['type' => 'popout']
-        )],
+      "EssentialElements\\spacing_margin_y",
+      "Paragraphs",
+      "paragraphs",
+       ['type' => 'popout']
+     ), getPresetSection(
+      "EssentialElements\\spacing_margin_y",
+      "Headings",
+      "headings",
+       ['type' => 'popout']
+     ), getPresetSection(
+      "EssentialElements\\spacing_margin_y",
+      "Buttons",
+      "buttons",
+       ['type' => 'popout']
+     )],
         ['type' => 'section'],
         false,
         false,
         [],
-    )];
+      )];
 
-    $spacing_controls = controlSection('bric_global_spacing', 'Global Spacing', $control);
+      $spacing_controls = controlSection( 'bric_global_spacing', 'Global Spacing', $control );
 
-    return array_merge($appendedControlSections, [$spacing_controls]);
+      return array_merge( $appendedControlSections, [$spacing_controls] ); 
+
+
 });
 
 
@@ -122,9 +133,13 @@ add_filter('breakdance_global_settings_control_sections_append', function ($appe
 
 add_filter('breakdance_global_settings_css_twig_template_append', function ($appendedTwigTemplate) {
 
-    error_log(__DIR__ . '/global-settings/css.twig');
+    //error_log(  __DIR__ . '/global-settings/css.twig');
 
-    $global_css_twig = file_get_contents(__DIR__ . '/global-settings/css.twig');
+    $global_css_twig = file_get_contents( __DIR__ . '/global-settings/css.twig' );
 
     return $appendedTwigTemplate . $global_css_twig;
+
 });
+
+
+

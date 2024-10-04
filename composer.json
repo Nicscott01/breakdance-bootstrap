@@ -1,0 +1,14 @@
+{
+    "name": "nicscott01/breakdance-bootstrap",
+    "description": "Add-on tools to make developing websites faster. Includes extra elements and scripts.",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "Nic",
+            "email": "nic@crearewebsolutions.com"
+        }
+    ],
+    "require": {},
+    "prefer-stable": true,
+    "minimum-stability": "dev"
+}

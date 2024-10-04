@@ -1,0 +1,51 @@
+%%SELECTOR%% { 
+  min-height: {{ design.container.min_height.style }};
+  {{ macros.spacing_padding_all(design.container.padding) }}
+  {{ macros.borders(design.container.borders) }}
+  {{ macros.spacing_margin_y(design.spacing) }}
+  {{ macros.simpleLayout(design.layout, breakpoint) }}
+}
+
+%%SELECTOR%%,
+%%SELECTOR%% .bric-child-pages--children {
+  width: {{ design.container.width.style }};
+}
+
+{{ macros.layoutV2(design.layout_v2, breakpoint, isBaseBreakpoint, '%%SELECTOR%% .bric-child-pages--children') }}
+
+
+%%SELECTOR%% .bric-child-pages--child a {
+  {{ macros.spacing_padding_all(design.child.padding) }}
+}
+
+
+%%SELECTOR%% .bric-child-pages--child {
+  {% if design.child.aspect_ratio %}
+    {% if design.child.aspect_ratio == 'custom' and design.child.custom_ratio.width and design.child.custom_ratio.height %}
+       aspect-ratio: {{ design.child.custom_ratio.width }} / {{ design.child.custom_ratio.height }};
+    {% else %}
+      aspect-ratio: {{ design.child.aspect_ratio }};
+    {% endif %}
+  {% endif %}
+  {{ macros.borders(design.child.borders) }};
+}
+
+{{ macros.fancyBackgroundCss('%%SELECTOR%% .bric-child-pages--child', design.child.background, breakpoint, false, true) }}
+
+
+%%SELECTOR%% a,
+%%SELECTOR%% h2 {
+  {{ macros.typography(design.typography, globalSettings) }}
+}
+
+%%SELECTOR%% .bric-child-pages--child a {
+  text-align: {{ design.child.text_horizontal_align }};
+  align-items: {{ design.child.text_vertical_align }};
+  
+}
+
+%%SELECTOR%% .bric-child-pages--child h2 {
+  background-color: {{ design.child.text_background }};
+  {{ macros.spacing_margin_y(design.child.text_margin) }}
+  {{ macros.spacing_padding_all(design.child.text_padding) }}
+}

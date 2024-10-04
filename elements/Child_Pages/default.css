@@ -1,0 +1,34 @@
+.breakdance .bric-children {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  max-width: 100%;
+  position: relative;
+  background-size: cover;
+}
+
+.breakdance .bric-children .bric-child-pages--child a {
+  display:flex;
+  height:100%;
+} 
+.breakdance .bric-children .bric-child-pages--child {
+  display:block;
+}
+
+.breakdance .bric-children .bric-child-pages--child,
+.breakdance .bric-children .bric-child-pages--child a {
+  position:relative;
+}
+
+.breakdance .bric-children .bric-child-pages--children {
+   list-style:none;
+   padding-left:0;
+}
+
+
+
+.breakdance .bric-children .bric-child-pages--child a,
+.breakdance .bric-children .bric-child-pages--child h2 {
+  width:100%;
+}

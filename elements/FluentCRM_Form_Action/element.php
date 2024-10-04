@@ -7,11 +7,11 @@ use function Breakdance\Elements\PresetSections\getPresetSection;
 
 
 \Breakdance\ElementStudio\registerElementForEditing(
-    "BricBreakdanceElements\\WebsiteCopyright",
+    "BricBreakdanceElements\\FluentcrmFormAction",
     \Breakdance\Util\getdirectoryPathRelativeToPluginFolder(__DIR__)
 );
 
-class WebsiteCopyright extends \Breakdance\Elements\Element
+class FluentcrmFormAction extends \Breakdance\Elements\Element
 {
     static function uiIcon()
     {
@@ -35,12 +35,12 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
 
     static function name()
     {
-        return 'Website Copyright';
+        return 'FluentCRM Form Action';
     }
 
     static function className()
     {
-        return 'bric-website-copyright';
+        return 'bric-fluentcrm-form-action';
     }
 
     static function category()
@@ -70,7 +70,7 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
 
     static function defaultProperties()
     {
-        return ['content' => ['data' => ['copyright_holder' => '[breakdance_dynamic field=\'site_title\']', 'copyright_holder_dynamic_meta' => ['field' => ['category' => 'Site Info', 'subcategory' => '', 'label' => 'Site Title', 'slug' => 'site_title', 'returnTypes' => ['string'], 'defaultAttributes' => (object)[], 'controls' => [['slug' => 'advanced', 'label' => 'Advanced', 'children' => [['slug' => 'beforeContent', 'label' => 'Prepend', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'afterContent', 'label' => 'Append', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'truncate', 'label' => 'Limit Characters', 'children' => [], 'options' => ['type' => 'number', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'fallback', 'label' => 'Fallback', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['multiline' => false]], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []]], 'options' => ['type' => 'section', 'sectionOptions' => ['type' => 'popout']], 'enableMediaQueries' => false, 'enableHover' => false]], 'proOnly' => true], 'shortcode' => '[breakdance_dynamic field=\'site_title\']', 'attributes' => (object)[]]]]];
+        return false;
     }
 
     static function defaultChildren()
@@ -86,53 +86,64 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
 
     static function designControls()
     {
-        return [getPresetSection(
-      "EssentialElements\\typography",
-      "Typography",
-      "typography",
-       ['type' => 'popout']
-     )];
+        return [];
     }
 
     static function contentControls()
     {
         return [c(
-        "data",
-        "Data",
+        "lists",
+        "Lists",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [], 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'bdbs_fetch_fluentcrm_lists', 'fetchContextPath' => 'content.controls.lists', 'refetchPaths' => []]]],
+        false,
+        false,
+        [],
+      ), c(
+        "tags",
+        "Tags",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [], 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'bdbs_fetch_fluentcrm_tags', 'fetchContextPath' => 'content.controls.lists', 'refetchPaths' => []]]],
+        false,
+        false,
+        [],
+      ), c(
+        "field_map",
+        "Field Map",
         [c(
-        "info",
-        "Info",
+        "crm_field",
+        "CRM Field",
         [],
-        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'info', 'content' => '<p>Use this to set the begin date for the website copyright. The end date will automagically update each year!</p>']],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'dropdownOptions' => ['populate' => ['path' => 'content.controls.field_map', 'text' => '', 'value' => '', 'fetchDataAction' => 'bdbs_fetch_fluentcrm_fields', 'fetchContextPath' => 'content.controls.field_map.crm_field', 'refetchPaths' => []]]],
         false,
         false,
         [],
       ), c(
-        "start_date",
-        "Start Date",
+        "formfield",
+        "Form Field",
         [],
-        ['type' => 'date_picker', 'layout' => 'vertical'],
-        false,
-        false,
-        [],
-      ), c(
-        "copyright_holder",
-        "Copyright Holder",
-        [],
-        ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'Company name'],
-        false,
-        false,
-        [],
-      ), c(
-        "suffix",
-        "Suffix",
-        [],
-        ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'All Rights Reserved'],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'variableOptions' => ['enabled' => true, 'populate' => ['path' => 'content.form.fields', 'text' => 'label', 'value' => 'advanced.id']], 'dropdownOptions' => ['populate' => ['path' => 'content.form.fields', 'text' => 'label', 'value' => 'advanced.id', 'fetchDataAction' => '', 'fetchContextPath' => '', 'refetchPaths' => []]]],
         false,
         false,
         [],
       )],
-        ['type' => 'section', 'layout' => 'vertical'],
+        ['type' => 'repeater', 'layout' => 'vertical', 'repeaterOptions' => ['titleTemplate' => '{crm_field}', 'defaultTitle' => '', 'buttonName' => '']],
+        false,
+        false,
+        [],
+      ), c(
+        "about_double_opt_in",
+        "About Double Opt In",
+        [],
+        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'warning', 'content' => '<p>Only disable double opt-in if you know what you\'re doing. This could lead to a very dirty list and blacklisting by email providers.</p>']],
+        false,
+        false,
+        [],
+      ), c(
+        "disable_double_opt_in",
+        "Disable Double Opt-In",
+        [],
+        ['type' => 'toggle', 'layout' => 'vertical'],
         false,
         false,
         [],
@@ -151,12 +162,12 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
 
     static function settings()
     {
-        return false;
+        return ['proOnly' => false];
     }
 
     static function addPanelRules()
     {
-        return false;
+        return ['alwaysHide' => true];
     }
 
     static public function actions()
@@ -191,7 +202,7 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return [['accepts' => 'string', 'path' => 'content.data.copyright_holder']];
+        return [];
     }
 
     static function additionalClasses()

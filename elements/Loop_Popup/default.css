@@ -1,0 +1,316 @@
+.breakdance .bric-loop-popup .modal {
+  --bric-modal-zindex: var(--bde-z-index-popup);
+  --bric-modal-width: 800px;
+  --bric-modal-padding: 1rem;
+  --bric-modal-margin: 0.5rem;
+  --bric-modal-color: inherit;
+  --bric-modal-bg: var(--bde-background-color);
+  --bric-modal-footer-gap: 0.5rem;
+  --bric-modal-footer-bg: ;
+  --bric-modal-footer-border-color: var(--bs-border-color);
+  --bric-modal-footer-border-width: 1px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--bric-modal-zindex);
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: var(--bric-modal-margin);
+  pointer-events: none;
+  min-height: calc(100% - var(--bric-modal-margin) * 2);
+}
+
+.modal.fade .modal-dialog {
+  transition: transform var(--bde-transition-duration) ease-out;
+  transform: translate(0, -50px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal.fade .modal-dialog {
+    transition: none;
+  }
+}
+.modal.show .modal-dialog {
+  transform: none;
+}
+.modal.modal-static .modal-dialog {
+  transform: scale(1.02);
+}
+
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - var(--bric-modal-margin) * 2);
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: var(--bric-modal-color);
+  pointer-events: auto;
+  background-color: var(--bric-modal-bg);
+  background-clip: padding-box;
+  outline: 0;
+}
+
+.modal-backdrop {
+  --bs-backdrop-zindex: calc( var(--bde-z-index-popup) - 1);
+  --bric-modal-backdrop-bg: #000;
+  --bric-modal-backdrop-opacity: 0.5;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--bs-backdrop-zindex);
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bric-modal-backdrop-bg);
+}
+.modal-backdrop.fade {
+  opacity: 0;
+}
+.modal-backdrop.show {
+  opacity: var(--bric-modal-backdrop-opacity);
+}
+
+
+
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: var(--bric-modal-padding);
+}
+
+.modal-footer {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  padding: calc(var(--bric-modal-padding) - var(--bric-modal-footer-gap) * 0.5);
+  background-color: var(--bric-modal-footer-bg);
+  border-top: var(--bric-modal-footer-border-width) solid var(--bric-modal-footer-border-color);
+}
+.modal-footer > * {
+  margin: calc(var(--bric-modal-footer-gap) * 0.5);
+}
+
+@media (min-width: 576px) {
+  .modal {
+    --bric-modal-margin: 1.75rem;
+  }
+  .modal-dialog {
+    max-width: var(--bric-modal-width);
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .modal-sm {
+    --bric-modal-width: 300px;
+  }
+}
+@media (min-width: 992px) {
+  .modal-lg,
+.modal-xl {
+    --bric-modal-width: 800px;
+  }
+}
+@media (min-width: 1200px) {
+  .modal-xl {
+    --bric-modal-width: 1140px;
+  }
+}
+.modal-fullscreen {
+  width: 100vw;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+}
+.modal-fullscreen .modal-content {
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+}
+.modal-fullscreen .modal-header,
+.modal-fullscreen .modal-footer {
+  border-radius: 0;
+}
+.modal-fullscreen .modal-body {
+  overflow-y: auto;
+}
+
+@media (max-width: 575.98px) {
+  .modal-fullscreen-sm-down {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  .modal-fullscreen-sm-down .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .modal-fullscreen-sm-down .modal-header,
+.modal-fullscreen-sm-down .modal-footer {
+    border-radius: 0;
+  }
+  .modal-fullscreen-sm-down .modal-body {
+    overflow-y: auto;
+  }
+}
+@media (max-width: 767.98px) {
+  .modal-fullscreen-md-down {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  .modal-fullscreen-md-down .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .modal-fullscreen-md-down .modal-header,
+.modal-fullscreen-md-down .modal-footer {
+    border-radius: 0;
+  }
+  .modal-fullscreen-md-down .modal-body {
+    overflow-y: auto;
+  }
+}
+@media (max-width: 991.98px) {
+  .modal-fullscreen-lg-down {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  .modal-fullscreen-lg-down .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .modal-fullscreen-lg-down .modal-header,
+.modal-fullscreen-lg-down .modal-footer {
+    border-radius: 0;
+  }
+  .modal-fullscreen-lg-down .modal-body {
+    overflow-y: auto;
+  }
+}
+@media (max-width: 1199.98px) {
+  .modal-fullscreen-xl-down {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  .modal-fullscreen-xl-down .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .modal-fullscreen-xl-down .modal-header,
+.modal-fullscreen-xl-down .modal-footer {
+    border-radius: 0;
+  }
+  .modal-fullscreen-xl-down .modal-body {
+    overflow-y: auto;
+  }
+}
+@media (max-width: 1399.98px) {
+  .modal-fullscreen-xxl-down {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  .modal-fullscreen-xxl-down .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .modal-fullscreen-xxl-down .modal-header,
+.modal-fullscreen-xxl-down .modal-footer {
+    border-radius: 0;
+  }
+  .modal-fullscreen-xxl-down .modal-body {
+    overflow-y: auto;
+  }
+}
+
+
+
+
+/** Nic's Stuff **/
+.breakdance .bric-loop-popup .modal-nav-wrapper {
+  position:absolute;
+  height:100%;
+  left:0;
+  top:0;
+  bottom:0;
+  display:flex;
+}
+
+.breakdance .bric-loop-popup .modal-nav-wrapper.modal-nav--next {
+  left:auto;
+  right:0;
+}
+
+.breakdance .bric-loop-popup .modal-nav-wrapper.modal-nav--next,
+.breakdance .bric-loop-popup .nav-icon.next-icon {
+  transform:rotate(180deg);
+}
+
+
+.breakdance .bric-loop-popup .nav-icon { 
+    display: flex;
+    font-size: 24px;
+}
+
+.breakdance .bric-loop-popup .nav-icon > svg { 
+    font-size: inherit;
+    width: 1em;
+    height: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+}
+
+.breakdance .bric-loop-popup button:hover {
+  cursor:pointer;
+}
+
+
+.breakdance .bric-loop-popup .modal-close-button-wrapper {
+  position:absolute;
+  top:0;
+  right:0;
+  z-index:var(--bde-z-index-popup);
+}
+
+.breakdance .bric-loop-popup .modal-close-button {
+  display: flex;
+  font-size: 24px;
+}
+
+.breakdance .bric-loop-popup .modal-close-button > svg {
+    font-size: inherit;
+    width: 1em;
+    height: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+}
+
