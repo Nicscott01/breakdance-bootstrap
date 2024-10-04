@@ -41,7 +41,7 @@ add_action('after_setup_theme', function() {
 
 
 add_action( 'admin_init', function() {
-    if (is_admin() && !defined('DOING_AJAX') && current_user_can('subscriber')) {
+    if (is_admin() && !defined('DOING_AJAX') && current_user_can('subscriber') && !current_user_can('administrator') && !is_super_admin() ) {
         wp_redirect(home_url()); // Redirect to homepage or any other URL
         exit;
     }
