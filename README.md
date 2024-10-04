@@ -4,6 +4,7 @@ Bootstrap features for Breakdance sites
 ## Changelog
 ### 8/12/2024 v0.71
 - Tweak styles on the policies links
+- Fix Maps not rendering in builder due to improper handling of objects
 
 ### 8/8/2024 v0.7
 - Add filter to add Breakdance class to FWP reset button

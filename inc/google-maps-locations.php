@@ -18,7 +18,6 @@ add_action('init', function() {
 
 
 
-
 add_action('wp_ajax_bric_maps_locations_update', function() {
     // Check user permissions
     if (!current_user_can('edit_post', $_POST['post_id'])) {
