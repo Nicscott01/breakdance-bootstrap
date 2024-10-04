@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 10/3/2024 v0.9.5
+- Fix messed up redirect on multisite due to the fluent crm code trying to keep subscribers out of the backend.
 ### 9/27/2024 v0.9.4
 - Add Term Icon Element so you can display a term as an icon for a post
 ### 9/20/2024 v0.9.3
