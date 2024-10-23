@@ -55,7 +55,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
 
     static function slug()
     {
-        return get_class();
+        return __CLASS__;
     }
 
     static function template()
@@ -116,6 +116,14 @@ class DynamicAccordion extends \Breakdance\Elements\Element
         "container",
         "Container",
         [c(
+        "width",
+        "Width",
+        [],
+        ['type' => 'unit', 'layout' => 'inline'],
+        false,
+        false,
+        [],
+      ), c(
         "background",
         "Background",
         [],
@@ -142,7 +150,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
       "EssentialElements\\tabs_design",
       "Filter Bar",
       "filter_bar",
-       ['condition' => ['0' => ['0' => ['path' => 'content.filter_bar.enable', 'operand' => 'is set', 'value' => '']]], 'type' => 'popout']
+       ['condition' => [[['path' => 'content.filter_bar.enable', 'operand' => 'is set', 'value' => '']]], 'type' => 'popout']
      ), getPresetSection(
       "EssentialElements\\spacing_margin_y",
       "Spacing",
@@ -168,7 +176,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
         "tag",
         "Tag",
         [],
-        ['type' => 'dropdown', 'layout' => 'inline', 'items' => ['0' => ['value' => 'article', 'text' => 'article'], '1' => ['text' => 'section', 'value' => 'section'], '2' => ['text' => 'div', 'value' => 'div']]],
+        ['type' => 'dropdown', 'layout' => 'inline', 'items' => [['value' => 'article', 'text' => 'article'], ['text' => 'section', 'value' => 'section'], ['text' => 'div', 'value' => 'div']]],
         false,
         false,
         [],
@@ -206,7 +214,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
         "frequency",
         "Frequency",
         [],
-        ['type' => 'number', 'layout' => 'vertical', 'condition' => ['0' => ['0' => ['path' => '%%CURRENTPATH%%.repeat', 'operand' => 'is set', 'value' => '']]]],
+        ['type' => 'number', 'layout' => 'vertical', 'condition' => [[['path' => '%%CURRENTPATH%%.repeat', 'operand' => 'is set', 'value' => '']]]],
         false,
         false,
         [],
@@ -246,7 +254,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
         "frequency",
         "Frequency",
         [],
-        ['type' => 'number', 'layout' => 'vertical', 'condition' => ['0' => ['0' => ['path' => '%%CURRENTPATH%%.repeat', 'operand' => 'is set', 'value' => '']]]],
+        ['type' => 'number', 'layout' => 'vertical', 'condition' => [[['path' => '%%CURRENTPATH%%.repeat', 'operand' => 'is set', 'value' => '']]]],
         false,
         false,
         [],
@@ -281,6 +289,22 @@ class DynamicAccordion extends \Breakdance\Elements\Element
         false,
         false,
         [],
+      ), c(
+        "display",
+        "Display",
+        [c(
+        "disable_accordion",
+        "Disable Accordion",
+        [],
+        ['type' => 'toggle', 'layout' => 'vertical'],
+        false,
+        false,
+        [],
+      )],
+        ['type' => 'section', 'layout' => 'vertical'],
+        false,
+        false,
+        [],
       )];
     }
 
@@ -296,7 +320,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
 
     static function settings()
     {
-        return ['withDependenciesInHtml' => true, 'proOnly' => true];
+        return ['withDependenciesInHtml' => true, 'proOnly' => true, 'shareStateWithChildSSR' => true];
     }
 
     static function addPanelRules()
@@ -375,7 +399,7 @@ window.BreakdanceSwiper().update({
 
     static function spacingBars()
     {
-        return ['0' => ['location' => 'outside-top', 'cssProperty' => 'margin-top', 'affectedPropertyPath' => 'design.spacing.margin_top.%%BREAKPOINT%%'], '1' => ['location' => 'outside-bottom', 'cssProperty' => 'margin-bottom', 'affectedPropertyPath' => 'design.spacing.margin_bottom.%%BREAKPOINT%%']];
+        return [['location' => 'outside-top', 'cssProperty' => 'margin-top', 'affectedPropertyPath' => 'design.spacing.margin_top.%%BREAKPOINT%%'], ['location' => 'outside-bottom', 'cssProperty' => 'margin-bottom', 'affectedPropertyPath' => 'design.spacing.margin_bottom.%%BREAKPOINT%%']];
     }
 
     static function attributes()
@@ -395,7 +419,7 @@ window.BreakdanceSwiper().update({
 
     static function dynamicPropertyPaths()
     {
-        return ['0' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '1' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '2' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '3' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '4' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '5' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '6' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '7' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '8' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '9' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string'], '10' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string']];
+        return [['accepts' => 'string', 'path' => 'content.data.id']];
     }
 
     static function additionalClasses()

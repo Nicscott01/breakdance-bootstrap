@@ -45,7 +45,7 @@ class PopupButton extends \Breakdance\Elements\Element
 
     static function category()
     {
-        return 'other';
+        return 'dynamic';
     }
 
     static function badge()
@@ -55,7 +55,7 @@ class PopupButton extends \Breakdance\Elements\Element
 
     static function slug()
     {
-        return get_class();
+        return __CLASS__;
     }
 
     static function template()
@@ -168,7 +168,7 @@ class PopupButton extends \Breakdance\Elements\Element
 
     static function spacingBars()
     {
-        return [];
+        return false;
     }
 
     static function attributes()
@@ -188,7 +188,7 @@ class PopupButton extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return ['0' => ['path' => 'settings.advanced.attributes[].value', 'accepts' => 'string']];
+        return [];
     }
 
     static function additionalClasses()

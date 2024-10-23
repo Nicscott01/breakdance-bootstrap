@@ -3,7 +3,7 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.9.5
+ *  Version: 0.9.6-dev
  * 
  * 
  */
@@ -89,72 +89,15 @@ use BricBreakdance\FluentCrmFormHandler;
                 return;
             }
             
-            require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
-
-            //\Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
-
-        });
-
-
-
-        add_action('init', function() {
-            // fail if Breakdance is not installed and available
-            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
-                return;
-            }
-            
-            require_once(__DIR__ . '/inc/gated-download-form-handler.php' );
-            
-            \Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
-
-        });
-
-
-
-        add_action('init', function() {
-            // fail if Breakdance is not installed and available
-            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
-                return;
-            }
-            
-            //Check that Fluent CRM is available
-
-            require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
-
-            //\Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
-
-        });
-
-
-
-        add_action('init', function() {
-            // fail if Breakdance is not installed and available
-            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
-                return;
-            }
-            
-            require_once(__DIR__ . '/inc/gated-download-form-handler.php' );
-            
-            \Breakdance\Forms\Actions\registerAction(new GatedDownloadFormHandler());
-
-        });
-
-
-
-        add_action('init', function() {
-            // fail if Breakdance is not installed and available
-            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
-                return;
-            }
-            
             if ( function_exists( 'FluentCrmApi' ) ) {
 
                 require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
 
+                \Breakdance\Forms\Actions\registerAction(new FluentCrmFormHandler());
+
             }
 
 
-            \Breakdance\Forms\Actions\registerAction(new FluentCrmFormHandler());
 
         });
 
@@ -177,156 +120,8 @@ use BricBreakdance\FluentCrmFormHandler;
 
         });
 
-/**
- * TEMP
- */
-
-
- add_action( 'admin_init_d', function() {
-
-    var_dump( fluentcrm_get_custom_contact_fields() );
-
- });
-
-add_action( 'init_d', function() {
-
-
-    \Breakdance\AJAX\register_handler(
-        'bdbs_fetch_fluentcrm_fields',
-        /**
-         * @return array
-         */
-        function () {
-            /** @var FormRequestContext $requestdata */
-          
-
-
-            return [
-                [
-                    'value' => 'user_id',
-                    'text' => 'User ID'
-                ], [
-                    'value' => 'company_id',
-                    'text' => 'Company ID'
-                ], [
-                    'value' => 'prefix',
-                    'text' => 'Prefix'
-                ], [
-                    'value' => 'first_name',
-                    'text' => 'First Name'
-                ], [
-                    'value' => 'last_name',
-                    'text' => 'Last Name'
-                ], [
-                    'value' => 'email',
-                    'text' => 'Email'
-                ], [
-                    'value' => 'timezone',
-                    'text' => 'Timezone'
-                ], [
-                    'value' => 'address_line_1',
-                    'text' => 'Address Line 1'
-                ], [
-                    'value' => 'address_line_2',
-                    'text' => 'Address Line 2'
-                ], [
-                    'value' => 'postal_code',
-                    'text' => 'Postal Code'
-                ], [
-                    'value' => 'city',
-                    'text' => 'City'
-                ], [
-                    'value' => 'state',
-                    'text' => 'State'
-                ], [
-                    'value' => 'country',
-                    'text' => 'Country'
-                ], [
-                    'value' => 'ip',
-                    'text' => 'IP Address'
-                ], [
-                    'value' => 'latitude',
-                    'text' => 'Latitude'
-                ], [
-                    'value' => 'longitude',
-                    'text' => 'Longitude'
-                ], [
-                    'value' => 'phone',
-                    'text' => 'Phone'
-                ], [
-                    'value' => 'status',
-                    'text' => 'Possible Values: pending/subscribed/bounced/unsubscribed'
-                ], [
-                    'value' => 'contact_tye',
-                    'text' => 'lead/customer'
-                ], [
-                    'value' => 'source',
-                    'text' => 'Source'
-                ], [
-                    'value' => 'avatar',
-                    'text' => 'Custom Contact Photo URL'
-                ], [
-                    'value' => 'date_of_birth',
-                    'text' => 'Date of Birth in Y-m-d format'
-                ], [
-                    'value' => 'last_activity',
-                    'text' => 'Last Activity'
-                ], [
-                    'value' => 'updated_at',
-                    'text' => 'Updated At'
-                ]
-            ];
-        },
-        'edit'
-    );
-
-
-});
-
-
-
-//Disabled
-        add_action( 'breakdance_render_element_template_d', function( $element, $props ) {
-
-
-            if ( !is_admin() && $element == 'EssentialElements\BusinessHours' ) {
-
-                $hours = $props['content'];
-
-                $this->test_hours = json_encode( $hours );
-            
-                add_action( 'wp_head', [ $this, 'print_hours_json'] );
-            }
-           
-
-        }, 10, 3);
-
-
-
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function print_hours_json() {
-
-        ?>
-<script type="application/ld+json">
-    <?php echo $this->test_hours; ?>
-
-</script>
-        <?php
-    } 
 
 
 
@@ -792,3 +587,30 @@ BreakdanceBS::get_instance();
 
 
 
+
+
+class ParentIDTracker {
+
+    public static $instance;
+    public $parent_id = null;
+
+    public function set_parent_id( $id ) {
+        $this->parent_id = $id;
+        return $this;
+    }
+
+    public function get_parent_id() {
+        return $this->parent_id;
+    }
+
+    public static function get_instance() {
+        if ( self::$instance == null ) {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
+}
+
+function ParentIDTracker() {
+    return ParentIDTracker::get_instance();
+}

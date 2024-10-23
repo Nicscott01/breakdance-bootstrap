@@ -19,6 +19,8 @@ showWarningInBuilderForImproperUseOfPaginationAndCustomQueriesOnArchives(
 );
 */
 
+$disable_accordion = $propertiesData['content']['display']['disable_accordion'] ?? false;
+
 $actionData = ['propertiesData' => $propertiesData];
 
 global $post;
@@ -36,16 +38,39 @@ $loop = getWpQuery($propertiesData);
 $layout = (string) ($propertiesData['design']['list']['layout'] ?? '');
 
 
+
+
+
 do_action("breakdance_posts_loop_before_loop", $actionData);
+
+
 
 if ( $loop->have_posts() ) {
 
-$loopIndex = 0;
 
-echo '<div class="posts bs-accordion">';
+    $loopIndex = 0;
+
+    if ( !$disable_accordion ) {
+
+        $accordion_id = $propertiesData['content']['data']['id'] ?? uniqid( 'accordion-');
+        \ParentIDTracker()->set_parent_id( $accordion_id );
+
+
+    } else {
+
+        $accodion_id = '';
+        \ParentIDTracker()->set_parent_id( false );
+    }
+
+
+    echo '<div class="posts bs-accordion" id="'. $accordion_id .'">';
+
 
     while( $loop->have_posts() ) {
+    
         $loopIndex++;
+
+        //Todo: Check to see if we're doing a FAQ, and then record the content for JSON-LD
 
         $block = getBlockForLoopIndex($propertiesData, $loopIndex);
 
@@ -59,7 +84,6 @@ echo '<div class="posts bs-accordion">';
         //$attrs = getFilterAttributesForPost($filterbar, $itemClasses);
 
         $blockId = $block['id'];
-
 
         if ($blockId) {
             $postId = get_the_ID();
@@ -75,7 +99,9 @@ echo '<div class="posts bs-accordion">';
 
     }
 
-    echo '</div>';
+    
+    echo '</div>'; 
+
 
 }
 
@@ -97,6 +123,7 @@ do_action("breakdance_posts_loop_after_loop", $actionData);
 
 do_action("breakdance_posts_loop_after_pagination", $actionData);
 */
+
 
 wp_reset_postdata();
 
