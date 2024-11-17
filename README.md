@@ -2,6 +2,10 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 11/17/2024 v0.9.6
+- Improve dynamic accordion
+- Improve Child Page element
+- Create Sticky Header Fix element o automatically add appropriate margin/padding
 ### 10/3/2024 v0.9.5
 - Fix messed up redirect on multisite due to the fluent crm code trying to keep subscribers out of the backend.
 ### 9/27/2024 v0.9.4
