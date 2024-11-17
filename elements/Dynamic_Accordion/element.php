@@ -320,7 +320,7 @@ class DynamicAccordion extends \Breakdance\Elements\Element
 
     static function settings()
     {
-        return ['withDependenciesInHtml' => true, 'proOnly' => true, 'shareStateWithChildSSR' => true];
+        return ['withDependenciesInHtml' => true, 'proOnly' => false, 'shareStateWithChildSSR' => true];
     }
 
     static function addPanelRules()

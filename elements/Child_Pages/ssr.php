@@ -28,8 +28,8 @@ $children = get_posts( $args );
 
 if ( !empty( $children ) ) {
 
-    $show_featured_image = $propertiesData['content']['image']['featured_image'];
-    $image_size = $propertiesData['content']['image']['featured_image_size'];
+    $show_featured_image = $propertiesData['content']['background']['featured_image'];
+    $image_size = $propertiesData['content']['background']['featured_image_size'];
     //var_dump( $propertiesData ); 
 
 

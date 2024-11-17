@@ -53,6 +53,8 @@ if ( $loop->have_posts() ) {
     if ( !$disable_accordion ) {
 
         $accordion_id = $propertiesData['content']['data']['id'] ?? uniqid( 'accordion-');
+       
+
         \ParentIDTracker()->set_parent_id( $accordion_id );
 
 
@@ -71,6 +73,9 @@ if ( $loop->have_posts() ) {
         $loopIndex++;
 
         //Todo: Check to see if we're doing a FAQ, and then record the content for JSON-LD
+        //Since we set the option for FAQ markup on the child template element, we'll just initiate the JSON-LD for FAQ here and then fill it up.
+        //If it's not full, we won't bother outputting it.
+        //But if we want to put it in the head, then we need to re-think the entire thing.
 
         $block = getBlockForLoopIndex($propertiesData, $loopIndex);
 

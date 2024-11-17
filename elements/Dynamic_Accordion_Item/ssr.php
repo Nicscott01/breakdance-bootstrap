@@ -7,6 +7,9 @@
  * 
  */
 
+// var_dump( $parentPropertiesData );
+
+
  $id = $propertiesData['content']['data']['slug'];
  $markup_as_faq = $propertiesData['content']['data']['markup_as_faq'] ?? false;
  $title = $propertiesData['content']['data']['title'];

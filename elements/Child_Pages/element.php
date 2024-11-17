@@ -230,8 +230,8 @@ class ChildPages extends \Breakdance\Elements\Element
     static function contentControls()
     {
         return [c(
-        "image",
-        "Image",
+        "background",
+        "Background",
         [c(
         "featured_image",
         "Featured Image",
@@ -363,7 +363,7 @@ class ChildPages extends \Breakdance\Elements\Element
 
     static function propertyPathsToWhitelistInFlatProps()
     {
-        return ['design.layout_v2.layout', 'design.layout_v2.h_vertical_at', 'design.layout_v2.h_alignment_when_vertical', 'design.layout_v2.a_display', 'design.child.background.image', 'design.child.background.overlay.image', 'design.child.background.image_settings.unset_image_at', 'design.child.background.image_settings.size', 'design.child.background.image_settings.height', 'design.child.background.image_settings.repeat', 'design.child.background.image_settings.position', 'design.child.background.image_settings.left', 'design.child.background.image_settings.top', 'design.child.background.image_settings.attachment', 'design.child.background.image_settings.custom_position', 'design.child.background.image_settings.width', 'design.child.background.overlay.image_settings.custom_position', 'design.child.background.image_size', 'design.child.background.overlay.image_size', 'design.child.background.overlay.type', 'design.child.background.image_settings'];
+        return ['design.layout_v2.layout', 'design.layout_v2.h_vertical_at', 'design.layout_v2.h_alignment_when_vertical', 'design.layout_v2.a_display', 'design.child.background.image', 'design.child.background.overlay.image', 'design.child.background.image_settings.unset_image_at', 'design.child.background.image_settings.size', 'design.child.background.image_settings.height', 'design.child.background.image_settings.repeat', 'design.child.background.image_settings.position', 'design.child.background.image_settings.left', 'design.child.background.image_settings.top', 'design.child.background.image_settings.attachment', 'design.child.background.image_settings.custom_position', 'design.child.background.image_settings.width', 'design.child.background.overlay.image_settings.custom_position', 'design.child.background.image_size', 'design.child.background.overlay.image_size', 'design.child.background.overlay.type', 'design.child.background.image_settings', 'content.image.background.image', 'content.image.background.overlay.image', 'content.image.background.image_settings.unset_image_at', 'content.image.background.image_settings.size', 'content.image.background.image_settings.height', 'content.image.background.image_settings.repeat', 'content.image.background.image_settings.position', 'content.image.background.image_settings.left', 'content.image.background.image_settings.top', 'content.image.background.image_settings.attachment', 'content.image.background.image_settings.custom_position', 'content.image.background.image_settings.width', 'content.image.background.overlay.image_settings.custom_position', 'content.image.background.image_size', 'content.image.background.overlay.image_size', 'content.image.background.overlay.type', 'content.image.background.image_settings', 'content.background.image', 'content.background.overlay.image', 'content.background.image_settings.unset_image_at', 'content.background.image_settings.size', 'content.background.image_settings.height', 'content.background.image_settings.repeat', 'content.background.image_settings.position', 'content.background.image_settings.left', 'content.background.image_settings.top', 'content.background.image_settings.attachment', 'content.background.image_settings.custom_position', 'content.background.image_settings.width', 'content.background.overlay.image_settings.custom_position', 'content.background.image_size', 'content.background.overlay.image_size', 'content.background.overlay.type', 'content.background.image_settings'];
     }
 
     static function propertyPathsToSsrElementWhenValueChanges()
