@@ -1,1 +1,14 @@
-%%SELECTOR%% { }
+{% if content.controls.behavior == 'push' %}
+	%%SELECTOR%% {
+      height:var(--bric-sticky-header-height);
+    }
+{% elseif content.controls.behavior == 'text-push' %}
+
+{% set extraPadding = content.controls.extra_padding.style|default('0') %}
+
+	.bde-header-builder--sticky:first-of-type + .bde-section .section-container,
+    .bde-header-builder--sticky:first-of-type + .bde-globalblock .bde-section .section-container {
+      padding-top:calc( var(--bric-sticky-header-height) + {{ extraPadding }} );
+	}
+
+{% endif %}

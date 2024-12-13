@@ -98,7 +98,23 @@ class Stickyheaderfix extends \Breakdance\Elements\Element
         "notice",
         "Notice",
         [],
-        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'default', 'content' => '<p>Use this if you set your Header Builder to sticky.</p>']],
+        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'default', 'content' => '<p>Use this if you set your Header Builder to sticky. It will push the content down in the .bde-section that occurs right after the Header Builder. </p>']],
+        false,
+        false,
+        [],
+      ), c(
+        "behavior",
+        "Behavior",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [['value' => 'push', 'text' => 'Push flow down'], ['text' => 'Prevent text from overlap', 'value' => 'text-push']]],
+        false,
+        false,
+        [],
+      ), c(
+        "extra_padding",
+        "Extra Padding",
+        [],
+        ['type' => 'unit', 'layout' => 'vertical', 'condition' => [[['path' => 'content.controls.behavior', 'operand' => 'equals', 'value' => 'text-push']]]],
         false,
         false,
         [],
@@ -121,16 +137,18 @@ class Stickyheaderfix extends \Breakdance\Elements\Element
     function setStickyFixHeight() {
         const stickyHeader = document.querySelector(\'.bde-header-builder--sticky:first-of-type\');
         const stickyFix = document.querySelector( \'%%SELECTOR%%\' );
-        
+            
         if (stickyHeader && stickyFix) {
             const headerHeight = stickyHeader.offsetHeight;
-            stickyFix.style.height = headerHeight + \'px\';
+            //stickyFix.style.height = headerHeight + \'px\';
+          	document.documentElement.style.setProperty(\'--bric-sticky-header-height\', headerHeight + \'px\');
+          
         }
     }
 
     // Set height on page load
     window.addEventListener(\'DOMContentLoaded\', setStickyFixHeight);
-
+	window.addEventListener(\'load\', setStickyFixHeight);
     // Recalculate height on window resize
     window.addEventListener(\'resize\', setStickyFixHeight);
 })();
@@ -179,7 +197,7 @@ class Stickyheaderfix extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return false;
+        return [];
     }
 
     static function additionalClasses()
