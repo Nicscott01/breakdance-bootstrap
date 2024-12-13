@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 12/13/2024 v0.9.7
+- Add options for sticky header fix element - extra padding and if you're pushing the entire div or just the internal components (text)
 ### 11/17/2024 v0.9.6
 - Improve dynamic accordion
 - Improve Child Page element
