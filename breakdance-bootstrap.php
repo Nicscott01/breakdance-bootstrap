@@ -3,7 +3,7 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.9.7
+ *  Version: 0.9.8
  * 
  * 
  */
@@ -138,7 +138,7 @@ use BricBreakdance\FluentCrmFormHandler;
 
             $urls['gsap'] = $plugin_url . 'dependencies/gsap.min.js';
             $urls['scrollTrigger'] = $plugin_url . 'dependencies/ScrollTrigger.min.js';
-            
+
             return $urls;
          });
 
