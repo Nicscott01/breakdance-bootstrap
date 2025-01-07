@@ -120,6 +120,29 @@ use BricBreakdance\FluentCrmFormHandler;
 
         });
 
+
+
+
+        /**
+         *  Load 3rd Party Scripts Locally
+         *  GSAP
+         *  ScrollTrigger
+         * 
+         * 
+         */
+
+        
+         add_action('breakdance_reusable_dependencies_urls', function ($urls) {
+
+            $plugin_url = plugins_url('/', __FILE__);
+
+            $urls['gsap'] = $plugin_url . 'dependencies/gsap.min.js';
+            $urls['scrollTrigger'] = $plugin_url . 'dependencies/ScrollTrigger.min.js';
+            
+            return $urls;
+         });
+
+
     }
 
 
