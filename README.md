@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 1/14/2025 v0.9.9
+- Hotfix for Breakdance\AJAX\BreakdanceAjaxHandlerException: Calling get_class() without arguments is deprecated in /sites/marjiam.com/files/web/app/plugins/breakdance/plugin/ajax/api.php on 116
 ### 1/7/2025 v0.9.8
 - Include local versions of GSAP and ScrollTrigger.js.
 ### 12/13/2024 v0.9.7

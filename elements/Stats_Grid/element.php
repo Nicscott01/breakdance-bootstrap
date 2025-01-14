@@ -55,7 +55,7 @@ class StatsGrid extends \Breakdance\Elements\Element
 
     static function slug()
     {
-        return get_class();
+      return __CLASS__;
     }
 
     static function template()
