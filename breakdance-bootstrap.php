@@ -3,7 +3,7 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 0.9.9
+ *  Version: 1.0.0-dev
  * 
  * 
  */
@@ -11,6 +11,7 @@
 use BricBreakdance\GatedDownloadFormHandler;
 use BricBreakdance\FluentCrmFormHandler;
 
+ include_once( __DIR__ . '/inc/helper-functions.php' ); 
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
  include_once( __DIR__ . '/inc/form-action-utils.php' ); 
@@ -24,6 +25,7 @@ use BricBreakdance\FluentCrmFormHandler;
  include_once( __DIR__ . '/inc/google-maps-locations.php' ); 
  include_once( __DIR__ . '/inc/fluent-crm-auto-login-handler.php' ); 
  include_once( __DIR__ . '/inc/icon-terms.php' ); 
+ include_once( __DIR__ . '/inc/fluent-crm-form-submission-provider-breakdance.php' ); 
 
 
 
