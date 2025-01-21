@@ -138,7 +138,7 @@ class FluentCrmFormSubmissionProviderBreakdance {
                     
                     $submission_meta = \Breakdance\Forms\Submission\getMeta( $submission->ID );
 
-                    dlog( $submission_meta, 'submission_meta' );
+                    //dlog( $submission_meta, 'submission_meta' );
 
                     if ($submission_meta['postId'] && $submission_meta['builderUrl']) {
                         $form_link = sprintf('<a href="%s" target="_blank">%s (%s)</a>', $submission_meta['builderUrl'], $submission_meta['formName'], $submission_meta['postId']);
