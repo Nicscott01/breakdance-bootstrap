@@ -5,6 +5,7 @@ Bootstrap features for Breakdance sites
 ### 1/20/2025 v1.0.0 - MLK Day & Innauguration Day of Trump the 2nd time around
 - Add a Fluent Form Provider for Breakdance form submissions. Matches submissions with the email of the subscriber and lists them in the Form Submissions section.
 - Added a helper debug function, `dlog( $stuff, $name )`
+- Add experimental code for tying a user/email to Fluent record. This is still in progress. I need to find a way to record the tracking ID (cookie) with the Breakdance form submission (maybe on the wp_insert_post hook). Then the tracking ID needs to be stored as a meta value for the Subscriber.
 ### 1/14/2025 v0.9.9
 - Hotfix for Breakdance\AJAX\BreakdanceAjaxHandlerException: Calling get_class() without arguments is deprecated in /sites/marjiam.com/files/web/app/plugins/breakdance/plugin/ajax/api.php on 116
 ### 1/7/2025 v0.9.8
