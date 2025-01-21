@@ -135,21 +135,17 @@ class Stickyheaderfix extends \Breakdance\Elements\Element
     {
         return ['0' =>  ['inlineScripts' => ['(function() {
     function setStickyFixHeight() {
-        const stickyHeader = document.querySelector(\'.bde-header-builder--sticky:first-of-type\');
-        const stickyFix = document.querySelector( \'%%SELECTOR%%\' );
+        const stickyHeaderElem = document.querySelectorAll(\'.bde-header-builder--sticky\')[0];
+        const stickyFix = document.querySelector(\'%%SELECTOR%%\');
             
-        if (stickyHeader && stickyFix) {
-            const headerHeight = stickyHeader.offsetHeight;
-            //stickyFix.style.height = headerHeight + \'px\';
-          	document.documentElement.style.setProperty(\'--bric-sticky-header-height\', headerHeight + \'px\');
-          
+        if (stickyHeaderElem && stickyFix) {
+            const headerHeight = stickyHeaderElem.offsetHeight;
+            document.documentElement.style.setProperty(\'--bric-sticky-header-height\', headerHeight + \'px\');
         }
     }
 
-    // Set height on page load
     window.addEventListener(\'DOMContentLoaded\', setStickyFixHeight);
-	window.addEventListener(\'load\', setStickyFixHeight);
-    // Recalculate height on window resize
+    window.addEventListener(\'load\', setStickyFixHeight);
     window.addEventListener(\'resize\', setStickyFixHeight);
 })();
 '],],];

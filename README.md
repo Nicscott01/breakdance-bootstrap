@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 1/21/2025 v1.0.1
+- Fix for Safari on the StickyHeaderFix script. Switch :first-of-type for the explicit approach, calling the first item in the array [0]
 ### 1/20/2025 v1.0.0 - MLK Day & Innauguration Day of Trump the 2nd time around
 - Add a Fluent Form Provider for Breakdance form submissions. Matches submissions with the email of the subscriber and lists them in the Form Submissions section.
 - Added a helper debug function, `dlog( $stuff, $name )`
