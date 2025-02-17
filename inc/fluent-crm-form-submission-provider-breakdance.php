@@ -127,6 +127,8 @@ class FluentCrmFormSubmissionProviderBreakdance {
             
             $formattedSubmissions = [];
 
+            $total_submissions = 0;
+
             // Loop through the results
             if ( $query->have_posts() ) {
 

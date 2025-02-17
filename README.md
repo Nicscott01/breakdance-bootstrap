@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 2/16/2025 v1.0.2
+- Improvements to fluentcrm form submission provider
 ### 1/21/2025 v1.0.1
 - Fix for Safari on the StickyHeaderFix script. Switch :first-of-type for the explicit approach, calling the first item in the array [0]
 ### 1/20/2025 v1.0.0 - MLK Day & Innauguration Day of Trump the 2nd time around

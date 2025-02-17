@@ -3,7 +3,7 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 1.0.1
+ *  Version: 1.0.2
  * 
  * 
  */
@@ -26,6 +26,8 @@ use BricBreakdance\FluentCrmFormHandler;
  include_once( __DIR__ . '/inc/fluent-crm-auto-login-handler.php' ); 
  include_once( __DIR__ . '/inc/icon-terms.php' ); 
  include_once( __DIR__ . '/inc/fluent-crm-form-submission-provider-breakdance.php' ); 
+ //include_once( __DIR__ . '/inc/gravityforms-fluent-feed/gravgravityforms-fluent-feed.php' ); 
+ //include_once( __DIR__ . '/inc/gravityforms-fluent-feed/fluent-crm-form-submission-provider-gravityforms.php' ); 
 // include_once( __DIR__ . '/inc/analyticswp-breakdance-submission-tracking.php' ); 
 
 
