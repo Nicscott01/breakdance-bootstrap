@@ -3,13 +3,15 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 1.0.2
+ *  Version: 1.0.3
  * 
  * 
  */
 
-use BricBreakdance\GatedDownloadFormHandler;
-use BricBreakdance\FluentCrmFormHandler;
+ define( 'BREAKDANCE_BS_VERSION', '1.0.3' );
+
+ use BricBreakdance\GatedDownloadFormHandler;
+ use BricBreakdance\FluentCrmFormHandler;
 
  include_once( __DIR__ . '/inc/helper-functions.php' ); 
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
@@ -65,8 +67,8 @@ use BricBreakdance\FluentCrmFormHandler;
 
 
         //Save ACF in local JSON
-       // add_filter( 'acf/settings/save_json', [ $this, 'acf_json_save_point' ] );
-       // add_filter( 'acf/settings/load_json	', [ $this, 'acf_json_load_point' ] );
+        add_filter( 'acf/settings/save_json', [ $this, 'acf_json_save_point' ] );
+        add_filter( 'acf/settings/load_json	', [ $this, 'acf_json_load_point' ] );
 
         //Move Yoast SEO Metabox to end
         add_filter( 'wpseo_metabox_prio', [ $this, 'prio_low' ] );
@@ -178,11 +180,10 @@ use BricBreakdance\FluentCrmFormHandler;
     public function acf_json_save_point( $path ) {
 
         //Get the uploads folder
-        $wp_uploads = wp_upload_dir( false );
+        $wp_uploads = wp_upload_dir( null, true );
 
         $this->acf_json_dir = $wp_uploads['basedir'] . '/acf/local-json/';
 
-//        error_log( $acf_json_dir );
 
         if ( is_dir( $this->acf_json_dir ) ) {
 
@@ -203,8 +204,6 @@ use BricBreakdance\FluentCrmFormHandler;
 
 
     public function acf_json_load_point( $paths ) {
-
-        error_log( json_encode( $paths ) );
 
         $paths[] = $this->acf_json_dir;
 

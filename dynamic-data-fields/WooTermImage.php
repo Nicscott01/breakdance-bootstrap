@@ -38,8 +38,6 @@ class WooTermImage extends ImageField
     public function handler($attributes): ImageData {
 
 
-        error_log( json_encode( $attributes ) );
-
         $imageData = new ImageData;
 
         //Get the current tax query

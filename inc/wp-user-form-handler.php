@@ -240,10 +240,6 @@ $log = ob_get_clean();
                     wp_new_user_notification($user_id, null, 'both');
                 }
 
-                // Log user creation details
-                error_log('User created successfully with ID: ' . $user_id);
-                error_log('User data: ' . print_r($user_data, true));
-
             } else {
                 // Log error details if user creation failed
                 error_log('Error creating user: ' . $user_id->get_error_message());

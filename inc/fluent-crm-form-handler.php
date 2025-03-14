@@ -369,11 +369,6 @@ class FluentCrmFormHandler extends \Breakdance\Forms\Actions\Action {
     public function run($form, $settings, $extra)
     {
 
-error_log( print_r( $settings, 1 ) );
-error_log( print_r( $form, 1 ) );
-
-
-
 
 
         try {
@@ -400,7 +395,7 @@ error_log( print_r( $form, 1 ) );
                 $fieldsRepeater = $settings['actions']['fluent_crm']['field_map'];
 
                 $mapped_values = \BricBreakdance\Forms\getMappedFieldValuesFromFormData($fieldsRepeater, $form, 'crm_field', 'formfield' );
-                error_log( 'Mapped values: ' . print_r( $mapped_values, 1 ) );
+                //error_log( 'Mapped values: ' . print_r( $mapped_values, 1 ) );
 
 
 
@@ -422,7 +417,7 @@ error_log( print_r( $form, 1 ) );
                 $mapped_values['tags'] = [ $settings['actions']['fluent_crm']['tags'] ] ?? [];
                 
 
-                error_log( 'Mapped values: ' . print_r( $mapped_values, 1 ) );
+                //error_log( 'Mapped values: ' . print_r( $mapped_values, 1 ) );
 
                 $disable_double_opt_in = $settings['actions']['fluent_crm']['disable_double_opt_in'] ?? false;
 
