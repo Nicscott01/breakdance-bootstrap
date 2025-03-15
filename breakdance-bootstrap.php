@@ -3,12 +3,12 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 1.0.3
+ *  Version: 1.0.4
  * 
  * 
  */
 
- define( 'BREAKDANCE_BS_VERSION', '1.0.3' );
+ define( 'BREAKDANCE_BS_VERSION', '1.0.4' );
 
  use BricBreakdance\GatedDownloadFormHandler;
  use BricBreakdance\FluentCrmFormHandler;

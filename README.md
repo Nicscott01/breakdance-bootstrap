@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 3/14/2025 v1.0.4
+- Implement Breakdance layout v2 macro in the Website policies element
 ### 2/16/2025 v1.0.2
 - Improvements to fluentcrm form submission provider
 ### 1/21/2025 v1.0.1
