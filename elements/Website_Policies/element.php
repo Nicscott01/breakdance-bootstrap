@@ -90,7 +90,12 @@ class WebsitePolicies extends \Breakdance\Elements\Element
       "EssentialElements\\layout_basic_flex",
       "Layout",
       "layout",
-       ['type' => 'popout']
+       ['condition' => [[['path' => 'design.layout', 'operand' => 'is set', 'value' => '']]], 'type' => 'popout']
+     ), getPresetSection(
+      "EssentialElements\\LayoutV2",
+      "Layout",
+      "layout_v2",
+       ['condition' => [[['path' => 'design.layout', 'operand' => 'is not set', 'value' => '']]], 'type' => 'popout']
      ), c(
         "spacing",
         "Spacing",
@@ -248,7 +253,7 @@ class WebsitePolicies extends \Breakdance\Elements\Element
 
     static function propertyPathsToWhitelistInFlatProps()
     {
-        return ['content.data.settings_link', 'content.data.policies', 'content.data.policies[].policy', 'design.layout.layout', 'design.layout.h_vertical_at', 'design.layout.h_alignment_when_vertical', 'design.layout.a_display', 'content.data.separator'];
+        return ['content.data.settings_link', 'content.data.policies', 'content.data.policies[].policy', 'content.data.separator', 'design.layout.horizontal.vertical_at', 'design.layout_v2.layout', 'design.layout_v2.h_vertical_at', 'design.layout_v2.h_alignment_when_vertical', 'design.layout_v2.a_display'];
     }
 
     static function propertyPathsToSsrElementWhenValueChanges()

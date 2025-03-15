@@ -19,8 +19,14 @@
   margin-left:0;
 }
 
+
+{{ macros.layoutV2(design.layout_v2, breakpoint, isBaseBreakpoint, '%%SELECTOR%%') }}
+ 
+
+{% if design.layout is defined and design.layout %}
 %%SELECTOR%% {
   {{ macros.layout_basic_flex(design.layout) }};
-  display:inline-flex;
-   gap: {{ design.spacing.gap.style }};
+  display: inline-flex;
+  gap: {{ design.spacing.gap.style }};
 }
+{% endif %}
