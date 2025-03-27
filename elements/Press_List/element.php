@@ -45,7 +45,7 @@ class PressList extends \Breakdance\Elements\Element
 
     static function category()
     {
-        return 'blocks';
+        return 'other';
     }
 
     static function badge()
@@ -60,6 +60,7 @@ class PressList extends \Breakdance\Elements\Element
 
     static function template()
     {
+        //return '<p>Test</p>';
         return file_get_contents(__DIR__ . '/html.twig');
     }
 
@@ -192,7 +193,7 @@ class PressList extends \Breakdance\Elements\Element
         false,
         [],
       )],
-        ['type' => 'repeater', 'layout' => 'vertical', 'repeaterOptions' => ['titleTemplate' => '{article_title}', 'defaultTitle' => '', 'buttonName' => '+ Item']],
+        ['type' => 'repeater', 'layout' => 'vertical', 'repeaterOptions' => ['titleTemplate' => '{article_title}', 'defaultTitle' => '', 'buttonName' => 'Add Item']],
         false,
         false,
         [],
@@ -200,7 +201,7 @@ class PressList extends \Breakdance\Elements\Element
         "separator",
         "Separator",
         [],
-        ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['format' => 'plain', 'multiline' => null], 'variableOptions' => ['enabled' => false], 'placeholder' => '|'],
+        ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['format' => 'plain', 'multiline' => false], 'variableOptions' => ['enabled' => false], 'placeholder' => '|'],
         false,
         false,
         [],
@@ -247,7 +248,7 @@ class PressList extends \Breakdance\Elements\Element
 
     static function nestingRule()
     {
-        return ["type" => "final",   ];
+        return ["type" => "final"  ];
     }
 
     static function spacingBars()
