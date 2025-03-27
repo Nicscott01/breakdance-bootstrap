@@ -2,10 +2,12 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
-### 3/17/2025 v1.0.5/6/7
-- Require Breakdance in wp plugin header
+### 3/27/25 v1.0.6/7/8
 - Add "Press List" element
 - I'm bad at version control and I fixed a bunch of things that didn't work when i tagged the release
+- Add target blank
+### 3/17/2025 v1.0.5
+- Require Breakdance in wp plugin header
 ### 3/14/2025 v1.0.4
 - Implement Breakdance layout v2 macro in the Website policies element
 ### 2/16/2025 v1.0.2

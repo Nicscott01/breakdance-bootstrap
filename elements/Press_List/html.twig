@@ -1,6 +1,11 @@
 {% set separator = ' ' ~ content.data.separator ~ ' ' |default(' - ') %}
 {% set separator = '<span class="separator"> ' ~ separator ~ '</span>' %}
 {% set date_format = content.data.date_format|default('m/d/Y') %}
+{% if content.data.open_links_in_new_tab %}
+	{% set target = 'target="_blank"' %}
+{% else %}
+	{% set target = '' %}
+{% endif %}
 
 {% for item in content.data.items %}
   <li>
@@ -11,7 +16,7 @@
     {% endif %}
     
     {% if item.link is not empty and item.article_title is not empty %}
-    	{{ separator }} <a href="{{ item.link }}" class="link">{{ item.article_title }}</a>
+    	{{ separator }} <a href="{{ item.link }}" class="link" {{ target|raw }}>{{ item.article_title }}</a>
     {% elseif item.link is empty and item.article_title is not empty %}
    		{{ separator }} <span class="title no-link">{{ item.article_title }}</span>
     {% endif %}
