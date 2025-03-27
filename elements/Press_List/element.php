@@ -148,6 +148,30 @@ class PressList extends \Breakdance\Elements\Element
         false,
         false,
         [],
+      ), c(
+        "layout",
+        "Layout",
+        [c(
+        "stack_at",
+        "Stack At",
+        [],
+        ['type' => 'breakpoint_dropdown', 'layout' => 'inline'],
+        false,
+        false,
+        [],
+      ), c(
+        "margin_bottom",
+        "Margin Bottom",
+        [],
+        ['type' => 'unit', 'layout' => 'inline'],
+        true,
+        false,
+        [],
+      )],
+        ['type' => 'section'],
+        false,
+        false,
+        [],
       )];
     }
 
@@ -287,7 +311,7 @@ class PressList extends \Breakdance\Elements\Element
 
     static function propertyPathsToWhitelistInFlatProps()
     {
-        return false;
+        return ['design.layout.stack_at', 'design.layout.margin_bottom'];
     }
 
     static function propertyPathsToSsrElementWhenValueChanges()

@@ -23,3 +23,17 @@
 %%SELECTOR%% .separator {
   {{ macros.typography(design.typography.separator, globalSettings) }}
 }
+
+
+%%SELECTOR%% li {
+  margin-bottom: {{ design.layout.margin_bottom.style }};
+  
+  {% if breakpoint == design.layout.stack_at %}
+    display:flex;
+    flex-direction:column;
+    & .separator {
+      display:none;	
+    }
+  {% endif %}
+}
+    

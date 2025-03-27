@@ -1,3 +1,7 @@
  .breakdance .bricbd-press-list {
    padding-left:0;
 }
+
+.breakdance .bricbd-press-list li {
+  display:block;
+}
