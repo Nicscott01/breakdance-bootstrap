@@ -1,0 +1,25 @@
+%%SELECTOR%% { 
+  list-style: {{ design.list.list_style }};
+  padding-left: {{ design.list.padding_left.style }};
+  {{ macros.typography(design.typography.general, globalSettings) }}
+}
+
+%%SELECTOR%% .date {
+  {{ macros.typography(design.typography.date, globalSettings) }}
+}
+
+%%SELECTOR%% .publication {
+  {{ macros.typography(design.typography.publication, globalSettings) }}
+}
+
+%%SELECTOR%% .link {
+  {{ macros.typography(design.typography.link, globalSettings) }}
+}
+
+%%SELECTOR%% .title {
+  {{ macros.typography(design.typography.title, globalSettings) }}
+}
+
+%%SELECTOR%% .separator {
+  {{ macros.typography(design.typography.separator, globalSettings) }}
+}
