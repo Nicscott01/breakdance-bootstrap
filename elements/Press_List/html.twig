@@ -7,7 +7,7 @@
     <span class="date">{{ item.date|date(date_format) }}</span> 
     {% if item.publication is not empty %}
     	{{ separator|raw }}
-    	<span class="publication"> item.publication </span>
+    	<span class="publication"> {{ item.publication }} </span>
     {% endif %}
     
     {% if item.link is not empty and item.article_title is not empty %}

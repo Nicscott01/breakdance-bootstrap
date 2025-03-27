@@ -60,7 +60,6 @@ class PressList extends \Breakdance\Elements\Element
 
     static function template()
     {
-        //return '<p>Test</p>';
         return file_get_contents(__DIR__ . '/html.twig');
     }
 
@@ -248,7 +247,7 @@ class PressList extends \Breakdance\Elements\Element
 
     static function nestingRule()
     {
-        return ["type" => "final"  ];
+        return ["type" => "final",   ];
     }
 
     static function spacingBars()
