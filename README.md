@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 3/31/25 v1.0.10
+- Add filter bricbd_accordion_title to edit the copy that appears in a Post Loop Builder accordion
 ### 3/31/25 v1.0.9
 - Fix global css style for margin on buttons
 ### 3/27/25 v1.0.6/7/8

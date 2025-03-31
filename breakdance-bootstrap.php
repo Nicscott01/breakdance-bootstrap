@@ -3,12 +3,12 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 1.0.9
+ *  Version: 1.0.10
  *  Requires Plugins: breakdance
  * 
  */
 
- define( 'BREAKDANCE_BS_VERSION', '1.0.9' );
+ define( 'BREAKDANCE_BS_VERSION', '1.0.10' );
 
  use BricBreakdance\GatedDownloadFormHandler;
  use BricBreakdance\FluentCrmFormHandler;
@@ -28,6 +28,7 @@
  include_once( __DIR__ . '/inc/fluent-crm-auto-login-handler.php' ); 
  include_once( __DIR__ . '/inc/icon-terms.php' ); 
  include_once( __DIR__ . '/inc/fluent-crm-form-submission-provider-breakdance.php' ); 
+ include_once( __DIR__ . '/inc/post-loop-accordion-extender.php' ); 
  //include_once( __DIR__ . '/inc/gravityforms-fluent-feed/gravgravityforms-fluent-feed.php' ); 
  //include_once( __DIR__ . '/inc/gravityforms-fluent-feed/fluent-crm-form-submission-provider-gravityforms.php' ); 
 // include_once( __DIR__ . '/inc/analyticswp-breakdance-submission-tracking.php' ); 
