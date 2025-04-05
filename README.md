@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 4/5/25 v1.1.0
+- Add support to show Breakdance palette colors in the Gutenburg palette (for FluentCRM/others)
 ### 3/31/25 v1.0.10
 - Add filter bricbd_accordion_title to edit the copy that appears in a Post Loop Builder accordion
 ### 3/31/25 v1.0.9

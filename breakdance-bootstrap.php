@@ -3,17 +3,18 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 1.0.10
+ *  Version: 1.1.0
  *  Requires Plugins: breakdance
  * 
  */
 
- define( 'BREAKDANCE_BS_VERSION', '1.0.10' );
+ define( 'BREAKDANCE_BS_VERSION', '1.1.0' );
 
  use BricBreakdance\GatedDownloadFormHandler;
  use BricBreakdance\FluentCrmFormHandler;
 
  include_once( __DIR__ . '/inc/helper-functions.php' ); 
+ include_once( __DIR__ . '/inc/global-palette-colors.php' ); 
  include_once( __DIR__ . '/custom-elements-loader.php' ); 
  include_once( __DIR__ . '/custom-dynamic-data-loader.php' ); 
  include_once( __DIR__ . '/inc/form-action-utils.php' ); 
@@ -642,3 +643,6 @@ class ParentIDTracker {
 function ParentIDTracker() {
     return ParentIDTracker::get_instance();
 }
+
+
+
