@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 4/8/25 v1.1.1
+- Fix fatal error when trying to load global colors into the theme color palette
 ### 4/5/25 v1.1.0
 - Add support to show Breakdance palette colors in the Gutenburg palette (for FluentCRM/others)
 ### 3/31/25 v1.0.10
