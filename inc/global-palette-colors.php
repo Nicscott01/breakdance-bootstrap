@@ -18,6 +18,11 @@ add_action( 'init', function() {
     }
 
     $global_breakdance_settings = \Breakdance\Data\get_global_settings_array();
+    
+    if ( ! isset( $global_breakdance_settings['settings']['colors'] ) ) {
+        return;
+    }
+
     $colors = $global_breakdance_settings['settings']['colors'];
 
     $palette =  array();
@@ -34,3 +39,13 @@ add_action( 'init', function() {
     \add_theme_support( 'editor-color-palette', $palette );
 
 }, 0 );
+
+
+
+
+add_filter( 'fluent_crm/theme_pref', function( $array ) {
+
+    
+    return $array;
+
+}, 10, 1 );
