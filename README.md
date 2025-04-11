@@ -2,6 +2,10 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 4/11/25 v1.1.2
+- Add more variable checks when loading color palette. Fresh installs may suffer from not having things set.
+- Add human usable color palette variables in :root like `--bde-palette-color-blue`
+- Add css rules to then use these colors in Gutenburg posts, etc. where it outputs `has-bd-palette-blue-color`
 ### 4/8/25 v1.1.1
 - Fix fatal error when trying to load global colors into the theme color palette
 ### 4/5/25 v1.1.0

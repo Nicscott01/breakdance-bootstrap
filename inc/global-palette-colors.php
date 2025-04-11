@@ -22,7 +22,7 @@ add_action( 'init', function() {
     if ( ! isset( $global_breakdance_settings['settings']['colors'] ) || 
         ! isset( $global_breakdance_settings['settings']['colors']['palette'] ) ||
         ! isset( $global_breakdance_settings['settings']['colors']['palette']['colors'] ) ||
-        ! is_array( $global_breakdance_settings['settings']['colors']['palette']['colors'] )
+        ! is_array( $global_breakdance_settings['settings']['colors']['palette']['colors'] ) 
     ) {
         return;
     }
@@ -35,7 +35,7 @@ add_action( 'init', function() {
     foreach ( $colors['palette']['colors'] as $color ) {
         $palette[] = array(
             'name'  => $color['label'],
-            'slug'  => sanitize_title( $color['cssVariableName'] ),
+            'slug'  => 'bd-palette-' . sanitize_title( $color['label'] ),
             'color' => $color['value'],
         );
     }

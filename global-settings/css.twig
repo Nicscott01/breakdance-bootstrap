@@ -1,3 +1,9 @@
+:root {
+    {% for color in settings.colors.palette.colors %}
+    --bde-palette-color-{{ color.label|lower }}: {{ color.value }};
+    {% endfor %}
+}
+
 .breakdance p,
 .breakdance-rich-text-styles>p:last-child  {
     {{ macros.spacing_margin_y(settings.bric_global_spacing.spacing.paragraphs) }}
@@ -15,3 +21,12 @@
 .breakdance .bde-button {
     {{ macros.spacing_margin_y(settings.bric_global_spacing.spacing.buttons) }}
 }
+
+
+{% for color in settings.colors.palette.colors %}
+
+.breakdance .has-bd-palette-{{ color.label|lower }}-color{
+    color: var( --bde-palette-color-{{  color.label|lower }} );
+}
+
+{% endfor %}
