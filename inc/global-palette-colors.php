@@ -19,7 +19,11 @@ add_action( 'init', function() {
 
     $global_breakdance_settings = \Breakdance\Data\get_global_settings_array();
     
-    if ( ! isset( $global_breakdance_settings['settings']['colors'] ) ) {
+    if ( ! isset( $global_breakdance_settings['settings']['colors'] ) || 
+        ! isset( $global_breakdance_settings['settings']['colors']['palette'] ) ||
+        ! isset( $global_breakdance_settings['settings']['colors']['palette']['colors'] ) ||
+        ! is_array( $global_breakdance_settings['settings']['colors']['palette']['colors'] )
+    ) {
         return;
     }
 
