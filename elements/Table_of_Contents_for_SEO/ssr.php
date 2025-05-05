@@ -9,6 +9,10 @@
  global $post;
 
 
+if ( !isset( $propertiesData["settings"]["advanced"]["id"] ) ) {
+    $propertiesData["settings"]["advanced"]["id"] = 'table-of-contents-seo';
+}
+
 $exclude_headings = $propertiesData['content']['data']['exclude_headings'] ?? [];
 
 
@@ -26,7 +30,7 @@ if ( $updated_content !== $post->post_content ) {
 
 }
 
-echo '<nav class="bric-toc"><ul>';
+echo '<nav id="table-of-contents-%%ID%%" class="bric-toc"><ul>';
 $prev_level = $toc_items[0]['level'];
 
 foreach ( $toc_items as $index => $item ) {

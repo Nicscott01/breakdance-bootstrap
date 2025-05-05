@@ -241,7 +241,7 @@ class TableOfContentsForSeo extends \Breakdance\Elements\Element
 
     static function spacingBars()
     {
-        return false;
+        return [['cssProperty' => 'margin-top', 'location' => 'outside-top', 'affectedPropertyPath' => 'design.container.margin.margin_top.%%BREAKPOINT%%'], ['cssProperty' => 'margin-bottom', 'location' => 'outside-bottom', 'affectedPropertyPath' => 'design.container.margin.margin_bottom.%%BREAKPOINT%%']];
     }
 
     static function attributes()

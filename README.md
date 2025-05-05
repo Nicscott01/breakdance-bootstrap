@@ -8,6 +8,8 @@ Bootstrap features for Breakdance sites
 - - Accounts for excluded headings via the TOC cache hash
 - - Updates `the_content` in the main post table when running through the post for the first time.
 - - We now selectively run the_content filter based on the $updated_contents when posts were changed and the page was loaded for the first time. Subsequent loads are already stored to $post->post_content.
+- - Beta.2
+- - - Add spacing bars for container
 
 ### 4/11/25 v1.1.2
 - Add more variable checks when loading color palette. Fresh installs may suffer from not having things set.

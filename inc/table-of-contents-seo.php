@@ -116,6 +116,8 @@ function get_cached_toc( $post, $exclude_headings = [] ) {
 /**
  * Add the table of contents to the JSON-LD schema.
  *
+ * TODO: The option of excluding headings should be added here as well. Not the worst thing that all headings are included in the schema.
+ * 
  * @param array $data The existing JSON-LD data.
  * @param array $jsonld The JSON-LD data being generated.
  *
@@ -124,7 +126,7 @@ function get_cached_toc( $post, $exclude_headings = [] ) {
 add_filter( 'rank_math/json_ld', function( $data, $jsonld ) {
     if ( is_singular( 'post' ) ) {
         global $post;
-
+       
         // Generate TOC with IDs
         [ $toc_items, $content_with_ids ] = get_cached_toc( $post );
 
@@ -144,7 +146,7 @@ add_filter( 'rank_math/json_ld', function( $data, $jsonld ) {
         foreach ( $toc_items as $index => $item ) {
             $item_list['itemListElement'][] = [
                 '@type'    => 'SiteNavigationElement',
-                'position' => $index + 1,
+                'position' => (int) ( $index + 1 ),
                 'name'     => $item['text'],
                 'url'      => get_permalink( $post ) . $item['anchor'],
             ];
