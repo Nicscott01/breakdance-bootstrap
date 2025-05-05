@@ -2,6 +2,13 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 5/5/25 v1.2.0
+- Add new Table of Contents for SEO element
+- - Checks if the headings in the post already have IDs and doen't add them again, or uses existing ones
+- - Accounts for excluded headings via the TOC cache hash
+- - Updates `the_content` in the main post table when running through the post for the first time.
+- - We now selectively run the_content filter based on the $updated_contents when posts were changed and the page was loaded for the first time. Subsequent loads are already stored to $post->post_content.
+
 ### 4/11/25 v1.1.2
 - Add more variable checks when loading color palette. Fresh installs may suffer from not having things set.
 - Add human usable color palette variables in :root like `--bde-palette-color-blue`

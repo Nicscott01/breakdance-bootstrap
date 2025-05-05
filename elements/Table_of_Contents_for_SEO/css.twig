@@ -1,0 +1,35 @@
+%%SELECTOR%% {
+  {{ macros.spacing_padding_all(design.container.padding) }}
+  {{ macros.spacing_margin_y(design.container.margin) }}
+  min-width: {{ design.container.min_width.style }};
+}
+
+%%SELECTOR%% .toc-title{ 
+  {{ macros.typography(design.header.typography, globalSettings) }}
+  {{ macros.spacing_padding_all(design.header.padding) }}
+  {{ macros.spacing_margin_y(design.header.margin) }}
+}
+
+%%SELECTOR%% .bric-toc ul {
+  {{ macros.spacing_margin_y(design.list.margin) }}
+}
+
+
+%%SELECTOR%% .bric-toc a {
+  {{ macros.typography(design.list.typography, globalSettings) }}
+}
+
+%%SELECTOR%% .bric-toc a:hover {
+  {{ macros.typographyWithHoverableColorAndEffects(design.list.typography) }}
+}
+    
+
+
+%%SELECTOR%% .bric-toc ul ul {
+  padding-left: {{ design.list.indent.style }};
+  margin-top: {{ design.list.space_between.style }};
+}
+
+%%SELECTOR%% .bric-toc li {
+  margin-bottom: {{ design.list.space_between.style }};
+}

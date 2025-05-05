@@ -1,0 +1,15 @@
+.breakdance .bric-toc-seo {
+  width:100%;
+}
+
+.breakdance .bric-toc-seo ul {
+  list-style:none;
+}
+
+.breakdance .bric-toc-seo .bric-toc > ul {
+  padding-left:0rem;
+}
+
+.breakdance .bric-toc-seo .toc-title {
+  margin-top:0;
+}

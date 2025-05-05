@@ -1,0 +1,22 @@
+{% set title = content.data.title|default( 'Table of Contents' ) %}
+
+{% if content.data.title_tag == 'h1' %}
+    <h1 class="toc-title">{{ title }}</h1>
+{% elseif content.data.title_tag == 'h2' %}
+    <h2 class="toc-title">{{ title }}</h2>
+{% elseif content.data.title_tag == 'h3' %}
+    <h3 class="toc-title">{{ title }}</h3>
+{% elseif content.data.title_tag == 'h4' %}
+    <h4 class="toc-title">{{ title }}</h4>
+{% elseif content.data.title_tag == 'h5' %}
+    <h5 class="toc-title">{{ title }}</h5>
+{% elseif content.data.title_tag == 'h6' %}
+    <h6 class="toc-title">{{ title }}</h6>
+{% elseif content.data.title_tag == 'p' %}
+    <p class="toc-title">{{ title }}</p>
+{% elseif content.data.title_tag == 'div' %}
+    <div class="toc-title">{{ title }}</div>
+{% else %}
+    <h2 class="toc-title">{{ title }}</h2>
+{% endif %}
+%%SSR%%
