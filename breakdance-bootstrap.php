@@ -3,12 +3,12 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 1.2.0-beta.2
+ *  Version: 1.2.1-beta
  *  Requires Plugins: breakdance
  * 
  */
 
- define( 'BREAKDANCE_BS_VERSION', '1.2.0-beta.2' );
+ define( 'BREAKDANCE_BS_VERSION', '1.2.1-beta' );
 
  use BricBreakdance\GatedDownloadFormHandler;
  use BricBreakdance\FluentCrmFormHandler;
@@ -22,6 +22,7 @@
  include_once( __DIR__ . '/inc/loop-popup.php' ); 
  include_once( __DIR__ . '/inc/team-members.php' ); 
  include_once( __DIR__ . '/inc/website-policies.php' ); 
+ include_once( __DIR__ . '/inc/breakdance-gutenburg-styles.php' ); 
  include_once( __DIR__ . '/inc/gated-download.php' ); 
  include_once( __DIR__ . '/inc/shortcodes.php' ); 
  include_once( __DIR__ . '/inc/facetwp.php' ); 

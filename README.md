@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 5/7/25 v1.2.1 
+- Add filter to apply Breakdance button primary style to Gutenburg buttons
 ### 5/5/25 v1.2.0
 - Add new Table of Contents for SEO element
 - - Checks if the headings in the post already have IDs and doen't add them again, or uses existing ones
