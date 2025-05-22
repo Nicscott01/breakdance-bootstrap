@@ -3,12 +3,12 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 1.2.1-beta
+ *  Version: 1.2.1-beta.2
  *  Requires Plugins: breakdance
  * 
  */
 
- define( 'BREAKDANCE_BS_VERSION', '1.2.1-beta' );
+ define( 'BREAKDANCE_BS_VERSION', '1.2.1-beta.2' );
 
  use BricBreakdance\GatedDownloadFormHandler;
  use BricBreakdance\FluentCrmFormHandler;
@@ -105,6 +105,35 @@ add_filter( 'rank_math/whitelabel', '__return_true' );
                 require_once( __DIR__ . '/inc/fluent-crm-form-handler.php' ); 
 
                 \Breakdance\Forms\Actions\registerAction(new FluentCrmFormHandler());
+
+            }
+
+
+
+        });
+
+
+        add_action('init', function() {
+            // fail if Breakdance is not installed and available
+            if (!function_exists('\Breakdance\Forms\Actions\registerAction') || !class_exists('\Breakdance\Forms\Actions\Action')) {
+                return;
+            }
+            
+            if ( true ) {
+
+                \Breakdance\APIKeys\registerKey([
+                    'name' => 'CF Turnstile Site Key',
+                    'slug' => 'cf_turnstile_site_key',
+                ]);
+                \Breakdance\APIKeys\registerKey([
+                    'name' => 'CF Turnstile Secret Key',
+                    'slug' => 'cf_turnstile_secret_key',
+                ]);
+    
+
+                require_once( __DIR__ . '/inc/form-action-turnstile.php' ); 
+
+                \Breakdance\Forms\Actions\registerAction(new BricBreakdance\BreakdanceTurnstile());
 
             }
 
