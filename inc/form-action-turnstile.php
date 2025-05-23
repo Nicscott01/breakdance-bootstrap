@@ -11,6 +11,16 @@ use function \BricBreakdance\Forms\getMappedFieldValuesFromFormData;
 
 class BreakdanceTurnstile extends \Breakdance\Forms\Actions\Action {
 
+    /**
+     * @var string
+     */
+    public $siteKey;
+
+    /**
+     * @var string
+     */
+    public $secretKey;
+
 
     public function __construct() {
 
@@ -22,6 +32,7 @@ class BreakdanceTurnstile extends \Breakdance\Forms\Actions\Action {
 
             printf( '<div class="breakdance-form-field"><div class="cf-turnstile" data-sitekey="%s"></div></div>', $this->siteKey );
             echo '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
+       
         }, 10, 1 );
 
     }
