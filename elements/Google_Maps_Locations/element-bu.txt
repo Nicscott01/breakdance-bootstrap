@@ -287,30 +287,6 @@ class GoogleMapsLocations extends \Breakdance\Elements\Element
         false,
         [],
       ), c(
-        "repeater_fields",
-        "Repeater Fields",
-        [],
-        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'default', 'content' => '<p>If populating the locations via Repeater field, tell us the field names below:</p>']],
-        false,
-        false,
-        [],
-      ), c(
-        "name_field",
-        "Name Field",
-        [],
-        ['type' => 'text', 'layout' => 'vertical'],
-        false,
-        false,
-        [],
-      ), c(
-        "location_field",
-        "Location Field",
-        [],
-        ['type' => 'text', 'layout' => 'vertical'],
-        false,
-        false,
-        [],
-      ), c(
         "center_info",
         "Center Info",
         [],
@@ -495,7 +471,7 @@ window.BricGoogleMapsLocations().update({
 
     static function dynamicPropertyPaths()
     {
-        return [['accepts' => 'repeater', 'path' => 'content.data.locations']];
+        return [];
     }
 
     static function additionalClasses()
@@ -510,7 +486,7 @@ window.BricGoogleMapsLocations().update({
 
     static function propertyPathsToWhitelistInFlatProps()
     {
-        return ['content.data.locations[].icon', 'design.icons.size', 'design.icons.color', 'content.data.locations[].icon_color', 'content.data.locations'];
+        return ['content.data.locations[].icon', 'design.icons.size', 'design.icons.color', 'content.data.locations[].icon_color'];
     }
 
     static function propertyPathsToSsrElementWhenValueChanges()

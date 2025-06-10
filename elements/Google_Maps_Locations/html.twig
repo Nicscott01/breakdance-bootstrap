@@ -1,13 +1,31 @@
 
-   
+  
+{% set formatted_locations = [] %}
+{% set nameKey = content.data.name_field %}
+{% set locationKey = content.data.location_field %}
+
+{% for key, location_data in content.data.locations %}
+  {% if nameKey and locationKey and location_data[locationKey] is defined %}
+    {% set formatted = {
+      name: location_data[nameKey],
+      address: location_data[locationKey].address,
+      coordinates: location_data[locationKey].lat ~ ',' ~ location_data[locationKey].lng
+    } %}
+  {% else %}
+    {% set formatted = location_data %}
+  {% endif %}
+
+  {% set formatted_locations = formatted_locations | merge([formatted]) %}
+{% endfor %}
+
+
 <div class="map-embed">
 <div class="google-map"></div>
 </div>
 <div id="locations-%%ID%%" class="data-locations locations-icons">
   <p>Post ID: %%POSTID%% </p>  
-     
-      
-{% for key, location in content.data.locations %}
+  
+{% for key, location in formatted_locations %}
   <div id="icon-{{key}}" class="location" data-name="{{ location.name }}" data-address="{{ location.address }}" data-coordinates="{{location.coordinates}}" data-icon-color="{{ location.icon_color }}" data-icon-size="{{ location.icon_size.number }}">{{location.icon.svgCode | raw}}</div>
 {% endfor %}
   <div class="custom-global-icon">{{ content.data.custom_icon.svgCode | raw }}</div>
