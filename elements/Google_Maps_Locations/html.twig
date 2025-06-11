@@ -1,15 +1,59 @@
 
-  
-{% set formatted_locations = [] %}
-{% set nameKey = content.data.name_field %}
-{% set locationKey = content.data.location_field %}
 
-{% for key, location_data in content.data.locations %}
+{# Set the master array that will hold our locations #}
+{% set raw_locations = [] %}
+{% set formatted_locations = [] %}
+
+{# Check to see if we're ACF or Builder #}
+
+{% if content.data.data_source == 'builder' %}
+
+	{% set raw_locations = content.data.locations %}
+
+{% elseif content.data.data_source == 'acf' %}
+
+	{% set raw_locations = content.data.locations_acf %}
+	{% set nameKey = content.data.name_field %}
+
+	{% if content.data.map_field_type == 'post' %}
+		{% set postField = content.data.post_field %}
+		{% set mapKey = content.data.post_map_field %}
+		
+		{# loop through the repeater and get the map objects #}
+		{% set post_map_locations = [] %}
+		{% for key, repeater_field in raw_locations %}
+			{# use our custom twig function to get the map data #}
+
+{% set map_from_post = getMapFromPost(repeater_field[postField].0, mapKey) %}
+
+			{% set post_map_location = {
+				name: repeater_field[nameKey],
+				address: map_from_post.address,
+				coordinates: map_from_post.lat ~ ', ' ~ map_from_post.lng,
+			} %}
+			{% set post_map_locations = post_map_locations | merge([post_map_location]) %}
+		{% endfor %}
+		
+		{% set formatted_locations = post_map_locations %}
+	
+	{% elseif content.data.map_field_type == 'acf_map' %}
+		{% set mapKey = content.data.map_field %}
+
+
+	{% endif %}
+
+
+
+{% endif %}
+
+
+{% if formatted_locations is empty %}
+{% for key, location_data in raw_locations %}
   {% if nameKey and locationKey and location_data[locationKey] is defined %}
     {% set formatted = {
       name: location_data[nameKey],
-      address: location_data[locationKey].address,
-      coordinates: location_data[locationKey].lat ~ ',' ~ location_data[locationKey].lng
+      address: location_data[mapKey].address,
+      coordinates: location_data[mapKey].lat ~ ',' ~ location_data[mapKey].lng
     } %}
   {% else %}
     {% set formatted = location_data %}
@@ -17,6 +61,7 @@
 
   {% set formatted_locations = formatted_locations | merge([formatted]) %}
 {% endfor %}
+{% endif %}
 
 
 <div class="map-embed">

@@ -36,6 +36,10 @@
  //include_once( __DIR__ . '/inc/gravityforms-fluent-feed/fluent-crm-form-submission-provider-gravityforms.php' ); 
 // include_once( __DIR__ . '/inc/analyticswp-breakdance-submission-tracking.php' ); 
 
+add_action( 'breakdance_loaded', function() {
+    include_once( __DIR__ . '/inc/twig-functions.php' );
+});
+
 
 add_filter( 'rank_math/whitelabel', '__return_true' );
 

@@ -231,6 +231,62 @@ class GoogleMapsLocations extends \Breakdance\Elements\Element
         "data",
         "Data",
         [c(
+        "data_source",
+        "Data Source",
+        [],
+        ['type' => 'button_bar', 'layout' => 'vertical', 'items' => [['value' => 'builder', 'text' => 'Builder'], ['text' => 'ACF', 'value' => 'acf']], 'buttonBarOptions' => ['size' => 'small', 'layout' => 'default']],
+        false,
+        false,
+        [],
+      ), c(
+        "locations_acf",
+        "Locations ACF",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['format' => 'html'], 'placeholder' => 'Only use dynamic data', 'condition' => [[['path' => 'content.data.data_source', 'operand' => 'equals', 'value' => 'acf']]]],
+        false,
+        false,
+        [],
+      ), c(
+        "name_field",
+        "Name Field",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'condition' => [[['path' => 'content.data.data_source', 'operand' => 'equals', 'value' => 'acf']]]],
+        false,
+        false,
+        [],
+      ), c(
+        "map_field_type",
+        "Map Field Type",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [['value' => 'acf_map', 'text' => 'ACF Map'], ['text' => 'Post Reference', 'value' => 'post']], 'condition' => [[['path' => 'content.data.data_source', 'operand' => 'equals', 'value' => 'acf']]]],
+        false,
+        false,
+        [],
+      ), c(
+        "map_field",
+        "Map Field",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'condition' => [[['path' => 'content.data.map_field_type', 'operand' => 'equals', 'value' => 'acf_map']]]],
+        false,
+        false,
+        [],
+      ), c(
+        "post_field",
+        "Post Field",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'condition' => [[['path' => 'content.data.map_field_type', 'operand' => 'equals', 'value' => 'post'], ['path' => 'content.data.data_source', 'operand' => 'equals', 'value' => 'acf']]]],
+        false,
+        false,
+        [],
+      ), c(
+        "post_map_field",
+        "Post Map Field",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'condition' => [[['path' => 'content.data.map_field_type', 'operand' => 'equals', 'value' => 'post'], ['path' => 'content.data.data_source', 'operand' => 'equals', 'value' => 'acf']]]],
+        false,
+        false,
+        [],
+      ), c(
         "locations",
         "Locations",
         [c(
@@ -282,31 +338,7 @@ class GoogleMapsLocations extends \Breakdance\Elements\Element
         false,
         [],
       )],
-        ['type' => 'repeater', 'layout' => 'vertical', 'repeaterOptions' => ['titleTemplate' => '{name}', 'defaultTitle' => 'Location', 'buttonName' => 'Add Location']],
-        false,
-        false,
-        [],
-      ), c(
-        "repeater_fields",
-        "Repeater Fields",
-        [],
-        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'default', 'content' => '<p>If populating the locations via Repeater field, tell us the field names below:</p>']],
-        false,
-        false,
-        [],
-      ), c(
-        "name_field",
-        "Name Field",
-        [],
-        ['type' => 'text', 'layout' => 'vertical'],
-        false,
-        false,
-        [],
-      ), c(
-        "location_field",
-        "Location Field",
-        [],
-        ['type' => 'text', 'layout' => 'vertical'],
+        ['type' => 'repeater', 'layout' => 'vertical', 'repeaterOptions' => ['titleTemplate' => '{name}', 'defaultTitle' => 'Location', 'buttonName' => 'Add Location'], 'condition' => [[['path' => 'content.data.data_source', 'operand' => 'equals', 'value' => 'builder']]]],
         false,
         false,
         [],
@@ -347,6 +379,14 @@ class GoogleMapsLocations extends \Breakdance\Elements\Element
         "Custom Icon",
         [],
         ['type' => 'icon', 'layout' => 'vertical'],
+        false,
+        false,
+        [],
+      ), c(
+        "",
+        "",
+        [],
+        ['type' => 'text', 'layout' => 'vertical'],
         false,
         false,
         [],
@@ -495,7 +535,7 @@ window.BricGoogleMapsLocations().update({
 
     static function dynamicPropertyPaths()
     {
-        return [['accepts' => 'repeater', 'path' => 'content.data.locations']];
+        return [['accepts' => 'repeater', 'path' => 'content.data.locations_acf']];
     }
 
     static function additionalClasses()
@@ -510,7 +550,7 @@ window.BricGoogleMapsLocations().update({
 
     static function propertyPathsToWhitelistInFlatProps()
     {
-        return ['content.data.locations[].icon', 'design.icons.size', 'design.icons.color', 'content.data.locations[].icon_color', 'content.data.locations'];
+        return ['content.data.locations[].icon', 'design.icons.size', 'design.icons.color', 'content.data.locations[].icon_color'];
     }
 
     static function propertyPathsToSsrElementWhenValueChanges()
