@@ -2,7 +2,9 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
-### 6/10/25 v1.2.1-beta.4 ###
+### 6/13/25 v1.2.2 
+- Version bump and release of beta changes.
+### 6/10/25 v1.2.1-beta.4-5 ###
 - Add repeater field functionality to Google Maps Locations widget
 ### 5/7/25 v1.2.1 
 - Add filter to apply Breakdance button primary style to Gutenburg buttons
