@@ -359,6 +359,14 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
         false,
         [],
       ), c(
+        "field_for_nested_location",
+        "Field for Nested Location",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'get_acf_field_names_for_nested_relationship', 'fetchContextPath' => 'content.data.field_for_location', 'refetchPaths' => ['content.data.locations', 'content.data.field_for_location']]], 'condition' => [[['path' => 'content.data.locations', 'operand' => 'contains', 'value' => 'breakdance_dynamic'], ['path' => 'content.data.field_for_location', 'operand' => 'contains', 'value' => 'is_post']]]],
+        false,
+        false,
+        [],
+      ), c(
         "center_info",
         "Center Info",
         [],

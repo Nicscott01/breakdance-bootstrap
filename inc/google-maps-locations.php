@@ -54,7 +54,7 @@ add_action('wp_ajax_bric_maps_locations_update', function() {
 
                 $context = isset( $_POST['requestData']['context'] ) ? $_POST['requestData']['context'] : false;
              
-                if ( false ) {
+                if ( $context === false ) {
                     return [];
                 }
 
@@ -82,7 +82,9 @@ add_action('wp_ajax_bric_maps_locations_update', function() {
                     
                     if ( $sub_field['type'] == 'relationship' || $sub_field['type'] == 'post_object' ) {
                         
-                        $value = 'is_post_' . $sub_field['name'];
+                        //Make a list of post types that this relationship field can pull from
+                        $post_types = isset( $sub_field['post_type'] ) ? $sub_field['post_type'] : [];
+                        $value = 'is_post__posttypes__' . implode( '_', $post_types );
                         
                     } else {
                         $value = $sub_field['name'];
@@ -96,6 +98,53 @@ add_action('wp_ajax_bric_maps_locations_update', function() {
 
                 return $choices;
 
+               
+            },
+            'edit'
+        );
+ 
+ 
+    \Breakdance\AJAX\register_handler(
+            'get_acf_field_names_for_nested_relationship',
+            function() {
+
+                $context = isset( $_POST['requestData']['context'] ) ? $_POST['requestData']['context'] : false;
+             
+                if ( $context === false ) {
+                    return [];
+                }
+
+
+                //Get the context of what post types we need to get the ACF field names for
+                if ( strpos( $context, 'is_post__posttypes__' ) === 0 ) {
+                    $post_types = explode( '_', str_replace( 'is_post__posttypes__', '', $context ) );
+                } else {
+                    $post_types = [];
+                }
+
+                //Build a list of all availalbe ACF fields for the post types in the context
+                $acf_fields = [];
+                foreach ( $post_types as $post_type ) {
+                    $fields = \BricBreakdance\GoogleMapsLocations\get_acf_fields_for_post_type( $post_type );
+
+
+                    if ( $fields ) {
+                        foreach ( $fields as $field ) {
+                            if ( isset( $field['name'] ) && isset( $field['label'] ) ) {
+                                $acf_fields[] = [
+                                    'value' => $field['name'],
+                                    'text'  => $field['label'],
+                                ];
+                            }
+                        }
+                    }
+                }
+
+                // If no fields found, return an empty array
+                if ( empty( $acf_fields ) ) {
+                    return [];
+                }
+
                 $array = [
                     [
                         'value' => 'test_1',
@@ -108,19 +157,46 @@ add_action('wp_ajax_bric_maps_locations_update', function() {
 
 
 
-                return $array;
+                return $acf_fields;
+
+
             },
             'edit'
         );
- }
+ 
+ 
+    }
 
 
- /**
- * Add a breakdance dynamic data handler function
+
+/**
+ * Get ACF fields for a specific post type.
+ *
+ * @param string $post_type The post type to get fields for.
+ * @return array An associative array of field names and their definitions.
  */
+function get_acf_fields_for_post_type( $post_type ) {
+    if ( ! function_exists( 'acf_get_field_groups' ) ) {
+        return [];
+    }
 
- function get_acf_field_names_for_repeater(  ) {
+    $fields = [];
 
-    $acf_repeater_field;
+    // Get all field groups for the given post type
+    $field_groups = acf_get_field_groups( [ 'post_type' => $post_type ] );
 
- }
+    foreach ( $field_groups as $group ) {
+        $group_fields = acf_get_fields( $group['key'] );
+
+        if ( ! $group_fields ) {
+            continue;
+        }
+
+        foreach ( $group_fields as $field ) {
+            $fields[ $field['name'] ] = $field;
+        }
+    }
+
+    return $fields;
+}
+
