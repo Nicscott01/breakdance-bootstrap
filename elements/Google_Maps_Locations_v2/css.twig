@@ -1,0 +1,11 @@
+%%SELECTOR%% .map-embed { 
+ height: {{ design.general.height.style }};
+ width:{{ design.general.width.style }};
+
+  {% if design.general.aspect_ratio == 'custom' %} 
+  aspect-ratio: {{ design.general.custom_ratio.width }} / {{ design.general.custom_ratio.height }};
+  {% else %} 
+  aspect-ratio: {{ design.general.aspect_ratio }}
+  {% endif %}
+}
+

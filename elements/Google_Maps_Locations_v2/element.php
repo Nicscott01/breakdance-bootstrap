@@ -7,11 +7,11 @@ use function Breakdance\Elements\PresetSections\getPresetSection;
 
 
 \Breakdance\ElementStudio\registerElementForEditing(
-    "BricBreakdanceElements\\GoogleMapsLocations",
+    "BricBreakdanceElements\\GoogleMapsLocationsv2",
     \Breakdance\Util\getdirectoryPathRelativeToPluginFolder(__DIR__)
 );
 
-class GoogleMapsLocations extends \Breakdance\Elements\Element
+class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
 {
     static function uiIcon()
     {
@@ -35,12 +35,12 @@ class GoogleMapsLocations extends \Breakdance\Elements\Element
 
     static function name()
     {
-        return 'Google Maps Locations';
+        return 'Google Maps Locations V2';
     }
 
     static function className()
     {
-        return 'bric-google-maps-locations';
+        return 'bric-google-maps-locations-v2';
     }
 
     static function category()
@@ -343,6 +343,22 @@ class GoogleMapsLocations extends \Breakdance\Elements\Element
         false,
         [],
       ), c(
+        "field_for_name",
+        "Field for Name",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'get_acf_field_names_for_repeater', 'fetchContextPath' => 'content.data.locations_dynamic_meta', 'refetchPaths' => ['content.data.locations']]], 'condition' => [[['path' => 'content.data.locations', 'operand' => 'contains', 'value' => 'breakdance_dynamic']]]],
+        false,
+        false,
+        [],
+      ), c(
+        "field_for_location",
+        "Field for Location",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'get_acf_field_names_for_repeater', 'fetchContextPath' => 'content.data.locations_dynamic_meta', 'refetchPaths' => ['content.data.locations']]], 'condition' => [[['path' => 'content.data.locations', 'operand' => 'contains', 'value' => 'breakdance_dynamic']]]],
+        false,
+        false,
+        [],
+      ), c(
         "center_info",
         "Center Info",
         [],
@@ -382,14 +398,6 @@ class GoogleMapsLocations extends \Breakdance\Elements\Element
         false,
         false,
         [],
-      ), c(
-        "",
-        "",
-        [],
-        ['type' => 'text', 'layout' => 'vertical', 'condition' => [[['path' => 'content.data.locations', 'operand' => 'contains', 'value' => 'acf']]]],
-        false,
-        false,
-        [],
       )],
         ['type' => 'section', 'layout' => 'vertical'],
         false,
@@ -407,7 +415,7 @@ class GoogleMapsLocations extends \Breakdance\Elements\Element
     {
         return ['0' =>  ['title' => 'Google Maps','scripts' => ['%%BREAKDANCE_REUSABLE_GOOGLE_MAPS_JS%%'],],'1' =>  ['scripts' => ['%%BREAKDANCE_REUSABLE_BRIC_GOOGLE_MAPS_LOCATIONS_JS%%'],'title' => 'Bric Google Maps',],'2' =>  ['title' => 'Coordinates - Zoom Viewer','frontendCondition' => 'return false;','inlineScripts' => ['document.querySelector( \'%%SELECTOR%%\' ).insertAdjacentHTML(\'beforeend\', \'<div class="maps-data">Coordinates: <div class="center-coordinates"></div>Zoom: <div class="zoom"></div></div>\');
 '],'inlineStyles' => ['
-.breakdance .bric-google-maps-locations .maps-data {
+.breakdance .bric-google-maps-locations-v2 .maps-data {
   position:absolute;
   top:auto;
   bottom:0;
@@ -421,8 +429,8 @@ class GoogleMapsLocations extends \Breakdance\Elements\Element
   font-weight:bolder;
 }
 
-.breakdance .bric-google-maps-locations .maps-data .zoom, 
-.breakdance .bric-google-maps-locations .maps-data .center-coordinates{
+.breakdance .bric-google-maps-locations-v2 .maps-data .zoom, 
+.breakdance .bric-google-maps-locations-v2 .maps-data .center-coordinates{
   margin-left:0rem;
   margin-right:1rem;
   font-weight: 400;

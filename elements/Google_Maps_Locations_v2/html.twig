@@ -1,0 +1,75 @@
+{# Set the master array that will hold our locations #}
+{% set raw_locations = [] %}
+{% set formatted_locations = [] %}
+
+{# Check to see if we're ACF or Builder #}
+
+{% if content.data.data_source == 'builder' %}
+
+	{% set raw_locations = content.data.locations %}
+
+{% elseif content.data.data_source == 'acf' %}
+
+	{% set raw_locations = content.data.locations_acf %}
+	{% set nameKey = content.data.name_field %}
+
+	{% if content.data.map_field_type == 'post' %}
+		{% set postField = content.data.post_field %}
+		{% set mapKey = content.data.post_map_field %}
+		
+		{# loop through the repeater and get the map objects #}
+		{% set post_map_locations = [] %}
+		{% for key, repeater_field in raw_locations %}
+			{# use our custom twig function to get the map data #}
+
+{% set map_from_post = getMapFromPost(repeater_field[postField].0, mapKey) %}
+
+			{% set post_map_location = {
+				name: repeater_field[nameKey],
+				address: map_from_post.address,
+				coordinates: map_from_post.lat ~ ', ' ~ map_from_post.lng,
+			} %}
+			{% set post_map_locations = post_map_locations | merge([post_map_location]) %}
+		{% endfor %}
+		
+		{% set formatted_locations = post_map_locations %}
+	
+	{% elseif content.data.map_field_type == 'acf_map' %}
+		{% set mapKey = content.data.map_field %}
+
+
+	{% endif %}
+
+
+
+{% endif %}
+
+
+{% if formatted_locations is empty %}
+{% for key, location_data in raw_locations %}
+  {% if nameKey and locationKey and location_data[locationKey] is defined %}
+    {% set formatted = {
+      name: location_data[nameKey],
+      address: location_data[mapKey].address,
+      coordinates: location_data[mapKey].lat ~ ',' ~ location_data[mapKey].lng
+    } %}
+  {% else %}
+    {% set formatted = location_data %}
+  {% endif %}
+
+  {% set formatted_locations = formatted_locations | merge([formatted]) %}
+{% endfor %}
+{% endif %}
+
+<p>V2</p>
+<div class="map-embed">
+<div class="google-map"></div>
+</div>
+<div id="locations-%%ID%%" class="data-locations locations-icons">
+  <p>Post ID: %%POSTID%% </p>  
+  
+{% for key, location in formatted_locations %}
+  <div id="icon-{{key}}" class="location" data-name="{{ location.name }}" data-address="{{ location.address }}" data-coordinates="{{location.coordinates}}" data-icon-color="{{ location.icon_color }}" data-icon-size="{{ location.icon_size.number }}">{{location.icon.svgCode | raw}}</div>
+{% endfor %}
+  <div class="custom-global-icon">{{ content.data.custom_icon.svgCode | raw }}</div>
+</div>
