@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 9/8/25 v1.2.3
+- Fix for Breakdance ACF relationship field ordering not working by ACF field
 ### 6/13/25 v1.2.2 
 - Version bump and release of beta changes.
 ### 6/10/25 v1.2.1-beta.4-5 ###
