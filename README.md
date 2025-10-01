@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 10/1/25 v1.2.4
+- Fix for FAQ w/ Schema not loading JS properly in BD 2.5.1
 ### 9/8/25 v1.2.3
 - Fix for Breakdance ACF relationship field ordering not working by ACF field
 ### 6/13/25 v1.2.2 

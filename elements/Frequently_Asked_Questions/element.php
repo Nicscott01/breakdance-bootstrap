@@ -99,6 +99,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         true,
         false,
         [],
+        
       ), c(
         "background",
         "Background",
@@ -107,11 +108,13 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       )],
         ['type' => 'section', 'layout' => 'vertical'],
         false,
         false,
         [],
+        
       ), c(
         "item",
         "Item",
@@ -123,6 +126,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         true,
         false,
         [],
+        
       ), c(
         "vertical_padding",
         "Vertical Padding",
@@ -131,6 +135,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         true,
         false,
         [],
+        
       ), getPresetSection(
       "EssentialElements\\AtomV1ButtonDesign",
       "Button",
@@ -147,6 +152,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), c(
         "active_icon",
         "Active Icon",
@@ -155,6 +161,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), c(
         "size",
         "Size",
@@ -163,6 +170,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         true,
         false,
         [],
+        
       ), c(
         "color",
         "Color",
@@ -171,6 +179,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), c(
         "active_color",
         "Active Color",
@@ -179,11 +188,13 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       )],
         ['type' => 'section', 'sectionOptions' => ['type' => 'popout']],
         false,
         false,
         [],
+        
       ), c(
         "background",
         "Background",
@@ -192,6 +203,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), c(
         "active_background",
         "Active Background",
@@ -200,6 +212,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), c(
         "below_title",
         "Below Title",
@@ -208,6 +221,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         true,
         false,
         [],
+        
       ), c(
         "above_button",
         "Above Button",
@@ -216,6 +230,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         true,
         false,
         [],
+        
       ), c(
         "after_item",
         "After Item",
@@ -224,6 +239,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         true,
         false,
         [],
+        
       ), c(
         "transition_duration",
         "Transition Duration",
@@ -232,11 +248,13 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       )],
         ['type' => 'section', 'layout' => 'vertical'],
         false,
         false,
         [],
+        
       ), c(
         "typography",
         "Typography",
@@ -248,6 +266,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), getPresetSection(
       "EssentialElements\\typography_with_align",
       "Title",
@@ -261,6 +280,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), getPresetSection(
       "EssentialElements\\typography_with_align",
       "Content",
@@ -271,6 +291,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), c(
         "borders",
         "Borders",
@@ -282,6 +303,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), c(
         "border_color",
         "Border Color",
@@ -290,6 +312,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), c(
         "border_width",
         "Border Width",
@@ -298,6 +321,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         true,
         false,
         [],
+        
       ), c(
         "border_radius",
         "Border Radius",
@@ -306,11 +330,13 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       )],
         ['type' => 'section', 'layout' => 'vertical'],
         false,
         false,
         [],
+        
       ), getPresetSection(
       "EssentialElements\\spacing_margin_y",
       "Spacing",
@@ -335,6 +361,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        ['accepts' => 'string']
       ), c(
         "answer",
         "Answer",
@@ -343,6 +370,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        ['accepts' => 'string']
       ), getPresetSection(
       "EssentialElements\\AtomV1ButtonContent",
       "Button",
@@ -353,6 +381,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        ['accepts' => 'repeater']
       ), c(
         "accordion",
         "Accordion",
@@ -361,6 +390,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       ), c(
         "first_tab_opened",
         "First tab opened",
@@ -369,11 +399,13 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         false,
         [],
+        
       )],
         ['type' => 'section', 'layout' => 'vertical'],
         false,
         false,
         [],
+        
       )];
     }
 
@@ -384,7 +416,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
 
     static function dependencies()
     {
-        return ['0' =>  ['scripts' => ['%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%elements/Frequently_Asked_Questions/assets/faq.js'],'title' => 'Tabs.js',],'1' =>  ['title' => 'FAQ Frontend','inlineScripts' => ['new BreakdanceFaq(\'%%SELECTOR%%\', { accordion: {{ content.settings.accordion|json_encode }}, openFirst: {{ content.settings.first_tab_opened|json_encode }}  });'],'builderCondition' => 'return false;','frontendCondition' => 'return true;',],];
+        return ['0' =>  ['scripts' => ['%%BREAKDANCE_ELEMENTS_PLUGIN_URL%%dependencies-files/breakdance-faq@1/faq.js'],'title' => 'Tabs.js',],'1' =>  ['title' => 'FAQ Frontend','inlineScripts' => ['new BreakdanceFaq(\'%%SELECTOR%%\', { accordion: {{ content.settings.accordion|json_encode }}, openFirst: {{ content.settings.first_tab_opened|json_encode }}  });'],'builderCondition' => 'return false;','frontendCondition' => 'return true;',],];
     }
 
     static function settings()
@@ -432,7 +464,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
 
     static function nestingRule()
     {
-        return ["type" => "final",   ];
+        return ['type' => 'final'];
     }
 
     static function spacingBars()
@@ -450,6 +482,12 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         return false;
     }
 
+    static function availableIn()
+    {
+        return ['breakdance'];
+    }
+
+
     static function order()
     {
         return 750;
@@ -457,7 +495,7 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return [['accepts' => 'string', 'path' => 'content.settings.items[].answer'], ['accepts' => 'string', 'path' => 'content.settings.items[].button.text'], ['accepts' => 'string', 'path' => 'content.settings.items[].button.link'], ['accepts' => 'repeater', 'path' => 'content.settings.items'], ['accepts' => 'string', 'path' => 'content.settings.items[].question']];
+        return false;
     }
 
     static function additionalClasses()
