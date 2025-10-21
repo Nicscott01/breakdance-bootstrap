@@ -89,6 +89,9 @@ class BreakdanceTurnstile extends \Breakdance\Forms\Actions\Action {
             }
             // Verification successful
             return [ 'type' => 'success', 'message' => __('Turnstile verification successful.', 'text-domain') ];
+        } else {
+            // No Turnstile response was provided
+            return [ 'type' => 'error', 'message' => __('Please complete the Turnstile verification.', 'text-domain') ];
         }
     }
 

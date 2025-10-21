@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 10/20/25 v1.2.5
+- Fix failed Turnstiles from getting submitted
 ### 10/1/25 v1.2.4
 - Fix for FAQ w/ Schema not loading JS properly in BD 2.5.1
 ### 9/8/25 v1.2.3

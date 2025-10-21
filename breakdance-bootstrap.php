@@ -3,12 +3,12 @@
  *  Plugin Name: Breakdance Bootstrap
  *  Description: Some baseline additions for websites built with Breakdance.
  *  Author: Nic Scott
- *  Version: 1.2.4
+ *  Version: 1.2.5
  *  Requires Plugins: breakdance
  * 
  */
 
- define( 'BREAKDANCE_BS_VERSION', '1.2.4' );
+ define( 'BREAKDANCE_BS_VERSION', '1.2.5' );
 
  use BricBreakdance\GatedDownloadFormHandler;
  use BricBreakdance\FluentCrmFormHandler;
@@ -679,7 +679,3 @@ class ParentIDTracker {
 function ParentIDTracker() {
     return ParentIDTracker::get_instance();
 }
-
-
-
-
