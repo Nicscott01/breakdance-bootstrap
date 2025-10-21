@@ -27,13 +27,8 @@ class BreakdanceTurnstile extends \Breakdance\Forms\Actions\Action {
         $this->siteKey = \Breakdance\APIKeys\getKey('cf_turnstile_site_key');
         $this->secretKey = \Breakdance\APIKeys\getKey('cf_turnstile_secret_key');
 
-        //Print the Turnstile widget in the form
-        add_action( 'breakdance_form_before_footer', function ($form ) {
-
-            printf( '<div class="breakdance-form-field"><div class="cf-turnstile" data-sitekey="%s"></div></div>', $this->siteKey );
-            echo '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
-       
-        }, 10, 1 );
+        // Print the Turnstile widget in the form only if this action is enabled for the form
+        add_action( 'breakdance_form_before_footer', [ $this, 'output_turnstile_field' ], 10, 1 );
 
     }
 
@@ -48,6 +43,67 @@ class BreakdanceTurnstile extends \Breakdance\Forms\Actions\Action {
     public static function slug() {
         return 'cf-turnstile';
     }
+
+
+    public function output_turnstile_field( $form ) {
+
+        
+        if ( $this->siteKey === '' || $this->secretKey === '' ) {
+            return;
+        }
+
+        $slug = $this::slug();
+        $found = false;
+
+        // Try several common locations/formats for stored actions
+        $actions = null;
+
+        if ( is_array( $form ) ) {
+            // If form is an array, check common keys
+            if ( isset( $form['actions']['actions'] ) ) {
+                $actions = $form['actions']['actions'];
+            } elseif ( isset( $form['actions'] ) ) {
+                $actions = $form['actions'];
+            }
+        } elseif ( is_object( $form ) ) {
+            // Object-based form: try property then getter
+            $actions = $form->settings['actions'] ?? null;
+
+            if ( is_null( $actions ) && method_exists( $form, 'get_setting' ) ) {
+                $actions = $form->get_setting( 'actions' );
+            }
+        }
+
+        if ( is_string( $actions ) ) {
+        $actions = [ $actions ];
+        }
+
+        if ( is_array( $actions ) ) {
+        foreach ( $actions as $action ) {
+            if ( is_string( $action ) && $action === $slug ) {
+            $found = true;
+            break;
+            }
+            if ( is_array( $action ) ) {
+            if ( ( isset( $action['type'] ) && $action['type'] === $slug )
+                || ( isset( $action['action'] ) && $action['action'] === $slug )
+                || ( isset( $action['slug'] ) && $action['slug'] === $slug ) ) {
+                $found = true;
+                break;
+            }
+            }
+        }
+        }
+
+        if ( ! $found ) {
+            return;
+        }
+
+        printf( '<div class="breakdance-form-field"><div class="cf-turnstile" data-sitekey="%s"></div></div>', $this->siteKey );
+        echo '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
+
+    }
+
 
     public function run( $form, $settings, $extras ) {
 

@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 10/21/25 v1.2.6
+- Forgot to not load the Turnstile field if there's no key or no action chosen. Duh.
 ### 10/20/25 v1.2.5
 - Fix failed Turnstiles from getting submitted
 ### 10/1/25 v1.2.4

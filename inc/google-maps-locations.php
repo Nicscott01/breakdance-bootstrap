@@ -84,7 +84,14 @@ add_action('wp_ajax_bric_maps_locations_update', function() {
                         
                         //Make a list of post types that this relationship field can pull from
                         $post_types = isset( $sub_field['post_type'] ) ? $sub_field['post_type'] : [];
-                        $value = 'is_post__posttypes__' . implode( '_', $post_types );
+                        $val_arr = [
+                            'name' => $sub_field['name'],
+                            'type' => $sub_field['type'],
+                            'is_post' => true,
+                            'posttypes' => $post_types
+                        ];
+                        $value = json_encode( $val_arr ); 
+                        //$value = $sub_field['name'] . '__is_post__posttypes__' . implode( '_', $post_types );
                         
                     } else {
                         $value = $sub_field['name'];
@@ -108,25 +115,28 @@ add_action('wp_ajax_bric_maps_locations_update', function() {
             'get_acf_field_names_for_nested_relationship',
             function() {
 
-                $context = isset( $_POST['requestData']['context'] ) ? $_POST['requestData']['context'] : false;
+                $context = isset( $_POST['requestData']['context'] ) ? stripslashes( $_POST['requestData']['context'] ) : false;
              
                 if ( $context === false ) {
                     return [];
                 }
 
+                // Decode once
+                $decoded = json_decode($context, true);
 
-                //Get the context of what post types we need to get the ACF field names for
-                if ( strpos( $context, 'is_post__posttypes__' ) === 0 ) {
-                    $post_types = explode( '_', str_replace( 'is_post__posttypes__', '', $context ) );
-                } else {
-                    $post_types = [];
+                if (is_string($decoded)) {
+                    // Decode again if it's still a string (double-encoded)
+                    $decoded = json_decode($decoded, true);
                 }
+
+                $context_arr = $decoded;
+
+                $post_types = $decoded['posttypes'];
 
                 //Build a list of all availalbe ACF fields for the post types in the context
                 $acf_fields = [];
                 foreach ( $post_types as $post_type ) {
                     $fields = \BricBreakdance\GoogleMapsLocations\get_acf_fields_for_post_type( $post_type );
-
 
                     if ( $fields ) {
                         foreach ( $fields as $field ) {
@@ -144,18 +154,6 @@ add_action('wp_ajax_bric_maps_locations_update', function() {
                 if ( empty( $acf_fields ) ) {
                     return [];
                 }
-
-                $array = [
-                    [
-                        'value' => 'test_1',
-                        'text' => 'Test 1'
-                    ],[
-                        'value' => 'test_2',
-                        'text' => 'Test 2'
-                    ]
-                ];
-
-
 
                 return $acf_fields;
 

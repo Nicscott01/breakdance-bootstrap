@@ -1,3 +1,8 @@
+{% if content.data.locations_dynamic_meta.field %}
+%%SSR%%
+{% else %}
+
+
 
 {# Set the master array that will hold our locations #}
 {% set raw_locations = [] %}
@@ -74,3 +79,4 @@
 {% endfor %}
   <div class="custom-global-icon">{{ content.data.custom_icon.svgCode | raw }}</div>
 </div>
+{% endif %}
