@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 10/28/25 v1.2.8
+- Rollback aggressive sanitization of cookie scripts
 ### 10/28/25 v1.2.7
 - Feature: Add ability to exclude printing cookie consent scripts on certain pages
 - Enhancement: Sanitize input that is printing for cookie consent

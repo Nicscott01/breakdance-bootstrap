@@ -90,34 +90,7 @@ class WebsitePolicies {
                 }
             }
 
-            $raw = get_option( 'options_cookie_consent_scripts' );
-            // Whitelist head-friendly tags/attributes using WP sanitizer
-            $allowed = [
-                'script' => [
-                    'src' => true, 'type' => true, 'async' => true, 'defer' => true,
-                    'crossorigin' => true, 'integrity' => true, 'nomodule' => true, 'nonce' => true,
-                ],
-                'meta'   => [ 'name' => true, 'content' => true, 'charset' => true, 'http-equiv' => true ],
-                'link'   => [ 'rel' => true, 'href' => true, 'type' => true, 'media' => true, 'sizes' => true ],
-                'style'  => [ 'type' => true, 'media' => true ],
-                'title'  => [],
-            ];
-
-            // Remove inline <script> blocks (allow only <script src="...">)
-            $raw_no_inline = preg_replace_callback(
-                '#<script\b([^>]*)>(.*?)</script>#is',
-                function ( $m ) {
-                    // keep script only if it has a src attribute, and drop any inline content
-                    if ( preg_match( '/\bsrc\s*=/i', $m[1] ) ) {
-                        return '<script' . $m[1] . '></script>';
-                    }
-                    return '';
-                },
-                $raw
-            );
-
-            // Use wp_kses to strip disallowed tags/attributes and drop javascript: URIs
-            $cookie_consent_script = wp_kses( $raw_no_inline, $allowed );
+            $cookie_consent_script = get_option( 'options_cookie_consent_scripts' );
 
             echo $cookie_consent_script;
 
