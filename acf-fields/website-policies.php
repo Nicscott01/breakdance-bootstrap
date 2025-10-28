@@ -49,6 +49,26 @@ add_action( 'acf/include_fields', function() {
 			'ui_on_text' => '',
 			'ui_off_text' => '',
 		),
+		array(
+			'key' => 'field_66b53000e4792',
+			'label' => 'Exclude URLs',
+			'name' => 'cookie_consent_exclude_urls',
+			'aria-label' => '',
+			'type' => 'textarea',
+			'instructions' => 'Enter one URL per line where the Cookie Consent scripts should be excluded (full URL or path).',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'default_value' => '',
+			'maxlength' => '',
+			'rows' => 5,
+			'placeholder' => "https://example.com/path\n/another-path",
+			'new_lines' => '',
+		),
 	),
 	'location' => array(
 		array(

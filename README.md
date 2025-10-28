@@ -2,6 +2,9 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 10/28/25 v1.2.7
+- Feature: Add ability to exclude printing cookie consent scripts on certain pages
+- Enhancement: Sanitize input that is printing for cookie consent
 ### 10/21/25 v1.2.6
 - Forgot to not load the Turnstile field if there's no key or no action chosen. Duh.
 ### 10/20/25 v1.2.5
