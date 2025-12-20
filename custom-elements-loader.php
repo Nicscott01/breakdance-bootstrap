@@ -76,6 +76,15 @@ add_action('breakdance_reusable_dependencies_urls', function ($urls) {
     //%%BREAKDANCE_REUSABLE_REZ_STREAM_INIT_JS%%
     $urls['rezStreamInitJs'] = plugin_dir_url(__FILE__) . 'assets/src/js/initRezStream.js';
 
+    //Fluent Booking
+    //%%BREAKDANCE_REUSABLE_FLUENT_BOOKING_LOADER_JS%%
+    //use FluentBooking\App\App
+    //$assetUrl = App::getInstance('url.assets');
+    //$assetUrl . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION
+    if ( class_exists( 'FluentBooking\App\App' ) ) {
+        $assetUrl = \FluentBooking\App\App::getInstance('url.assets');
+        $urls['fluentBookingLoaderJs'] = $assetUrl . 'public/js/app.js';
+    }
 
     return $urls;
 

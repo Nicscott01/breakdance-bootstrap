@@ -33,6 +33,7 @@
  include_once( __DIR__ . '/inc/post-loop-accordion-extender.php' ); 
  include_once( __DIR__ . '/inc/table-of-contents-seo.php' ); 
  include_once( __DIR__ . '/inc/hot-fixes.php' ); 
+ include_once( __DIR__ . '/inc/fluent-booking-element-helper.php' ); 
  //include_once( __DIR__ . '/inc/gravityforms-fluent-feed/gravgravityforms-fluent-feed.php' ); 
  //include_once( __DIR__ . '/inc/gravityforms-fluent-feed/fluent-crm-form-submission-provider-gravityforms.php' ); 
 // include_once( __DIR__ . '/inc/analyticswp-breakdance-submission-tracking.php' ); 
