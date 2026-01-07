@@ -51,7 +51,7 @@
     {% for item in content.settings.items %}
     {
       "@type": "Question",
-      "name": "{{ item.question | replace({'"': '\"'}) }}",
+      "name": "{{ item.question | striptags | trim | replace({'"': '\\\"'}) | raw }}",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "{{ item.answer 

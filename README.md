@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 1/7/26 v1.2.10
+- Escaped quotes in FAQ question input
 ### 1/7/26 v1.2.9
 - Escape double quotes in schema for FAQ element
 ### 10/28/25 v1.2.8
