@@ -58,7 +58,7 @@
           | replace({'<br>': '\n', '<br/>': '\n', '</p>': '\n\n', '<p>': '', '</li>': '\n', '<ul>': '', '</ul>': '', '<li>': '- '}) 
           | striptags 
           | trim 
-          | replace({'"': '\"'}) 
+          | replace({'"': '\\\"'}) 
           | raw }}"
       }
     }{% if not loop.last %},{% endif %}
