@@ -30,7 +30,7 @@ class FacetWP {
 	public function button_classes( $output, $params ) {
 
         if ( 'reset' == $params['facet']['type'] ) {
-          $output = str_replace( 'facetwp-reset', 'facetwp-reset button-atom--secondary', $output );
+          $output = str_replace( 'facetwp-reset', 'facetwp-reset button-atom button-atom--secondary', $output );
         }
 
         return $output;
