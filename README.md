@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 2/4/26 v1.2.11
+- Add Cicle Counter w/ dynamic data. Note, this doesn't render in the editor properly, but it works on the front end. TODO: Work out the editor kinks!
 ### 1/7/26 v1.2.10
 - Escaped quotes in FAQ question input
 ### 1/7/26 v1.2.9
