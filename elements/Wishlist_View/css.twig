@@ -1,0 +1,135 @@
+%%SELECTOR%% {
+  {{ macros.spacing_margin_y(design.layout.margin) }}
+  {{ macros.spacing_padding_all(design.layout.padding) }}
+  {{ macros.borders(design.layout.borders) }}
+  {{ macros.typography(design.typography.base, globalSettings) }}
+}
+
+{% if design.layout.max_width.style %}
+%%SELECTOR%% {
+  max-width: {{ design.layout.max_width.style }};
+}
+{% endif %}
+
+{% if design.layout.background %}
+%%SELECTOR%% {
+  background: {{ design.layout.background }};
+}
+{% endif %}
+
+%%SELECTOR%% a,
+%%SELECTOR%% .iconic-ww-wishlist-meta__item a,
+%%SELECTOR%% .iconic-ww-nav a {
+  {{ macros.typography(design.typography.links, globalSettings) }}
+}
+
+%%SELECTOR%% .iconic-ww-table th,
+%%SELECTOR%% .iconic-ww-wishlist-items th,
+%%SELECTOR%% .iconic-ww-wishlists-table th {
+  {{ macros.typography(design.typography.table_heading, globalSettings) }}
+}
+
+%%SELECTOR%% .bde-button__button {
+  {{ macros.typography(design.typography.buttons, globalSettings) }}
+}
+
+{% if design.buttons.style == 'custom' and breakpoint == design.buttons.custom.size.full_width_at %}
+%%SELECTOR%% .bde-button__button {
+  width: 100%;
+}
+{% endif %}
+
+{{ macros.atomV1ButtonCss(design.buttons, 'bde-button__button', '%%SELECTOR%%', breakpoint, globalSettings) }}
+
+{% if design.responsive_tables.enable_table_scroll and (design.responsive_tables.scroll_at is empty or breakpoint == design.responsive_tables.scroll_at) %}
+%%SELECTOR%% .bric-wishlist-view__table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+{% endif %}
+
+{% if design.responsive_tables.enable_table_scroll %}
+%%SELECTOR%% .bric-wishlist-view__table-scroll {
+  max-width: 100%;
+}
+
+%%SELECTOR%% .bric-wishlist-view__table-scroll > .iconic-ww-table,
+%%SELECTOR%% .bric-wishlist-view__table-scroll > .iconic-ww-wishlist-items,
+%%SELECTOR%% .bric-wishlist-view__table-scroll > .iconic-ww-wishlists-table {
+  width: max-content;
+  min-width: {{ design.responsive_tables.min_table_width.style|default('680px') }};
+}
+{% endif %}
+
+{% if design.table.header_background %}
+%%SELECTOR%% .iconic-ww-table thead th {
+  background: {{ design.table.header_background }};
+}
+{% endif %}
+
+{% if design.table.row_border_color %}
+%%SELECTOR%% .iconic-ww-table td,
+%%SELECTOR%% .iconic-ww-table th {
+  border-color: {{ design.table.row_border_color }};
+}
+{% endif %}
+
+{% if design.table.cell_padding_y.style %}
+%%SELECTOR%% .iconic-ww-table td,
+%%SELECTOR%% .iconic-ww-table th {
+  padding-top: {{ design.table.cell_padding_y.style }};
+  padding-bottom: {{ design.table.cell_padding_y.style }};
+}
+{% endif %}
+
+{% if design.table.cell_padding_x.style %}
+%%SELECTOR%% .iconic-ww-table td,
+%%SELECTOR%% .iconic-ww-table th {
+  padding-left: {{ design.table.cell_padding_x.style }};
+  padding-right: {{ design.table.cell_padding_x.style }};
+}
+{% endif %}
+
+{% if design.forms.input_background or design.forms.input_text_color or design.forms.input_border_color or design.forms.input_border_radius.style %}
+%%SELECTOR%% .iconic-ww-form--styled input[type=text],
+%%SELECTOR%% .iconic-ww-form--styled input[type=email],
+%%SELECTOR%% .iconic-ww-input-field,
+%%SELECTOR%% .iconic-ww-form--inline .iconic-ww-form__field {
+{% if design.forms.input_background %}
+  background: {{ design.forms.input_background }};
+{% endif %}
+{% if design.forms.input_text_color %}
+  color: {{ design.forms.input_text_color }};
+{% endif %}
+{% if design.forms.input_border_color %}
+  border-color: {{ design.forms.input_border_color }};
+{% endif %}
+{% if design.forms.input_border_radius.style %}
+  border-radius: {{ design.forms.input_border_radius.style }};
+{% endif %}
+}
+{% endif %}
+
+{% if design.notices.info_background or design.notices.info_text_color %}
+%%SELECTOR%% .woocommerce-info {
+{% if design.notices.info_background %}
+  background: {{ design.notices.info_background }};
+{% endif %}
+{% if design.notices.info_text_color %}
+  color: {{ design.notices.info_text_color }};
+{% endif %}
+}
+{% endif %}
+
+{% if design.notices.error_background or design.notices.error_text_color %}
+%%SELECTOR%% .iconic-ww-form__notice--error,
+%%SELECTOR%% .woocommerce-error {
+{% if design.notices.error_background %}
+  background: {{ design.notices.error_background }};
+{% endif %}
+{% if design.notices.error_text_color %}
+  color: {{ design.notices.error_text_color }};
+{% endif %}
+}
+{% endif %}
