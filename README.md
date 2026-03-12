@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 3/12/26 v1.3.1
+- Fix Google Maps Locations V2 SSR crash by handling dynamic field values safely when data is returned as arrays/JSON and removing debug SSR output.
 ### 2/10/26 v1.3.0
 - Add Wishlist element (works with the Iconic Wishlist plugi https://iconicwp.com/products/wishlists-for-woocommerce/)
 ### 2/4/26 v1.2.11
