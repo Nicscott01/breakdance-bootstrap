@@ -370,7 +370,7 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
         "center_info",
         "Center Info",
         [],
-        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'info', 'content' => '<p>The center coordinates will appear in the bottom left of the map area after you drag the map around. Copy and paste those below for the center coordinates.</p>']],
+        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'info', 'content' => '<p>When you pan or zoom the map in the builder, this element now auto-syncs the <strong>Center</strong> and <strong>Zoom</strong> controls. The values are also shown on the map as a visual confirmation.</p>']],
         false,
         false,
         [],

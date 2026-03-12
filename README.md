@@ -2,6 +2,12 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 3/12/26 v1.3.3
+- Google Maps Locations V2: harden builder center/zoom auto-sync by searching across builder frame documents and improving control detection.
+- Add cache-busting query args (`?ver=BREAKDANCE_BS_VERSION`) for Google Maps Locations JS dependencies so editor/front-end pick up updates immediately.
+### 3/12/26 v1.3.2
+- Google Maps Locations V2: auto-sync `Center` and `Zoom` control values in the Breakdance builder when panning/zooming the map (while still showing live values on-map).
+- Google Maps Locations V2: add layered geocode caching (memory, localStorage, and WordPress transient cache via AJAX) so unresolved addresses are not geocoded on every load.
 ### 3/12/26 v1.3.1
 - Fix Google Maps Locations V2 SSR crash by handling dynamic field values safely when data is returned as arrays/JSON and removing debug SSR output.
 ### 2/10/26 v1.3.0

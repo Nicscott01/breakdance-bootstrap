@@ -6,6 +6,14 @@
 namespace BricBreakdance\GoogleMapsLocations;
 
 add_action( 'breakdance_loaded', 'BricBreakdance\GoogleMapsLocations\register_breakdance_ajax_handlers');
+add_action( 'wp_ajax_bric_maps_locations_cache_get', 'BricBreakdance\GoogleMapsLocations\ajax_geocode_cache_get' );
+add_action( 'wp_ajax_nopriv_bric_maps_locations_cache_get', 'BricBreakdance\GoogleMapsLocations\ajax_geocode_cache_get' );
+add_action( 'wp_ajax_bric_maps_locations_cache_set', 'BricBreakdance\GoogleMapsLocations\ajax_geocode_cache_set' );
+add_action( 'wp_ajax_nopriv_bric_maps_locations_cache_set', 'BricBreakdance\GoogleMapsLocations\ajax_geocode_cache_set' );
+
+const GEOCODE_CACHE_TRANSIENT_PREFIX = 'bric_maps_locations_geo_v2_';
+const GEOCODE_CACHE_TTL_SECONDS = 180 * DAY_IN_SECONDS;
+const GEOCODE_CACHE_BATCH_LIMIT = 100;
 /*
  * NOT SURE IF THIS IS NEEDED
 add_action('init', function() {
@@ -198,3 +206,190 @@ function get_acf_fields_for_post_type( $post_type ) {
     return $fields;
 }
 
+/**
+ * Normalize an address for stable cache keys.
+ *
+ * @param string $address
+ * @return string
+ */
+function normalize_geocode_address( $address ) {
+	$normalized = trim( (string) $address );
+
+	if ( $normalized === '' ) {
+		return '';
+	}
+
+	$normalized = preg_replace( '/\s+/', ' ', $normalized );
+
+	if ( function_exists( 'mb_strtolower' ) ) {
+		$normalized = mb_strtolower( $normalized, 'UTF-8' );
+	} else {
+		$normalized = strtolower( $normalized );
+	}
+
+	return $normalized;
+}
+
+/**
+ * Build a transient key for an address.
+ *
+ * @param string $address
+ * @return string
+ */
+function geocode_cache_key_for_address( $address ) {
+	return GEOCODE_CACHE_TRANSIENT_PREFIX . md5( $address );
+}
+
+/**
+ * Read and sanitize addresses from request input.
+ *
+ * @param mixed $raw_addresses
+ * @return array
+ */
+function sanitize_address_list( $raw_addresses ) {
+	if ( is_string( $raw_addresses ) ) {
+		$decoded = json_decode( wp_unslash( $raw_addresses ), true );
+		if ( is_array( $decoded ) ) {
+			$raw_addresses = $decoded;
+		}
+	}
+
+	if ( ! is_array( $raw_addresses ) ) {
+		return [];
+	}
+
+	$addresses = [];
+	foreach ( $raw_addresses as $raw_address ) {
+		$address = trim( sanitize_text_field( (string) $raw_address ) );
+		if ( $address === '' ) {
+			continue;
+		}
+		$addresses[] = $address;
+	}
+
+	return array_values( array_slice( $addresses, 0, GEOCODE_CACHE_BATCH_LIMIT ) );
+}
+
+/**
+ * AJAX: fetch geocode cache entries by address list.
+ *
+ * @return void
+ */
+function ajax_geocode_cache_get() {
+	$addresses = sanitize_address_list( $_POST['addresses'] ?? [] );
+
+	if ( empty( $addresses ) ) {
+		wp_send_json_success(
+			[
+				'cache' => [],
+			]
+		);
+	}
+
+	$cache = [];
+
+	foreach ( $addresses as $address ) {
+		$normalized_address = normalize_geocode_address( $address );
+
+		if ( $normalized_address === '' ) {
+			continue;
+		}
+
+		$cache_key = geocode_cache_key_for_address( $normalized_address );
+		$entry = get_transient( $cache_key );
+
+		if ( ! is_array( $entry ) ) {
+			continue;
+		}
+
+		$lat = filter_var( $entry['lat'] ?? null, FILTER_VALIDATE_FLOAT );
+		$lng = filter_var( $entry['lng'] ?? null, FILTER_VALIDATE_FLOAT );
+
+		if ( $lat === false || $lng === false ) {
+			continue;
+		}
+
+		$cache[ $normalized_address ] = [
+			'lat' => (float) $lat,
+			'lng' => (float) $lng,
+		];
+	}
+
+	wp_send_json_success(
+		[
+			'cache' => $cache,
+		]
+	);
+}
+
+/**
+ * AJAX: set/update geocode cache entries.
+ *
+ * @return void
+ */
+function ajax_geocode_cache_set() {
+	$raw_entries = $_POST['entries'] ?? [];
+
+	if ( is_string( $raw_entries ) ) {
+		$raw_entries = json_decode( wp_unslash( $raw_entries ), true );
+	}
+
+	if ( ! is_array( $raw_entries ) ) {
+		wp_send_json_error(
+			[
+				'message' => 'Invalid entries payload.',
+			],
+			400
+		);
+	}
+
+	$entries = array_slice( $raw_entries, 0, GEOCODE_CACHE_BATCH_LIMIT );
+	$updated = 0;
+
+	foreach ( $entries as $entry ) {
+		if ( ! is_array( $entry ) ) {
+			continue;
+		}
+
+		$address = trim( sanitize_text_field( (string) ( $entry['address'] ?? '' ) ) );
+		$normalized_address = normalize_geocode_address( $address );
+
+		if ( $normalized_address === '' ) {
+			continue;
+		}
+
+		$lat = filter_var( $entry['lat'] ?? null, FILTER_VALIDATE_FLOAT );
+		$lng = filter_var( $entry['lng'] ?? null, FILTER_VALIDATE_FLOAT );
+
+		if ( $lat === false || $lng === false ) {
+			continue;
+		}
+
+		$lat = (float) $lat;
+		$lng = (float) $lng;
+
+		if ( $lat < -90 || $lat > 90 || $lng < -180 || $lng > 180 ) {
+			continue;
+		}
+
+		$cache_key = geocode_cache_key_for_address( $normalized_address );
+
+		set_transient(
+			$cache_key,
+			[
+				'lat' => $lat,
+				'lng' => $lng,
+				'saved_at' => time(),
+			],
+			GEOCODE_CACHE_TTL_SECONDS
+		);
+
+		$updated++;
+	}
+
+	wp_send_json_success(
+		[
+			'updated' => $updated,
+		]
+	);
+}
