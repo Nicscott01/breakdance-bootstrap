@@ -9,10 +9,8 @@ add_action( 'breakdance_loaded', 'BricBreakdance\GoogleMapsLocations\register_br
 add_action( 'wp_ajax_bric_maps_locations_cache_get', 'BricBreakdance\GoogleMapsLocations\ajax_geocode_cache_get' );
 add_action( 'wp_ajax_nopriv_bric_maps_locations_cache_get', 'BricBreakdance\GoogleMapsLocations\ajax_geocode_cache_get' );
 add_action( 'wp_ajax_bric_maps_locations_cache_set', 'BricBreakdance\GoogleMapsLocations\ajax_geocode_cache_set' );
-add_action( 'wp_ajax_nopriv_bric_maps_locations_cache_set', 'BricBreakdance\GoogleMapsLocations\ajax_geocode_cache_set' );
 
-const GEOCODE_CACHE_TRANSIENT_PREFIX = 'bric_maps_locations_geo_v2_';
-const GEOCODE_CACHE_TTL_SECONDS = 180 * DAY_IN_SECONDS;
+const GEOCODE_CACHE_POSTMETA_KEY = '_bric_maps_locations_geo_cache_v2';
 const GEOCODE_CACHE_BATCH_LIMIT = 100;
 /*
  * NOT SURE IF THIS IS NEEDED
@@ -231,13 +229,51 @@ function normalize_geocode_address( $address ) {
 }
 
 /**
- * Build a transient key for an address.
+ * Get the geocode cache map for a specific post.
  *
- * @param string $address
- * @return string
+ * @param int $post_id
+ * @return array
  */
-function geocode_cache_key_for_address( $address ) {
-	return GEOCODE_CACHE_TRANSIENT_PREFIX . md5( $address );
+function get_post_geocode_cache( $post_id ) {
+	$cache = get_post_meta( $post_id, GEOCODE_CACHE_POSTMETA_KEY, true );
+	if ( ! is_array( $cache ) ) {
+		return [];
+	}
+
+	$sanitized_cache = [];
+	foreach ( $cache as $normalized_address => $entry ) {
+		$normalized_key = normalize_geocode_address( (string) $normalized_address );
+		if ( $normalized_key === '' || ! is_array( $entry ) ) {
+			continue;
+		}
+
+		$lat = filter_var( $entry['lat'] ?? null, FILTER_VALIDATE_FLOAT );
+		$lng = filter_var( $entry['lng'] ?? null, FILTER_VALIDATE_FLOAT );
+		$updated_at = isset( $entry['updated_at'] ) ? (int) $entry['updated_at'] : time();
+
+		if ( $lat === false || $lng === false ) {
+			continue;
+		}
+
+		$sanitized_cache[ $normalized_key ] = [
+			'lat' => (float) $lat,
+			'lng' => (float) $lng,
+			'updated_at' => $updated_at,
+		];
+	}
+
+	return $sanitized_cache;
+}
+
+/**
+ * Save the geocode cache map for a specific post.
+ *
+ * @param int $post_id
+ * @param array $cache
+ * @return void
+ */
+function save_post_geocode_cache( $post_id, $cache ) {
+	update_post_meta( $post_id, GEOCODE_CACHE_POSTMETA_KEY, $cache );
 }
 
 /**
@@ -276,9 +312,10 @@ function sanitize_address_list( $raw_addresses ) {
  * @return void
  */
 function ajax_geocode_cache_get() {
+	$post_id = absint( $_POST['post_id'] ?? 0 );
 	$addresses = sanitize_address_list( $_POST['addresses'] ?? [] );
 
-	if ( empty( $addresses ) ) {
+	if ( $post_id <= 0 || empty( $addresses ) ) {
 		wp_send_json_success(
 			[
 				'cache' => [],
@@ -286,6 +323,24 @@ function ajax_geocode_cache_get() {
 		);
 	}
 
+	$post = get_post( $post_id );
+	if ( ! $post ) {
+		wp_send_json_success(
+			[
+				'cache' => [],
+			]
+		);
+	}
+
+	if ( ! is_user_logged_in() && $post->post_status !== 'publish' ) {
+		wp_send_json_success(
+			[
+				'cache' => [],
+			]
+		);
+	}
+
+	$post_cache = get_post_geocode_cache( $post_id );
 	$cache = [];
 
 	foreach ( $addresses as $address ) {
@@ -295,9 +350,7 @@ function ajax_geocode_cache_get() {
 			continue;
 		}
 
-		$cache_key = geocode_cache_key_for_address( $normalized_address );
-		$entry = get_transient( $cache_key );
-
+		$entry = $post_cache[ $normalized_address ] ?? null;
 		if ( ! is_array( $entry ) ) {
 			continue;
 		}
@@ -328,6 +381,20 @@ function ajax_geocode_cache_get() {
  * @return void
  */
 function ajax_geocode_cache_set() {
+	$post_id = absint( $_POST['post_id'] ?? 0 );
+	$can_edit_target_post = current_user_can( 'edit_post', $post_id );
+	$can_edit_generic_posts = current_user_can( 'edit_posts' );
+	$can_manage_options = current_user_can( 'manage_options' );
+
+	if ( $post_id <= 0 || ( ! $can_edit_target_post && ! $can_edit_generic_posts && ! $can_manage_options ) ) {
+		wp_send_json_error(
+			[
+				'message' => 'Unauthorized.',
+			],
+			403
+		);
+	}
+
 	$raw_entries = $_POST['entries'] ?? [];
 
 	if ( is_string( $raw_entries ) ) {
@@ -344,6 +411,7 @@ function ajax_geocode_cache_set() {
 	}
 
 	$entries = array_slice( $raw_entries, 0, GEOCODE_CACHE_BATCH_LIMIT );
+	$post_cache = get_post_geocode_cache( $post_id );
 	$updated = 0;
 
 	foreach ( $entries as $entry ) {
@@ -372,20 +440,16 @@ function ajax_geocode_cache_set() {
 			continue;
 		}
 
-		$cache_key = geocode_cache_key_for_address( $normalized_address );
-
-		set_transient(
-			$cache_key,
-			[
-				'lat' => $lat,
-				'lng' => $lng,
-				'saved_at' => time(),
-			],
-			GEOCODE_CACHE_TTL_SECONDS
-		);
+		$post_cache[ $normalized_address ] = [
+			'lat' => $lat,
+			'lng' => $lng,
+			'updated_at' => time(),
+		];
 
 		$updated++;
 	}
+
+	save_post_geocode_cache( $post_id, $post_cache );
 
 	wp_send_json_success(
 		[

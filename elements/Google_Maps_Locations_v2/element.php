@@ -452,8 +452,10 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
     "rotateControl": {{ design.controls.rotate|json_encode|raw }},
     "zoomControl": {{ design.controls.zoom|json_encode|raw }},
 	"fullscreenControl": {{design.controls.full_screen|json_encode|raw}},
-    "iconsColor" : "{{ design.icons.color|raw }}",
-	"iconsSize" : "{{ design.icons.size.number|raw }}"
+	    "iconsColor" : "{{ design.icons.color|raw }}",
+		"iconsSize" : "{{ design.icons.size.number|raw }}",
+		"postId": "%%POSTID%%",
+		"allowLiveGeocoding": false
 };
 
 window.BricGoogleMapsLocations().update({
@@ -478,7 +480,15 @@ window.BricGoogleMapsLocations().update({
     {
         return [
 
-'onPropertyChange' => [['script' => 'var GoogleMapsOptions = {
+'onPropertyChange' => [['script' => 'var bricGoogleMapsRuntime = window.BricGoogleMapsLocations ? window.BricGoogleMapsLocations() : null;
+var shouldSkipMapRefresh = Boolean(
+  bricGoogleMapsRuntime &&
+  typeof bricGoogleMapsRuntime.shouldSkipPropertyChangeUpdate === "function" &&
+  bricGoogleMapsRuntime.shouldSkipPropertyChangeUpdate("%%ID%%")
+);
+
+if (!shouldSkipMapRefresh) {
+var GoogleMapsOptions = {
     "center": {{ content.data.center|json_encode|raw }},
     "zoom": {{ content.data.zoom|json_encode|raw }},
     "type": {{ content.data.type|json_encode|raw }},
@@ -489,14 +499,17 @@ window.BricGoogleMapsLocations().update({
     "zoomControl": {{ design.controls.zoom|json_encode|raw }},
 	"fullscreenControl": {{design.controls.full_screen|json_encode|raw}},
    "iconsSize" : {{ design.icons and design.icons.size and design.icons.size.number ? design.icons.size.number : \'null\' }},
-    "iconsColor" : "{{ design.icons.color|raw }}"	
+	    "iconsColor" : "{{ design.icons.color|raw }}",
+		"postId": "%%POSTID%%",
+		"allowLiveGeocoding": true	
 };
 
 window.BricGoogleMapsLocations().update({
  id: "%%ID%%",
   selector: "%%SELECTOR%%",
   options: GoogleMapsOptions
-});',
+});
+}',
 ],],
 
 'onMountedElement' => [['script' => 'var GoogleMapsOptions = {
@@ -510,7 +523,9 @@ window.BricGoogleMapsLocations().update({
     "zoomControl": {{ design.controls.zoom|json_encode|raw }},
 	"fullscreenControl": {{design.controls.full_screen|json_encode|raw}},
    "iconsSize" : {{ design.icons and design.icons.size and design.icons.size.number ? design.icons.size.number : \'null\' }},
-    "iconsColor" : "{{ design.icons.color|raw }}"	
+	    "iconsColor" : "{{ design.icons.color|raw }}",
+		"postId": "%%POSTID%%",
+		"allowLiveGeocoding": true	
 };
 
 window.BricGoogleMapsLocations().update({
@@ -566,7 +581,17 @@ window.BricGoogleMapsLocations().update({
 
     static function propertyPathsToWhitelistInFlatProps()
     {
-        return ['content.data.locations[].icon', 'design.icons.size', 'design.icons.color', 'content.data.locations[].icon_color'];
+        return [
+            'content.data.locations[].icon',
+            'content.data.locations[].icon_color',
+            'content.data.locations[].icon_size',
+            'content.data.locations[].address',
+            'content.data.locations[].coordinates',
+            'content.data.custom_icon',
+            'content.data.custom_icon.svgCode',
+            'design.icons.size',
+            'design.icons.color',
+        ];
     }
 
     static function propertyPathsToSsrElementWhenValueChanges()
