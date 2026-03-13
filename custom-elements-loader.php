@@ -64,9 +64,9 @@ add_action('breakdance_reusable_dependencies_urls', function ($urls) {
     $urls['googleMapsJs'] = 'https://maps.googleapis.com/maps/api/js?libraries=marker&v=weekly&key=' . $google_maps_api_key;
 
     //%%BREAKDANCE_REUSABLE_GOOGLE_MAPS_LOCATIONS_INIT_JS%%
-    $urls['googleMapsLocationsInitJs'] = plugin_dir_url( __FILE__ ) . 'assets/src/js/google-maps-locations-init.js';
+    $urls['googleMapsLocationsInitJs'] = plugin_dir_url( __FILE__ ) . 'assets/src/js/google-maps-locations-init.js?ver=' . BREAKDANCE_BS_VERSION;
     //%%BREAKDANCE_REUSABLE_BRIC_GOOGLE_MAPS_LOCATIONS_JS%%
-    $urls['bricGoogleMapsLocationsJs'] = plugin_dir_url( __FILE__ ) . 'assets/src/js/bric-google-maps-locations.js';
+    $urls['bricGoogleMapsLocationsJs'] = plugin_dir_url( __FILE__ ) . 'assets/src/js/bric-google-maps-locations.js?ver=' . BREAKDANCE_BS_VERSION;
 
 
     //RezStream
@@ -149,6 +149,5 @@ add_filter('breakdance_global_settings_css_twig_template_append', function ($app
     return $appendedTwigTemplate . $global_css_twig;
 
 });
-
 
 

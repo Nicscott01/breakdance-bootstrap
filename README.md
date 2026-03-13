@@ -2,6 +2,40 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 3/12/26 v1.3.13
+- Google Maps Locations V2: add active-row fallback for repeater coordinate auto-fill in builder when only a single repeater row control is mounted in the panel.
+- Google Maps Locations V2: broaden geocode cache write capability checks (`edit_post` OR `edit_posts` OR `manage_options`) to avoid false unauthorized responses for Breakdance template editing contexts.
+### 3/12/26 v1.3.12
+- Google Maps Locations V2: fix coordinate auto-fill row mapping in repeater controls by deriving control index offset from visible address fields and removing ambiguous index fallback that could write multiple locations to the same coordinate input.
+### 3/12/26 v1.3.11
+- Google Maps Locations V2: add builder-only recovery for corrupted repeater coordinates (all locations sharing one GPS value) by clearing them and forcing a fresh geocode pass per address.
+### 3/12/26 v1.3.10
+- Google Maps Locations V2: fix repeater coordinate auto-fill targeting so each geocoded location writes to its own row-specific `locations[n].coordinates` control instead of potentially reusing a shared repeater input.
+### 3/12/26 v1.3.9
+- Google Maps Locations V2: when builder geocoding resolves a location, auto-write the resolved GPS string into repeater `Coordinates` controls (e.g. `control-content-data-locations[*]-coordinates`) so coordinates persist directly in Breakdance element data.
+- Google Maps Locations V2: mirror resolved coordinates back onto `.data-locations .location[data-coordinates]` in builder and skip redundant redraw callbacks triggered by those control updates.
+### 3/12/26 v1.3.8
+- Google Maps Locations V2: change editor geocode-cache persistence from debounced batch queue to immediate per-address writes to avoid dropped cache saves during builder rerenders.
+- Google Maps Locations V2: keep frontend marker rendering cache-only (no frontend geocoding), while making cache-write failures visible in builder console.
+### 3/12/26 v1.3.7
+- Google Maps Locations V2: fix SVG icon regression in SSR by allowing safe SVG tags instead of stripping icon markup with `wp_kses_post`, restoring custom/global map icons.
+- Google Maps Locations V2: make builder geocode caching deterministic by passing explicit `allowLiveGeocoding` flags from Breakdance builder/frontend scripts (builder `true`, frontend `false`).
+- Google Maps Locations V2: whitelist additional flat props needed by SSR (`content.data.custom_icon`, location address/coordinates/icon size) for stable frontend rendering.
+### 3/12/26 v1.3.6
+- Google Maps Locations V2: fix regression where locations/icons could disappear when rendering through SSR by normalizing Breakdance repeater values (array/object shapes) before outputting `.data-locations`.
+- Google Maps Locations V2: restore frontend marker plotting fallback from postmeta cache (no Google geocoding) when `data-coordinates` are empty.
+### 3/12/26 v1.3.5
+- Google Maps Locations V2: hydrate missing `data-coordinates` from per-post postmeta geocode cache during SSR so frontend rendering can use cached coordinates directly.
+- Google Maps Locations V2: reduce editor drag/zoom sluggishness by skipping self-triggered map refresh cycles after auto-syncing `Center` and `Zoom`.
+### 3/12/26 v1.3.4
+- Google Maps Locations V2: switch geocode cache persistence to postmeta (per post/document) and use that cache for frontend marker rendering.
+- Google Maps Locations V2: prevent map re-initialization on every center/zoom sync by reusing the existing map instance and only refreshing markers when location data changes.
+### 3/12/26 v1.3.3
+- Google Maps Locations V2: harden builder center/zoom auto-sync by searching across builder frame documents and improving control detection.
+- Add cache-busting query args (`?ver=BREAKDANCE_BS_VERSION`) for Google Maps Locations JS dependencies so editor/front-end pick up updates immediately.
+### 3/12/26 v1.3.2
+- Google Maps Locations V2: auto-sync `Center` and `Zoom` control values in the Breakdance builder when panning/zooming the map (while still showing live values on-map).
+- Google Maps Locations V2: add layered geocode caching (memory, localStorage, and WordPress transient cache via AJAX) so unresolved addresses are not geocoded on every load.
 ### 3/12/26 v1.3.1
 - Fix Google Maps Locations V2 SSR crash by handling dynamic field values safely when data is returned as arrays/JSON and removing debug SSR output.
 ### 2/10/26 v1.3.0
