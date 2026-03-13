@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 3/13/26 v1.3.14
+- Release: merge Google Maps Locations V2 stability fixes into `main` (SSR/data rendering, builder coordinate auto-fill, icon rendering, and frontend coordinate plotting improvements).
 ### 3/12/26 v1.3.13
 - Google Maps Locations V2: add active-row fallback for repeater coordinate auto-fill in builder when only a single repeater row control is mounted in the panel.
 - Google Maps Locations V2: broaden geocode cache write capability checks (`edit_post` OR `edit_posts` OR `manage_options`) to avoid false unauthorized responses for Breakdance template editing contexts.
