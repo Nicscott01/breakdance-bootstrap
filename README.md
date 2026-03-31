@@ -2,6 +2,9 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 3/31/26 v1.3.15
+- Add WooCommerce Blocks cart and checkout button helper to apply Breakdance button classes to the Cart `Proceed to checkout` button and Checkout `Place order` button.
+- Add filters so developers can override the applied classes per button or replace the full selector-to-class map.
 ### 3/13/26 v1.3.14
 - Release: merge Google Maps Locations V2 stability fixes into `main` (SSR/data rendering, builder coordinate auto-fill, icon rendering, and frontend coordinate plotting improvements).
 ### 3/12/26 v1.3.13
