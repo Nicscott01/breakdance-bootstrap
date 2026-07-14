@@ -7,6 +7,24 @@ use function \Breakdance\Elements\controlSection;
 use function \Breakdance\Elements\c;
 use function \Breakdance\Elements\PresetSections\getPresetSection;
 
+/**
+ * Rebuild the generated Global CSS when Fluent Booking is toggled, so its
+ * conditional stylesheet never remains in Breakdance's cached output.
+ */
+function clear_global_css_cache_for_fluent_booking( $plugin ) {
+
+    if ( 'fluent-booking/fluent-booking.php' !== $plugin ) {
+        return;
+    }
+
+    if ( function_exists( '\\Breakdance\\Render\\deleteGlobalCssAndDependenciesCacheFromWpDb' ) ) {
+        \Breakdance\Render\deleteGlobalCssAndDependenciesCacheFromWpDb();
+    }
+}
+
+add_action( 'activated_plugin', __NAMESPACE__ . '\\clear_global_css_cache_for_fluent_booking', 10, 1 );
+add_action( 'deactivated_plugin', __NAMESPACE__ . '\\clear_global_css_cache_for_fluent_booking', 10, 1 );
+
 
 
 add_action('breakdance_loaded', function () {
@@ -146,8 +164,12 @@ add_filter('breakdance_global_settings_css_twig_template_append', function ($app
 
     $global_css_twig = file_get_contents( __DIR__ . '/global-settings/css.twig' );
 
-    return $appendedTwigTemplate . $global_css_twig;
+    if ( ! class_exists( '\\FluentBooking\\App\\App' ) ) {
+        return $appendedTwigTemplate . $global_css_twig;
+    }
+
+    $fluent_booking_css_twig = file_get_contents( __DIR__ . '/global-settings/fluent-booking.css.twig' );
+
+    return $appendedTwigTemplate . $global_css_twig . $fluent_booking_css_twig;
 
 });
-
-

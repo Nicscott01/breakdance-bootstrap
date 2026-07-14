@@ -2,6 +2,10 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 7/14/26 v1.3.18
+- Add the Breakdance Global Color palette to Fluent Forms color pickers.
+- Add conditional Fluent Booking Global CSS that maps booking UI colors to Breakdance's semantic site colors.
+- Clear Breakdance's generated Global CSS cache when Fluent Booking is activated or deactivated, preventing stale booking rules.
 ### 3/31/26 v1.3.15
 - Add WooCommerce Blocks cart and checkout button helper to apply Breakdance button classes to the Cart `Proceed to checkout` button and Checkout `Place order` button.
 - Add filters so developers can override the applied classes per button or replace the full selector-to-class map.
