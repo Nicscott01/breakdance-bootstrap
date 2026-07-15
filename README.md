@@ -2,6 +2,8 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 7/15/26 v1.3.19
+- Website Copyright: add year-display choices for a start-year-to-current-year range, current year only, or a static start year; current-year modes update automatically.
 ### 7/14/26 v1.3.18
 - Add the Breakdance Global Color palette to Fluent Forms color pickers.
 - Add conditional Fluent Booking Global CSS that maps booking UI colors to Breakdance's semantic site colors.
