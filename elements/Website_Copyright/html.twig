@@ -2,9 +2,11 @@
 
 {% set start_year = start_date|date("Y") %}
 {% set current_year = "now"|date("Y") %}
-{% set year_string = "" %}
+{% set year_display = content.data.year_display %}
 
-{% if start_year == current_year %}
+{% if year_display == "static" %}
+    {% set year_string = start_year %}
+{% elseif year_display == "current" or start_year == current_year %}
     {% set year_string = current_year %}
 {% else %}
     {% set year_string = start_year ~ '-' ~ current_year %}

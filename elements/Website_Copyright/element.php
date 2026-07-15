@@ -70,7 +70,7 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
 
     static function defaultProperties()
     {
-        return ['content' => ['data' => ['copyright_holder' => '[breakdance_dynamic field=\'site_title\']', 'copyright_holder_dynamic_meta' => ['field' => ['category' => 'Site Info', 'subcategory' => '', 'label' => 'Site Title', 'slug' => 'site_title', 'returnTypes' => ['string'], 'defaultAttributes' => (object)[], 'controls' => [['slug' => 'advanced', 'label' => 'Advanced', 'children' => [['slug' => 'beforeContent', 'label' => 'Prepend', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'afterContent', 'label' => 'Append', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'truncate', 'label' => 'Limit Characters', 'children' => [], 'options' => ['type' => 'number', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'fallback', 'label' => 'Fallback', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['multiline' => false]], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []]], 'options' => ['type' => 'section', 'sectionOptions' => ['type' => 'popout']], 'enableMediaQueries' => false, 'enableHover' => false]], 'proOnly' => true], 'shortcode' => '[breakdance_dynamic field=\'site_title\']', 'attributes' => (object)[]]]]];
+        return ['content' => ['data' => ['year_display' => 'range', 'copyright_holder' => '[breakdance_dynamic field=\'site_title\']', 'copyright_holder_dynamic_meta' => ['field' => ['category' => 'Site Info', 'subcategory' => '', 'label' => 'Site Title', 'slug' => 'site_title', 'returnTypes' => ['string'], 'defaultAttributes' => (object)[], 'controls' => [['slug' => 'advanced', 'label' => 'Advanced', 'children' => [['slug' => 'beforeContent', 'label' => 'Prepend', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'afterContent', 'label' => 'Append', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'truncate', 'label' => 'Limit Characters', 'children' => [], 'options' => ['type' => 'number', 'layout' => 'vertical'], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []], ['slug' => 'fallback', 'label' => 'Fallback', 'children' => [], 'options' => ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['multiline' => false]], 'enableMediaQueries' => false, 'enableHover' => false, 'keywords' => []]], 'options' => ['type' => 'section', 'sectionOptions' => ['type' => 'popout']], 'enableMediaQueries' => false, 'enableHover' => false]], 'proOnly' => true], 'shortcode' => '[breakdance_dynamic field=\'site_title\']', 'attributes' => (object)[]]]]];
     }
 
     static function defaultChildren()
@@ -103,7 +103,15 @@ class WebsiteCopyright extends \Breakdance\Elements\Element
         "info",
         "Info",
         [],
-        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'info', 'content' => '<p>Use this to set the begin date for the website copyright. The end date will automagically update each year!</p>']],
+        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'info', 'content' => '<p>Choose a year range, the current year, or a static start year. The current year updates automatically each year.</p>']],
+        false,
+        false,
+        [],
+      ), c(
+        "year_display",
+        "Copyright Year Display",
+        [],
+        ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [['value' => 'range', 'text' => 'Year range'], ['value' => 'current', 'text' => 'Current year only'], ['value' => 'static', 'text' => 'Static start year']]],
         false,
         false,
         [],
