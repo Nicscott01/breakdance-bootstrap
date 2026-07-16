@@ -70,7 +70,16 @@ class WebsiteAuthor extends \Breakdance\Elements\Element
 
     static function defaultProperties()
     {
-        return false;
+        return [
+            'content' => [
+                'tracking' => [
+                    'enabled' => true,
+                    'source' => 'website_credit',
+                    'medium' => 'referral',
+                    'campaign' => 'website_author',
+                ],
+            ],
+        ];
     }
 
     static function defaultChildren()
@@ -125,6 +134,54 @@ class WebsiteAuthor extends \Breakdance\Elements\Element
         "Agency URL",
         [],
         ['type' => 'url', 'layout' => 'vertical'],
+        false,
+        false,
+        [],
+      )],
+        ['type' => 'section', 'layout' => 'vertical'],
+        false,
+        false,
+        [],
+      ), c(
+        "tracking",
+        "Tracking",
+        [c(
+        "tracking_help",
+        "Tracking Help",
+        [],
+        ['type' => 'alert_box', 'layout' => 'vertical', 'alertBoxOptions' => ['style' => 'info', 'content' => '<p>These values are added to the outgoing Agency URL. Recommended defaults: <code>website_credit</code> for Source, <code>referral</code> for Medium, and <code>website_author</code> for Campaign.</p>']],
+        false,
+        false,
+        [],
+      ), c(
+        "enabled",
+        "Enable UTM Tracking",
+        [],
+        ['type' => 'toggle', 'layout' => 'vertical'],
+        false,
+        false,
+        [],
+      ), c(
+        "source",
+        "UTM Source",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['format' => 'plain'], 'placeholder' => 'website_credit (recommended)'],
+        false,
+        false,
+        [],
+      ), c(
+        "medium",
+        "UTM Medium",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['format' => 'plain'], 'placeholder' => 'referral (recommended)'],
+        false,
+        false,
+        [],
+      ), c(
+        "campaign",
+        "UTM Campaign",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'textOptions' => ['format' => 'plain'], 'placeholder' => 'website_author (recommended)'],
         false,
         false,
         [],
@@ -188,7 +245,7 @@ class WebsiteAuthor extends \Breakdance\Elements\Element
 
     static function dynamicPropertyPaths()
     {
-        return [['accepts' => 'string', 'path' => 'content.data.agency_name'], ['accepts' => 'string', 'path' => 'content.data.agency_url']];
+        return [['accepts' => 'string', 'path' => 'content.data.agency_name'], ['accepts' => 'string', 'path' => 'content.data.agency_url'], ['accepts' => 'string', 'path' => 'content.tracking.source'], ['accepts' => 'string', 'path' => 'content.tracking.medium'], ['accepts' => 'string', 'path' => 'content.tracking.campaign']];
     }
 
     static function additionalClasses()

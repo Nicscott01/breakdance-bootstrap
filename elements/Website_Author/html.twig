@@ -1,11 +1,23 @@
 {% set prefix = content.data.prefix is not empty ? content.data.prefix : 'Website by' %}
 {% set agency_name = content.data.agency_name %}
 {% set agency_url = content.data.agency_url %}
+{% set tracking = content.tracking|default({}) %}
+{% set tracking_enabled = tracking.enabled is defined ? tracking.enabled : true %}
+{% set tracking_source = tracking.source is not empty ? tracking.source : 'website_credit' %}
+{% set tracking_medium = tracking.medium is not empty ? tracking.medium : 'referral' %}
+{% set tracking_campaign = tracking.campaign is not empty ? tracking.campaign : 'website_author' %}
+{% set attribution_utm = 'utm_source=' ~ tracking_source|url_encode ~ '&utm_medium=' ~ tracking_medium|url_encode ~ '&utm_campaign=' ~ tracking_campaign|url_encode %}
 
+{% if agency_url and tracking_enabled and 'utm_' not in agency_url %}
+    {% set url_parts = agency_url|split('#', 2) %}
+    {% set url_base = url_parts[0] %}
+    {% set url_fragment = url_parts|length > 1 ? '#' ~ url_parts[1] : '' %}
+    {% set separator = '?' in url_base ? '&' : '?' %}
+    {% set agency_url = url_base ~ separator ~ attribution_utm ~ url_fragment %}
+{% endif %}
 
-{{ prefix }}
 {% if agency_url %}
-    <a href="{{ agency_url }}" target="_blank">{{ agency_name }}</a>
+    <a href="{{ agency_url }}" target="_blank" rel="noopener">{{ prefix }} {{ agency_name }}</a>
 {% else %}
-    {{ agency_name }}
+    {{ prefix }} {{ agency_name }}
 {% endif %}
