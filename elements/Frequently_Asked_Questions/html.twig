@@ -51,15 +51,15 @@
     {% for item in content.settings.items %}
     {
       "@type": "Question",
-      "name": "{{ item.question | striptags | trim | replace({'"': '\\\"'}) | raw }}",
+      "name": {{ item.question | striptags | trim | json_encode | raw }},
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "{{ item.answer 
-          | replace({'<br>': '\n', '<br/>': '\n', '</p>': '\n\n', '<p>': '', '</li>': '\n', '<ul>': '', '</ul>': '', '<li>': '- '}) 
-          | striptags 
-          | trim 
-          | replace({'"': '\\\"'}) 
-          | raw }}"
+        "text": {{ item.answer
+          | replace({'<br>': '\n', '<br/>': '\n', '</p>': '\n\n', '<p>': '', '</li>': '\n', '<ul>': '', '</ul>': '', '<li>': '- '})
+          | striptags
+          | trim
+          | json_encode
+          | raw }}
       }
     }{% if not loop.last %},{% endif %}
     {% endfor %}
