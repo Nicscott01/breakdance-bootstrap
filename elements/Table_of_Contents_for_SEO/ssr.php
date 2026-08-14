@@ -16,18 +16,10 @@ if ( !isset( $propertiesData["settings"]["advanced"]["id"] ) ) {
 $exclude_headings = $propertiesData['content']['data']['exclude_headings'] ?? [];
 
 
-[ $toc_items, $updated_content ] = get_cached_toc( $post, $exclude_headings );
+[ $toc_items ] = get_cached_toc( $post, $exclude_headings );
 
 if ( empty( $toc_items ) ) {
     echo '<p>There was no content found to generate a table of contents.</p>';
-}
-
-if ( $updated_content !== $post->post_content ) {
-        
-    add_filter( 'the_content', function ( $content ) use ( $updated_content ) {
-        return $updated_content;
-    }, 5 );
-
 }
 
 echo '<nav id="table-of-contents-%%ID%%" class="bric-toc"><ul>';

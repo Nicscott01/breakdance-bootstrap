@@ -70,41 +70,59 @@ function generate_toc_from_content_with_ids( $content, $exclude_tags = [] ) {
 
 
 /**
- * Get the cached table of contents for a post.
+ * Get a table of contents and heading IDs for a post without persisting either
+ * value. This function can run during a public request, so its cache is kept
+ * only for the current PHP request.
  *
  * @param WP_Post $post The post object.
+ * @param array   $exclude_headings Heading tags to exclude from the table of contents.
  *
- * @return array The cached table of contents and updated content.
+ * @return array The table of contents and content with heading IDs.
  */
-
 function get_cached_toc( $post, $exclude_headings = [] ) {
+    static $toc_cache = [];
 
-    $cache_key     = '_bric_toc_cache';
-    $exclude_hash  = md5( serialize( $exclude_headings ) );
-    $current_hash  = md5( $post->post_content . '_' . $exclude_hash );
+    $cache_key = md5(
+        $post->ID . '_' . $post->post_content . '_' . serialize( $exclude_headings )
+    );
 
-    $cache = get_post_meta( $post->ID, $cache_key, true );
-
-    if ( is_array( $cache ) && isset( $cache['hash'], $cache['toc'] ) && $cache['hash'] === $current_hash ) {
-        return [ $cache['toc'], $post->post_content ];
+    if ( isset( $toc_cache[ $cache_key ] ) ) {
+        return $toc_cache[ $cache_key ];
     }
 
-    // Recalculate
-    [ $toc, $updated_content ] = generate_toc_from_content_with_ids( $post->post_content, $exclude_headings );
-    
-    // Update the post content with the new IDs    
-    wp_update_post( [
-        'ID'           => $post->ID,
-        'post_content' => $updated_content,
-    ] );
+    $toc_cache[ $cache_key ] = generate_toc_from_content_with_ids(
+        $post->post_content,
+        $exclude_headings
+    );
 
-    update_post_meta( $post->ID, $cache_key, [
-        'toc'  => $toc,
-        'hash' => $current_hash,
-    ] );
-
-    return [ $toc, $updated_content ];
+    return $toc_cache[ $cache_key ];
 }
+
+/**
+ * Add heading IDs to the main post content response without changing the
+ * stored post. This keeps Rank Math's schema anchors valid on public posts.
+ *
+ * @param string $content The post content being rendered.
+ *
+ * @return string The content with heading IDs.
+ */
+function add_heading_ids_to_post_content( $content ) {
+    if ( is_admin() || ! is_singular( 'post' ) ) {
+        return $content;
+    }
+
+    global $post;
+
+    if ( ! $post || $content !== $post->post_content ) {
+        return $content;
+    }
+
+    [ , $content_with_ids ] = get_cached_toc( $post );
+
+    return $content_with_ids;
+}
+
+add_filter( 'the_content', __NAMESPACE__ . '\\add_heading_ids_to_post_content', 5 );
 
 
 
@@ -126,9 +144,13 @@ function get_cached_toc( $post, $exclude_headings = [] ) {
 add_filter( 'rank_math/json_ld', function( $data, $jsonld ) {
     if ( is_singular( 'post' ) ) {
         global $post;
+
+        if ( ! $post ) {
+            return $data;
+        }
        
         // Generate TOC with IDs
-        [ $toc_items, $content_with_ids ] = get_cached_toc( $post );
+        [ $toc_items ] = get_cached_toc( $post );
 
         if ( empty( $toc_items ) ) {
             return $data;

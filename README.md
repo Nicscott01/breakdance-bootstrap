@@ -2,6 +2,9 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 8/14/26 v1.3.21
+- Table of Contents for SEO: stop writing posts and TOC metadata during public rendering, preventing anonymous frontend requests from creating revisions or sanitizing Custom HTML such as Facebook iframes.
+- Generate heading IDs and Rank Math ItemList schema in the response with a request-local cache instead.
 ### 7/15/26 v1.3.19
 - Website Copyright: add year-display choices for a start-year-to-current-year range, current year only, or a static start year; current-year modes update automatically.
 ### 7/14/26 v1.3.18
