@@ -6,6 +6,11 @@
  */
 
 use function \Breakdance\Util\WP\isAnyArchive;
+// Breakdance's loop helpers live in the Breakdance\LoopBuilder namespace
+// (breakdance-elements/lib/post-builder.php and post.php). Unqualified calls
+// from this global-namespace file fatal with "Call to undefined function".
+use function Breakdance\LoopBuilder\getWpQuery;
+use function Breakdance\LoopBuilder\getBlockForLoopIndex;
 
 
 //require_once __DIR__ . "/post-loop-builder.php";
@@ -30,6 +35,13 @@ $initialGlobalPost = $post;
 
 //$query = \Breakdance\WpQueryControl\getWpQueryArgumentsFromWpQueryControlProperties($propertiesData['content']['wp_query']['query']);
 
+
+// Fail soft if Breakdance ever moves these helpers again: a missing accordion
+// beats a fatal that takes the whole page down.
+if ( ! function_exists( 'Breakdance\LoopBuilder\getWpQuery' ) || ! function_exists( 'Breakdance\LoopBuilder\getBlockForLoopIndex' ) ) {
+    echo '<!-- Dynamic Accordion: Breakdance loop helpers not available -->';
+    return;
+}
 
 $loop = getWpQuery($propertiesData);
 
@@ -60,7 +72,7 @@ if ( $loop->have_posts() ) {
 
     } else {
 
-        $accodion_id = '';
+        $accordion_id = '';
         \ParentIDTracker()->set_parent_id( false );
     }
 
@@ -83,7 +95,6 @@ if ( $loop->have_posts() ) {
             $loop->the_post();
         }
 
-        $itemClasses = get_item_classes($layout);
 
         $postTag = $propertiesData['content']['repeated_block']['tag'] ?? 'article';
         //$attrs = getFilterAttributesForPost($filterbar, $itemClasses);

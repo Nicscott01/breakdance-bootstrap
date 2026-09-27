@@ -2,6 +2,9 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 9/27/26 v1.3.22
+- Dynamic Accordion: fix the fatal "Call to undefined function getWpQuery()" that took down any page using the element. Breakdance's loop helpers (`getWpQuery`, `getBlockForLoopIndex`) live in the `Breakdance\LoopBuilder` namespace, so the element now imports them, and it outputs an HTML comment instead of fataling if they are ever unavailable.
+- Dynamic Accordion: remove the call to the undefined `get_item_classes()` (its result was unused) and fix the `$accordion_id` typo when the accordion is disabled.
 ### 8/14/26 v1.3.21
 - Table of Contents for SEO: stop writing posts and TOC metadata during public rendering, preventing anonymous frontend requests from creating revisions or sanitizing Custom HTML such as Facebook iframes.
 - Generate heading IDs and Rank Math ItemList schema in the response with a request-local cache instead.
