@@ -2,6 +2,10 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 10/16/26 v1.3.23
+- Icon Terms: add optional visible term names, an editable label, and a link toggle. Existing instances retain icon-only links unless configured otherwise.
+- Icon Terms: provide descriptive link names, decorative SVGs, and unique SVG IDs with preserved paint, fragment, and accessibility references.
+- Icon Terms: handle unassigned terms, missing icons, and WordPress term errors without empty links or notices.
 ### 9/27/26 v1.3.22
 - Dynamic Accordion: fix the fatal "Call to undefined function getWpQuery()" that took down any page using the element. Breakdance's loop helpers (`getWpQuery`, `getBlockForLoopIndex`) live in the `Breakdance\LoopBuilder` namespace, so the element now imports them, and it outputs an HTML comment instead of fataling if they are ever unavailable.
 - Dynamic Accordion: remove the call to the undefined `get_item_classes()` (its result was unused) and fix the `$accordion_id` typo when the accordion is disabled.

@@ -70,7 +70,15 @@ class IconTerms extends \Breakdance\Elements\Element
 
     static function defaultProperties()
     {
-        return false;
+        return [
+            'content' => [
+                'controls' => [
+                    'show_term_names' => false,
+                    'link_terms' => true,
+                    'label' => '',
+                ],
+            ],
+        ];
     }
 
     static function defaultChildren()
@@ -91,6 +99,11 @@ class IconTerms extends \Breakdance\Elements\Element
       "Icon",
       "icon",
        ['type' => 'popout']
+     ), getPresetSection(
+        "EssentialElements\\typography",
+        "Text",
+        "text",
+        ['type' => 'popout']
      )];
     }
 
@@ -128,6 +141,30 @@ class IconTerms extends \Breakdance\Elements\Element
         [],
       )],
         ['type' => 'repeater', 'layout' => 'vertical', 'repeaterOptions' => ['titleTemplate' => 'Term', 'defaultTitle' => '', 'buttonName' => 'Add term'], 'condition' => [[['path' => 'content.controls.taxonomy', 'operand' => 'is set', 'value' => '']]]],
+        false,
+        false,
+        [],
+      ), c(
+        "show_term_names",
+        "Show Term Names",
+        [],
+        ['type' => 'toggle', 'layout' => 'inline'],
+        false,
+        false,
+        [],
+      ), c(
+        "link_terms",
+        "Link Terms",
+        [],
+        ['type' => 'toggle', 'layout' => 'inline'],
+        false,
+        false,
+        [],
+      ), c(
+        "label",
+        "Label",
+        [],
+        ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'Weather during stay:'],
         false,
         false,
         [],

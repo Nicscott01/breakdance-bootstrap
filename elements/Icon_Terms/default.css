@@ -3,6 +3,8 @@
   padding:0;
   gap:.5rem;
   display:flex;
+  flex-wrap:wrap;
+  align-items:center;
 }
 
 .breakdance .bric-icon-terms .icon {
@@ -17,4 +19,33 @@
     stroke-width: 0;
     stroke: currentColor;
     fill: currentColor;
+}
+
+.breakdance .bric-icon-terms .icon-term-item {
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+}
+
+.breakdance .bric-icon-terms .icon-term-item .icon {
+  flex-shrink:0;
+}
+
+.breakdance .bric-icon-terms .icon-terms-caption {
+  display:block;
+  margin-bottom:.35rem;
+}
+
+.breakdance .bric-icon-terms .icon-terms-caption,
+.breakdance .bric-icon-terms .icon-term-name {
+  font-size:.8em;
+}
+
+.breakdance .bric-icon-terms .icon-terms-caption + .icon-terms-list {
+  margin-top:0;
+}
+
+.breakdance .bric-icon-terms .icon-terms-with-names a.icon-term-item {
+  min-width:44px;
+  min-height:44px;
 }
