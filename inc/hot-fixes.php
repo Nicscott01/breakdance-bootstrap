@@ -14,13 +14,15 @@ namespace BricBreakdanceHotFixes;
  */
 
 add_filter( 'breakdance_query_control_query', function( $query ) {
-    // Modify the query as needed
-    if ( $query['orderby'] == 'acf_field' ) {
-        $query['orderby'] = 'post__in';
+    // A Text query arrives as a query string, not an array; leave it untouched.
+    if ( ! is_array( $query ) || ( $query['orderby'] ?? '' ) !== 'acf_field' ) {
+        return $query;
+    }
 
-        if ( $query['order'] == 'DESC' ) {
+    $query['orderby'] = 'post__in';
+
+    if ( ( $query['order'] ?? '' ) === 'DESC' && is_array( $query['post__in'] ?? null ) ) {
         $query['post__in'] = array_reverse( $query['post__in'] );
-        } 
     }
 
     return $query;

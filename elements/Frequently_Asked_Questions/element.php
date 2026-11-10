@@ -400,6 +400,15 @@ class FrequentlyAskedQuestions extends \Breakdance\Elements\Element
         false,
         [],
         
+      ), c(
+        "page_schema",
+        "Page has its own FAQPage schema",
+        [],
+        ['type' => 'toggle', 'layout' => 'inline', 'description' => 'Turn on when a parent section has itemscope itemtype="https://schema.org/FAQPage". The element then skips its own JSON-LD, so the page has one FAQPage.'],
+        false,
+        false,
+        [],
+        
       )],
         ['type' => 'section', 'layout' => 'vertical'],
         false,

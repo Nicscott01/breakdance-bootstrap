@@ -33,7 +33,7 @@
       
       <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" role="region" aria-labelledby="bde-faq-%%ID%%-button-{{ loop.index }}" id="bde-faq-%%ID%%-{{ loop.index }}" class="bde-faq__answer">
         <div class="bde-faq__answer-content">
-            <div class="breakdance-rich-text-styles">{{ item.answer }}</div>
+            <div class="breakdance-rich-text-styles" itemprop="text">{{ item.answer }}</div>
 
             {% if item.button.text %}
               {{ macros.atomV1ButtonHtml(item.button, 'bde-faq__btn', design.item.button, 'content.settings.items[' ~ loop.index0 ~ '].button.text') }}
@@ -43,6 +43,8 @@
     </div>
   {% endfor %}
 {% endif %}
+{# One FAQPage per page: skip this block when a parent section provides FAQPage microdata. #}
+{% if not content.settings.page_schema %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -66,4 +68,5 @@
   ]
 }
 </script>
+{% endif %}
 
