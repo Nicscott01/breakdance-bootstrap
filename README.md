@@ -2,6 +2,9 @@
 Bootstrap features for Breakdance sites
 
 ## Changelog
+### 11/16/26 v1.3.25
+- Verify CF Turnstile before Breakdance runs any submission actions whenever the form selects CF Turnstile.
+- Require a valid token for the site's WordPress Home URL hostname, and verify it once per submission. Existing forms use their current Turnstile keys.
 ### 10/16/26 v1.3.23
 - Icon Terms: add optional visible term names, an editable label, and a link toggle. Existing instances retain icon-only links unless configured otherwise.
 - Icon Terms: provide descriptive link names, decorative SVGs, and unique SVG IDs with preserved paint, fragment, and accessibility references.
