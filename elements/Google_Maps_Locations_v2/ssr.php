@@ -149,29 +149,34 @@ $extract_coordinates_string = static function ( $value ) use ( $to_assoc ) {
 };
 
 $locations = [];
-$builder_locations = $to_assoc( $data['locations'] ?? [] );
-$acf_locations = $to_assoc( $data['locations_acf'] ?? [] );
+if ( $data_source === 'posts' ) {
+    $posts_settings = is_array( $data['posts'] ?? null ) ? $data['posts'] : [];
+    $locations = \BricBreakdance\GoogleMapsLocations\get_related_post_locations( $posts_settings );
+} else {
+    $builder_locations = $to_assoc( $data['locations'] ?? [] );
+    $acf_locations = $to_assoc( $data['locations_acf'] ?? [] );
 
-if ( $data_source === 'builder' && is_array( $builder_locations ) ) {
-    $locations = $builder_locations;
-}
+    if ( $data_source === 'builder' && is_array( $builder_locations ) ) {
+        $locations = $builder_locations;
+    }
 
-if ( empty( $locations ) && $data_source === 'acf' && is_array( $acf_locations ) ) {
-    $locations = $acf_locations;
-}
+    if ( empty( $locations ) && $data_source === 'acf' && is_array( $acf_locations ) ) {
+        $locations = $acf_locations;
+    }
 
-if ( empty( $locations ) && is_array( $builder_locations ) && ! empty( $builder_locations ) ) {
-    $locations = $builder_locations;
-}
+    if ( empty( $locations ) && is_array( $builder_locations ) && ! empty( $builder_locations ) ) {
+        $locations = $builder_locations;
+    }
 
-if ( empty( $locations ) && is_array( $acf_locations ) && ! empty( $acf_locations ) ) {
-    $locations = $acf_locations;
-}
+    if ( empty( $locations ) && is_array( $acf_locations ) && ! empty( $acf_locations ) ) {
+        $locations = $acf_locations;
+    }
 
-if ( empty( $locations ) && $locations_field_name !== '' && function_exists( 'get_field' ) ) {
-    $loaded_locations = $to_assoc( get_field( $locations_field_name ) );
-    if ( is_array( $loaded_locations ) ) {
-        $locations = $loaded_locations;
+    if ( empty( $locations ) && $locations_field_name !== '' && function_exists( 'get_field' ) ) {
+        $loaded_locations = $to_assoc( get_field( $locations_field_name ) );
+        if ( is_array( $loaded_locations ) ) {
+            $locations = $loaded_locations;
+        }
     }
 }
 
@@ -203,7 +208,7 @@ if ( is_array( $custom_icon ) && isset( $custom_icon['svgCode'] ) && is_string( 
 $current_post_id = function_exists( 'get_the_ID' ) ? (int) get_the_ID() : 0;
 $geocode_cache = [];
 $cache_loader = '\\BricBreakdance\\GoogleMapsLocations\\get_post_geocode_cache';
-if ( $current_post_id > 0 && function_exists( $cache_loader ) ) {
+if ( $data_source !== 'posts' && $current_post_id > 0 && function_exists( $cache_loader ) ) {
     $loaded_geocode_cache = $to_assoc( $cache_loader( $current_post_id ) );
     if ( is_array( $loaded_geocode_cache ) ) {
         $geocode_cache = $loaded_geocode_cache;
@@ -335,7 +340,6 @@ $sanitize_svg_markup = static function ( $svg_markup ) {
   <div class="google-map"></div>
 </div>
 <div id="locations-%%ID%%" class="data-locations locations-icons">
-  <p>Post ID: %%POSTID%% </p>
   <?php foreach ( $locations as $index => $location_row ) : ?>
     <?php
     $location = $to_assoc( $location_row );
@@ -343,94 +347,108 @@ $sanitize_svg_markup = static function ( $svg_markup ) {
         continue;
     }
 
-    $name = '';
-    if ( $name_field !== '' && isset( $location[ $name_field ] ) ) {
-        $name = (string) $location[ $name_field ];
-    } elseif ( isset( $location['name'] ) ) {
-        $name = (string) $location['name'];
-    }
-
-    $map = [];
-
-    if ( $map_field_type === 'post' && $post_field !== '' && $post_map_field !== '' && isset( $location[ $post_field ] ) && function_exists( 'get_field' ) ) {
-        $related_post_id = $extract_post_id( $location[ $post_field ] );
-        if ( $related_post_id > 0 ) {
-            $map = $parse_map_value( get_field( $post_map_field, $related_post_id ) );
+    if ( $data_source === 'posts' ) {
+        $name = $location['name'];
+        $address = $location['address'];
+        $coordinates = $location['coordinates'];
+        // Related posts use the global icon only, including global color/size.
+        $icon_color = '';
+        $icon_size = '';
+        $icon_svg = '';
+    } else {
+        $name = '';
+        if ( $name_field !== '' && isset( $location[ $name_field ] ) ) {
+            $name = (string) $location[ $name_field ];
+        } elseif ( isset( $location['name'] ) ) {
+            $name = (string) $location['name'];
         }
-    } elseif ( $map_field_type === 'acf_map' && $map_field !== '' && isset( $location[ $map_field ] ) ) {
-        $map = $parse_map_value( $location[ $map_field ] );
-    }
 
-    if ( empty( $map ) && $location_field_name !== '' && isset( $location[ $location_field_name ] ) ) {
-        $location_field_value = $location[ $location_field_name ];
+        $map = [];
 
-        if ( $location_field_is_post && $field_for_nested_location !== '' && function_exists( 'get_field' ) ) {
-            $related_post_id = $extract_post_id( $location_field_value );
+        if ( $map_field_type === 'post' && $post_field !== '' && $post_map_field !== '' && isset( $location[ $post_field ] ) && function_exists( 'get_field' ) ) {
+            $related_post_id = $extract_post_id( $location[ $post_field ] );
             if ( $related_post_id > 0 ) {
-                $map = $parse_map_value( get_field( $field_for_nested_location, $related_post_id ) );
+                $map = $parse_map_value( get_field( $post_map_field, $related_post_id ) );
             }
-        } else {
-            $map = $parse_map_value( $location_field_value );
+        } elseif ( $map_field_type === 'acf_map' && $map_field !== '' && isset( $location[ $map_field ] ) ) {
+            $map = $parse_map_value( $location[ $map_field ] );
         }
-    }
 
-    $address = '';
-    if ( isset( $map['address'] ) ) {
-        $address = (string) $map['address'];
-    } elseif ( isset( $location['address'] ) ) {
-        $address = (string) $location['address'];
-    }
+        if ( empty( $map ) && $location_field_name !== '' && isset( $location[ $location_field_name ] ) ) {
+            $location_field_value = $location[ $location_field_name ];
 
-    $coordinates = '';
-    if ( isset( $map['lat'], $map['lng'] ) ) {
-        $coordinates = $extract_coordinates_string(
-            [
-                'lat' => $map['lat'],
-                'lng' => $map['lng'],
-            ]
-        );
-    } elseif ( isset( $location['coordinates'] ) ) {
-        $coordinates = $extract_coordinates_string( $location['coordinates'] );
-    }
+            if ( $location_field_is_post && $field_for_nested_location !== '' && function_exists( 'get_field' ) ) {
+                $related_post_id = $extract_post_id( $location_field_value );
+                if ( $related_post_id > 0 ) {
+                    $map = $parse_map_value( get_field( $field_for_nested_location, $related_post_id ) );
+                }
+            } else {
+                $map = $parse_map_value( $location_field_value );
+            }
+        }
 
-    if ( $coordinates === '' && $address !== '' && ! empty( $geocode_cache ) ) {
-        $normalized_address = $normalize_geocode_address( $address );
-        $cached_coordinates = $normalized_address !== '' ? ( $geocode_cache[ $normalized_address ] ?? null ) : null;
+        $address = '';
+        if ( isset( $map['address'] ) ) {
+            $address = (string) $map['address'];
+        } elseif ( isset( $location['address'] ) ) {
+            $address = (string) $location['address'];
+        }
 
-        if ( is_array( $cached_coordinates ) ) {
+        $coordinates = '';
+        if ( isset( $map['lat'], $map['lng'] ) ) {
             $coordinates = $extract_coordinates_string(
                 [
-                    'lat' => $cached_coordinates['lat'] ?? null,
-                    'lng' => $cached_coordinates['lng'] ?? null,
+                    'lat' => $map['lat'],
+                    'lng' => $map['lng'],
                 ]
             );
+        } elseif ( isset( $location['coordinates'] ) ) {
+            $coordinates = $extract_coordinates_string( $location['coordinates'] );
         }
-    }
 
-    $icon_color = isset( $location['icon_color'] ) ? (string) $location['icon_color'] : '';
-    $icon_size = '';
-    if ( isset( $location['icon_size'] ) && is_array( $location['icon_size'] ) && isset( $location['icon_size']['number'] ) ) {
-        $icon_size = (string) $location['icon_size']['number'];
-    } elseif ( isset( $location['icon_size'] ) ) {
-        $icon_size = (string) $location['icon_size'];
-    }
+        if ( $coordinates === '' && $address !== '' && ! empty( $geocode_cache ) ) {
+            $normalized_address = $normalize_geocode_address( $address );
+            $cached_coordinates = $normalized_address !== '' ? ( $geocode_cache[ $normalized_address ] ?? null ) : null;
 
-    $icon_svg = '';
-    $icon_value = $to_assoc( $location['icon'] ?? null );
-    if ( is_array( $icon_value ) && isset( $icon_value['svgCode'] ) && is_string( $icon_value['svgCode'] ) ) {
-        $icon_svg = $icon_value['svgCode'];
-    } elseif ( is_string( $icon_value ) ) {
-        $icon_svg = $icon_value;
+            if ( is_array( $cached_coordinates ) ) {
+                $coordinates = $extract_coordinates_string(
+                    [
+                        'lat' => $cached_coordinates['lat'] ?? null,
+                        'lng' => $cached_coordinates['lng'] ?? null,
+                    ]
+                );
+            }
+        }
+
+        $icon_color = isset( $location['icon_color'] ) ? (string) $location['icon_color'] : '';
+        $icon_size = '';
+        if ( isset( $location['icon_size'] ) && is_array( $location['icon_size'] ) && isset( $location['icon_size']['number'] ) ) {
+            $icon_size = (string) $location['icon_size']['number'];
+        } elseif ( isset( $location['icon_size'] ) ) {
+            $icon_size = (string) $location['icon_size'];
+        }
+
+        $icon_svg = '';
+        $icon_value = $to_assoc( $location['icon'] ?? null );
+        if ( is_array( $icon_value ) && isset( $icon_value['svgCode'] ) && is_string( $icon_value['svgCode'] ) ) {
+            $icon_svg = $icon_value['svgCode'];
+        } elseif ( is_string( $icon_value ) ) {
+            $icon_svg = $icon_value;
+        }
     }
     ?>
     <div
-      id="icon-<?php echo esc_attr( (string) $index ); ?>"
+      id="icon-<?php echo esc_attr( $data_source === 'posts' ? '%%ID%%-post-' . $location['post_id'] : (string) $index ); ?>"
       class="location"
       data-name="<?php echo esc_attr( $name ); ?>"
       data-address="<?php echo esc_attr( $address ); ?>"
       data-coordinates="<?php echo esc_attr( $coordinates ); ?>"
       data-icon-color="<?php echo esc_attr( $icon_color ); ?>"
       data-icon-size="<?php echo esc_attr( $icon_size ); ?>"
+      <?php if ( $data_source === 'posts' ) : ?>
+      data-post-id="<?php echo esc_attr( (string) $location['post_id'] ); ?>"
+      data-address-hash="<?php echo esc_attr( $location['address_hash'] ); ?>"
+      <?php endif; ?>
     ><?php echo $sanitize_svg_markup( $icon_svg ); ?></div>
   <?php endforeach; ?>
   <div class="custom-global-icon"><?php echo $sanitize_svg_markup( $custom_icon_svg ); ?></div>

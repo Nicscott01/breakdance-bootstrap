@@ -1,7 +1,94 @@
 # Breakdance Bootstrap Plugin
 Bootstrap features for Breakdance sites
 
+## Google Maps Locations V2: Related Posts
+
+Choose **Related Posts** in the element's Data Source control to build pins from
+published posts instead of a manually maintained repeater. Builder and ACF repeater
+sources keep their existing settings and host-document coordinate cache.
+
+For a map in a Global Block on a single `trents_tree` template:
+
+1. Choose **Post Type: location**. Any post type that is public *or* editable in
+   wp-admin (`show_ui`) is allowed, so location CPTs without public single pages
+   work. Breakdance documents are never offered.
+2. Choose **Each location links to this page** and enter `trents_tree` for
+   **Relationship Field**. The field belongs to each location post and may be an
+   ACF relationship, multi post object, or single post object.
+3. Leave **Name Field** empty for the post title. Set **Address Field** to `address`;
+   use a complete street address rather than a place name. Optionally set
+   **Map Field** to `location` if those posts have an ACF Google Map field.
+4. Choose an order and optional limit. Empty Limit means up to 200 posts. When the
+   relationship is **This page lists its locations**, put the relationship field
+   on the viewed post and use **Relationship order** to preserve its selection
+   order (DESC reverses it). For other relationship modes, Relationship order
+   falls back to menu order. **All published posts of this type** needs no anchor
+   or relationship field.
+5. Optionally enable **Fit Map to Locations** to frame all pins. One pin uses the
+   configured zoom, or 14 if unset. The toggle defaults off. Related Posts uses
+   the global Custom Icon and design icon color/size; there are no per-post icons.
+
+The context is the content post in WordPress's current loop/query, including the
+builder's selected preview post, rather than the Global Block's `%%POSTID%%`.
+Breakdance sends SSR to the selected preview URL, as it does for dynamic data.
+For an admin-ajax SSR request without that URL, the helper can read the triggering
+document's saved `_breakdance_template_last_previewed_item`. If no content post
+is available, relationship-based modes output no locations. Choose a year post
+in Breakdance's preview selector while editing the Global Block or template.
+
+Coordinates are resolved in this order:
+
+1. Valid latitude/longitude from the optional Map Field. Its address also supplies
+   an empty Address Field.
+2. `_bric_maps_geocode` meta on the **location post**, with `address_hash`, `lat`,
+   `lng`, `source` (`server` or `builder`), and `updated_at` (Unix timestamp).
+3. PHP geocoding of the normalized address, saving successful coordinates to that
+   location post. At most five requests run across all maps per PHP render, each
+   with a four-second timeout; remaining locations wait for a later render.
+4. If needed, the builder's browser geocoder can save coordinates through a
+   nonce-protected AJAX action. The editor must be allowed to edit the individual
+   location post, even when they can edit the Global Block.
+
+Addresses have HTML stripped, line breaks/`<br>` converted to commas, and whitespace
+and stray commas normalized before display, hashing, and geocoding. Changing the
+normalized address invalidates stored coordinates automatically. Titles are never
+used as geocoding input. Failed lookups (including a missing key, `REQUEST_DENIED`,
+`ZERO_RESULTS`, or network errors) receive a 12-hour negative transient per post
+and address hash; they log once during that interval only with `WP_DEBUG` enabled.
+A successful builder save clears that failure marker. Related Posts pins consume
+SSR coordinates on the frontend with no browser geocoding or host-cache AJAX.
+
+Enable Google's Geocoding API for the server key and Maps JavaScript API for the
+browser key. PHP resolves the first nonempty key from:
+
+1. `bric_google_maps_server_api_key` filter.
+2. `BRIC_GOOGLE_MAPS_SERVER_API_KEY` constant (define in site configuration).
+3. Breakdance's Google Maps API key, via
+   `Breakdance\APIKeys\getKey(BREAKDANCE_GOOGLE_MAPS_API_KEY_NAME)`.
+4. ACF's `google_api_key` setting, after the `acf/fields/google_map/api` filter.
+
+Use a separate server key restricted by server IP and API, **not HTTP referrer**.
+A browser key with referrer restrictions can return `REQUEST_DENIED` from PHP;
+the builder fallback can still work with the browser key. The server key and
+builder write nonce are never included in the public map options.
+
+Available filters:
+
+| Filter | Default | Purpose |
+| --- | --- | --- |
+| `bric_google_maps_locations_context_post_id` | Resolved content post ID, or `0` | Override the relationship anchor. |
+| `bric_google_maps_server_api_key` | Empty string | Supply a server geocoding key before other settings. |
+| `bric_google_maps_geocode_limit` | `5` | Maximum server requests per PHP render; `0` disables them. |
+| `bric_google_maps_geocode_negative_ttl` | `43200` seconds | Failure-marker lifetime. |
+| `bric_google_maps_related_post_type_allowed` | `true` | Return `false` to block a post type as a Related Posts source. |
+
+Run `php tests/maps-related-posts-test.php` for the standalone helper tests.
+
 ## Changelog
+### 11/17/26 v1.4.0
+- Google Maps Locations V2: add Related Posts with preview-aware relationship queries,
+  per-location stored coordinates, bounded server geocoding, and builder write-back.
+- Add opt-in Fit Map to Locations and remove the hidden Post ID debug output.
 ### 9/27/26 v1.3.22
 - Dynamic Accordion: fix the fatal "Call to undefined function getWpQuery()" that took down any page using the element. Breakdance's loop helpers (`getWpQuery`, `getBlockForLoopIndex`) live in the `Breakdance\LoopBuilder` namespace, so the element now imports them, and it outputs an HTML comment instead of fataling if they are ever unavailable.
 - Dynamic Accordion: remove the call to the undefined `get_item_classes()` (its result was unused) and fix the `$accordion_id` typo when the accordion is disabled.
