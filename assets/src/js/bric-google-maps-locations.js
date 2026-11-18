@@ -789,6 +789,14 @@
         return;
       }
 
+      // fitBounds() on a map that has not finished initialising (no projection
+      // yet) computes a world-level zoom. Wait for the projection; unlike
+      // "idle", it does not depend on map tiles loading.
+      if (!map.getProjection()) {
+        google.maps.event.addListenerOnce(map, "projection_changed", () => fitMapToMarkers(map, id, options));
+        return;
+      }
+
       const markers = getGlobalMapStore("googleMapsMarkers", {})[id] || [];
       if (markers.length === 1) {
         map.setCenter(markers[0].position);

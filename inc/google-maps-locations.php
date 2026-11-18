@@ -304,6 +304,64 @@ function get_context_post_id() {
 }
 
 /**
+ * Resolve the relationship anchor without changing the current WordPress post.
+ * Missing anchor settings preserve the existing loop/preview-aware context.
+ *
+ * @param array $settings Related Posts settings from content.data.posts.
+ * @return int
+ */
+function resolve_anchor_post_id( array $settings ): int {
+    static $latest_post_ids = [];
+    $anchor = $settings['anchor'] ?? 'current';
+    $post_id = 0;
+
+    if ( $anchor === 'current' ) {
+        $post_id = get_context_post_id();
+    } elseif ( $anchor === 'specific' ) {
+        $value = $settings['anchor_post_id'] ?? '';
+        if ( is_int( $value ) || is_string( $value ) ) {
+            $id = filter_var( $value, FILTER_VALIDATE_INT, [ 'options' => [ 'min_range' => 1 ] ] );
+            $post = $id ? get_post( $id ) : null;
+            if ( $post instanceof \WP_Post && $post->post_status === 'publish' && is_related_post_type_allowed( $post->post_type ) ) {
+                $post_id = (int) $post->ID;
+            }
+        }
+    } elseif ( $anchor === 'latest' ) {
+        $post_type = is_string( $settings['anchor_post_type'] ?? null ) ? sanitize_key( trim( $settings['anchor_post_type'] ) ) : '';
+        $newest_by = ( $settings['anchor_newest_by'] ?? 'date' ) === 'meta' ? 'meta' : 'date';
+        $field = $newest_by === 'meta' && is_string( $settings['anchor_field_name'] ?? null ) ? trim( $settings['anchor_field_name'] ) : '';
+        $field_type = $newest_by === 'meta' && ( $settings['anchor_field_type'] ?? 'number' ) === 'text' ? 'text' : 'number';
+
+        if ( is_related_post_type_allowed( $post_type ) && ( $newest_by !== 'meta' || $field !== '' ) ) {
+            $cache_key = serialize( [ $post_type, $newest_by, $field, $field_type ] );
+            if ( ! array_key_exists( $cache_key, $latest_post_ids ) ) {
+                $args = [
+                    'post_type' => $post_type,
+                    'post_status' => 'publish',
+                    'posts_per_page' => 1,
+                    'no_found_rows' => true,
+                    'fields' => 'ids',
+                    'ignore_sticky_posts' => true,
+                    'suppress_filters' => false,
+                    'orderby' => 'date',
+                    'order' => 'DESC',
+                ];
+                if ( $newest_by === 'meta' ) {
+                    $args['meta_query'] = [ [ 'key' => $field, 'compare' => 'EXISTS' ] ];
+                    $args['orderby'] = $field_type === 'text' ? 'meta_value' : 'meta_value_num';
+                }
+                $query = new \WP_Query( $args );
+                $latest_post_ids[ $cache_key ] = isset( $query->posts[0] ) ? (int) $query->posts[0] : 0;
+            }
+            $post_id = $latest_post_ids[ $cache_key ];
+        }
+    }
+
+    // Apply on every call, including cached lookups and unresolved anchors.
+    return absint( apply_filters( 'bric_google_maps_locations_anchor_post_id', $post_id, $settings ) );
+}
+
+/**
  * Normalize Related Posts addresses for display, hashing and geocoding. Keep the
  * legacy normalize_geocode_address() unchanged for existing host-post caches.
  *
@@ -555,7 +613,8 @@ function resolve_location_coordinates( $post_id, $address, $map = [] ) {
 /** Assemble the existing .location data contract from published location posts. */
 function get_related_post_locations( $settings ) {
     $locations = [];
-    foreach ( query_related_posts( $settings, get_context_post_id() ) as $post ) {
+    $anchor = ( $settings['relationship'] ?? 'points_to_current' ) === 'all' ? 0 : resolve_anchor_post_id( $settings );
+    foreach ( query_related_posts( $settings, $anchor ) as $post ) {
         $map = get_location_field( $settings['map_field'] ?? '', $post->ID );
         $address = normalize_location_address( get_location_field( $settings['address_field'] ?? 'address', $post->ID ) );
         if ( $address === '' && is_array( $map ) ) {

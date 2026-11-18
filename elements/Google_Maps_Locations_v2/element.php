@@ -75,6 +75,9 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
                 'posts' => [
                     'post_type' => 'location',
                     'relationship' => 'points_to_current',
+                    'anchor' => 'current',
+                    'anchor_newest_by' => 'date',
+                    'anchor_field_type' => 'number',
                     'address_field' => 'address',
                     'order_by' => 'relationship_order',
                     'order' => 'ASC',
@@ -259,10 +262,63 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
         ), c(
             "relationship", "Relationship", [],
             ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [
-                ['value' => 'points_to_current', 'text' => 'Each location links to this page'],
-                ['value' => 'listed_on_current', 'text' => 'This page lists its locations'],
+                ['value' => 'points_to_current', 'text' => 'Each location links to the anchor post'],
+                ['value' => 'listed_on_current', 'text' => 'The anchor post lists its locations'],
                 ['value' => 'all', 'text' => 'All published posts of this type'],
             ]],
+            false, false, []
+        ), c(
+            "anchor", "Anchor", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [
+                ['value' => 'current', 'text' => 'The post being viewed'],
+                ['value' => 'latest', 'text' => 'Newest post of a type'],
+                ['value' => 'specific', 'text' => 'A specific post'],
+            ], 'condition' => [[['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all']]]],
+            false, false, []
+        ), c(
+            "anchor_post_type", "Anchor Post Type", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'placeholder' => 'trents_tree',
+                'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'bric_maps_get_public_post_types']],
+                'condition' => [[
+                    ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                    ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'latest'],
+                ]]],
+            false, false, []
+        ), c(
+            "anchor_newest_by", "Newest By", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [
+                ['value' => 'date', 'text' => 'Publish date'],
+                ['value' => 'meta', 'text' => 'Custom field'],
+            ], 'condition' => [[
+                ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'latest'],
+            ]]],
+            false, false, []
+        ), c(
+            "anchor_field_name", "Field Name", [],
+            ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'start_date', 'condition' => [[
+                ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'latest'],
+                ['path' => 'content.data.posts.anchor_newest_by', 'operand' => 'equals', 'value' => 'meta'],
+            ]]],
+            false, false, []
+        ), c(
+            "anchor_field_type", "Field Type", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [
+                ['value' => 'number', 'text' => 'Number or ACF date (Ymd)'],
+                ['value' => 'text', 'text' => 'Text / date-time string'],
+            ], 'condition' => [[
+                ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'latest'],
+                ['path' => 'content.data.posts.anchor_newest_by', 'operand' => 'equals', 'value' => 'meta'],
+            ]]],
+            false, false, []
+        ), c(
+            "anchor_post_id", "Anchor Post ID", [],
+            ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'Post ID or dynamic data', 'condition' => [[
+                ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'specific'],
+            ]]],
             false, false, []
         ), c(
             "relationship_field", "Relationship Field", [],
@@ -286,7 +342,7 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
                 ['value' => 'menu_order', 'text' => 'Menu order'],
                 ['value' => 'title', 'text' => 'Title'],
                 ['value' => 'date', 'text' => 'Date'],
-                ['value' => 'relationship_order', 'text' => 'Relationship order (this page lists locations)'],
+                ['value' => 'relationship_order', 'text' => 'Relationship order (anchor lists locations)'],
             ]],
             false, false, []
         ), c(
@@ -649,7 +705,7 @@ window.BricGoogleMapsLocations().update({
 
     static function dynamicPropertyPaths()
     {
-        return [['accepts' => 'repeater', 'path' => 'content.data.locations_acf'], ['accepts' => 'repeater', 'path' => 'content.data.locations']];
+        return [['accepts' => 'repeater', 'path' => 'content.data.locations_acf'], ['accepts' => 'repeater', 'path' => 'content.data.locations'], ['accepts' => 'string', 'path' => 'content.data.posts.anchor_post_id']];
     }
 
     static function additionalClasses()
