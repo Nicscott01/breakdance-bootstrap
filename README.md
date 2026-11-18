@@ -17,7 +17,8 @@ For a map placed directly on a single `trents_tree` template (or in a Global Blo
    ACF relationship, multi post object, or single post object. Leave **Anchor** at
    **The post being viewed** to use the viewed year.
 3. Leave **Name Field** empty for the post title. Set **Address Field** to `address`;
-   use a complete street address rather than a place name. Optionally set
+   use a complete street address rather than a place name. The field may be text or an
+   ACF group (street, town, state, zip subfields are joined in order). Optionally set
    **Map Field** to `location` if those posts have an ACF Google Map field.
 4. Choose an order and optional limit. Empty Limit means up to 200 posts. When the
    relationship is **The anchor post lists its locations**, put the relationship
@@ -125,6 +126,9 @@ Available filters:
 Run `php tests/maps-related-posts-test.php` for the standalone helper tests.
 
 ## Changelog
+### 11/17/26 v1.4.2
+- Google Maps Locations V2 Related Posts: read an ACF group address (street, town, state,
+  zip subfields) as one address, so locations without a Google Map value still get pins.
 ### 11/17/26 v1.4.1
 - Google Maps Locations V2: add current, newest-by-date/custom-field, and specific-post
   relationship anchors, request-local newest-post caching, and an anchor override filter.
