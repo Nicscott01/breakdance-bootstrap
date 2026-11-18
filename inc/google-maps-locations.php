@@ -369,7 +369,10 @@ function resolve_anchor_post_id( array $settings ): int {
  * @return string
  */
 function normalize_location_address( $address ) {
-    if ( ! is_scalar( $address ) ) {
+    if ( is_array( $address ) ) {
+        $address = flatten_location_address( $address );
+    }
+    if ( ! is_scalar( $address ) || is_bool( $address ) ) {
         return '';
     }
 
@@ -379,6 +382,31 @@ function normalize_location_address( $address ) {
     $address = preg_replace( '/\s+/', ' ', str_replace( "\xc2\xa0", ' ', $address ) );
     $address = preg_replace( '/\s*,(?:\s*,)*\s*/', ', ', $address );
     return trim( $address, " \t\n\r\0\x0B," );
+}
+
+/**
+ * Reduce an array address to text. An ACF Google Map value uses its
+ * formatted address; an ACF group (street, town, state, zip subfields)
+ * joins its non-empty text parts in field order.
+ *
+ * @param array $address
+ * @return string
+ */
+function flatten_location_address( array $address ) {
+    if ( isset( $address['address'] ) && is_string( $address['address'] ) && ( isset( $address['lat'] ) || isset( $address['lng'] ) ) ) {
+        return $address['address'];
+    }
+
+    $parts = [];
+    foreach ( $address as $part ) {
+        if ( is_string( $part ) || is_int( $part ) || is_float( $part ) ) {
+            $part = normalize_location_address( $part );
+            if ( $part !== '' ) {
+                $parts[] = $part;
+            }
+        }
+    }
+    return implode( ', ', $parts );
 }
 
 /**

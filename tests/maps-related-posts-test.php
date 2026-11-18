@@ -194,6 +194,11 @@ namespace {
         check( normalize_location_address( "869 Bragdon Road\r\nWells, ME" ) === '869 Bragdon Road, Wells, ME', 'CRLF becomes a comma' );
         check( normalize_location_address( 'A&nbsp;Street&lt;br&gt;Town' ) === 'A Street, Town', 'HTML entities normalize' );
         check( normalize_location_address( [] ) === '', 'Non-scalar address is empty' );
+        check( normalize_location_address( [ 'field_a' => '200 Sanford Rd', 'field_b' => 'Wells', 'field_c' => 'ME', 'field_d' => '' ] ) === '200 Sanford Rd, Wells, ME', 'ACF group address joins non-empty subfields' );
+        check( normalize_location_address( [ 'address' => '', 'town' => 'Orono', 'state' => 'ME', 'zip' => 4469 ] ) === 'Orono, ME, 4469', 'ACF group address skips empty street and keeps numeric zip' );
+        check( normalize_location_address( [ 'address' => '869 Bragdon Road, Wells, ME, USA', 'lat' => 43.3, 'lng' => -70.6, 'zoom' => 14 ] ) === '869 Bragdon Road, Wells, ME, USA', 'ACF Google Map array uses its formatted address' );
+        check( normalize_location_address( [ [ 'nested' ], true, null ] ) === '', 'Nested, boolean and null parts are ignored' );
+        check( normalize_location_address( true ) === '', 'Boolean address is empty' );
         $address = '869 Bragdon Road, Wells, ME';
         $meta[101][ LOCATION_COORDS_POSTMETA_KEY ] = [ 'address_hash' => md5( $address ), 'lat' => '43.3', 'lng' => '-70.6', 'source' => 'builder' ];
         $stored = [ 'lat' => 43.3, 'lng' => -70.6 ];
