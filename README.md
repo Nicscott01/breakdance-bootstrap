@@ -1,7 +1,139 @@
 # Breakdance Bootstrap Plugin
 Bootstrap features for Breakdance sites
 
+## Google Maps Locations V2: Related Posts
+
+Choose **Related Posts** in the element's Data Source control to build pins from
+published posts instead of a manually maintained repeater. Builder and ACF repeater
+sources keep their existing settings and host-document coordinate cache.
+
+For a map placed directly on a single `trents_tree` template (or in a Global Block):
+
+1. Choose **Post Type: location**. Any post type that is public *or* editable in
+   wp-admin (`show_ui`) is allowed, so location CPTs without public single pages
+   work. Breakdance documents are never offered.
+2. Choose **Each location links to the anchor post** and enter `trents_tree` for
+   **Relationship Field**. The field belongs to each location post and may be an
+   ACF relationship, multi post object, or single post object. Leave **Anchor** at
+   **The post being viewed** to use the viewed year.
+3. Leave **Name Field** empty for the post title. Set **Address Field** to `address`;
+   use a complete street address rather than a place name. Optionally set
+   **Map Field** to `location` if those posts have an ACF Google Map field.
+4. Choose an order and optional limit. Empty Limit means up to 200 posts. When the
+   relationship is **The anchor post lists its locations**, put the relationship
+   field on the anchor post and use **Relationship order** to preserve its selection
+   order (DESC reverses it). For other relationship modes, Relationship order
+   falls back to menu order. **All published posts of this type** needs no anchor
+   or relationship field.
+5. Optionally enable **Fit Map to Locations** to frame all pins. One pin uses the
+   configured zoom, or 14 if unset. The toggle defaults off. Related Posts uses
+   the global Custom Icon and design icon color/size; there are no per-post icons.
+
+**Anchor** is available when Relationship is not **All published posts of this type**:
+
+- **The post being viewed** (default, including existing elements without an Anchor
+  setting) uses the current loop/query and builder preview context described below.
+- **Newest post of a type** uses **Anchor Post Type**, chosen from the same allowed
+  types as Post Type. **Newest By: Publish date** is the default. To order by a saved
+  custom field, choose **Custom field** and enter its **Field Name**. **Field Type:
+  Number or ACF date (Ymd)** is the default and sorts numerically; **Text / date-time
+  string** sorts as text (for example, ACF's `Y-m-d H:i:s` values). Both sort DESC,
+  skip posts missing that field, and only consider published posts. The newest-post
+  lookup, including an empty result, is cached per type/order settings for the PHP
+  request; it does not change the global post.
+- **A specific post** uses **Anchor Post ID**, which accepts a positive integer or
+  Breakdance string dynamic data resolving to one. The post must be published and
+  belong to an allowed post type; otherwise there is no anchor.
+
+For a map directly on the `trents_tree` post type archive template, use the same
+location and relationship settings as above, with:
+
+- **Anchor:** Newest post of a type
+- **Anchor Post Type:** `trents_tree`
+- **Newest By:** Custom field
+- **Field Name:** `start_date`
+- **Field Type:** Number or ACF date (Ymd)
+
+This uses the published year with the greatest saved `start_date`, independently
+of publish-date order. A missing type or an empty Field Name in Custom field mode
+produces no anchor. Relationship-based modes then output no locations.
+
+For **The post being viewed**, the context is the content post in WordPress's
+current loop/query, including the builder's selected preview post, rather than the
+Global Block's `%%POSTID%%`.
+Breakdance sends SSR to the selected preview URL, as it does for dynamic data.
+For an admin-ajax SSR request without that URL, the helper can read the triggering
+document's saved `_breakdance_template_last_previewed_item`. If no content post
+is available, relationship-based modes output no locations. Choose a year post
+in Breakdance's preview selector while editing the Global Block or template.
+
+On archives, search results, and the posts home page, **The post being viewed** can
+still resolve to the first listed post outside a loop. This existing behavior is
+preserved: Breakdance's LoopBuilder creates a separate `WP_Query` and calls its
+`the_post()`, which sets that query's loop flag but does not set the main query's
+`in_the_loop()` flag. A guard based on `is_singular()` / `in_the_loop()` could hide
+maps inside valid Breakdance loops. Use **Newest post of a type** or **A specific
+post** for maps placed directly on non-singular templates.
+
+Coordinates are resolved in this order:
+
+1. Valid latitude/longitude from the optional Map Field. Its address also supplies
+   an empty Address Field.
+2. `_bric_maps_geocode` meta on the **location post**, with `address_hash`, `lat`,
+   `lng`, `source` (`server` or `builder`), and `updated_at` (Unix timestamp).
+3. PHP geocoding of the normalized address, saving successful coordinates to that
+   location post. At most five requests run across all maps per PHP render, each
+   with a four-second timeout; remaining locations wait for a later render.
+4. If needed, the builder's browser geocoder can save coordinates through a
+   nonce-protected AJAX action. The editor must be allowed to edit the individual
+   location post, even when they can edit the Global Block.
+
+Addresses have HTML stripped, line breaks/`<br>` converted to commas, and whitespace
+and stray commas normalized before display, hashing, and geocoding. Changing the
+normalized address invalidates stored coordinates automatically. Titles are never
+used as geocoding input. Failed lookups (including a missing key, `REQUEST_DENIED`,
+`ZERO_RESULTS`, or network errors) receive a 12-hour negative transient per post
+and address hash; they log once during that interval only with `WP_DEBUG` enabled.
+A successful builder save clears that failure marker. Related Posts pins consume
+SSR coordinates on the frontend with no browser geocoding or host-cache AJAX.
+
+Enable Google's Geocoding API for the server key and Maps JavaScript API for the
+browser key. PHP resolves the first nonempty key from:
+
+1. `bric_google_maps_server_api_key` filter.
+2. `BRIC_GOOGLE_MAPS_SERVER_API_KEY` constant (define in site configuration).
+3. Breakdance's Google Maps API key, via
+   `Breakdance\APIKeys\getKey(BREAKDANCE_GOOGLE_MAPS_API_KEY_NAME)`.
+4. ACF's `google_api_key` setting, after the `acf/fields/google_map/api` filter.
+
+Use a separate server key restricted by server IP and API, **not HTTP referrer**.
+A browser key with referrer restrictions can return `REQUEST_DENIED` from PHP;
+the builder fallback can still work with the browser key. The server key and
+builder write nonce are never included in the public map options.
+
+Available filters:
+
+| Filter | Default | Purpose |
+| --- | --- | --- |
+| `bric_google_maps_locations_context_post_id` | Resolved content post ID, or `0` | Override the context used by Anchor = The post being viewed. |
+| `bric_google_maps_locations_anchor_post_id` | Resolved anchor post ID, or `0` | Override the final anchor in any mode; receives `($post_id, $settings)` where `$settings` is `content.data.posts`. Runs on every resolution, including cached lookups and missing anchors. |
+| `bric_google_maps_server_api_key` | Empty string | Supply a server geocoding key before other settings. |
+| `bric_google_maps_geocode_limit` | `5` | Maximum server requests per PHP render; `0` disables them. |
+| `bric_google_maps_geocode_negative_ttl` | `43200` seconds | Failure-marker lifetime. |
+| `bric_google_maps_related_post_type_allowed` | `true` | Return `false` to block a post type as a Related Posts source. |
+
+Run `php tests/maps-related-posts-test.php` for the standalone helper tests.
+
 ## Changelog
+### 11/17/26 v1.4.1
+- Google Maps Locations V2: add current, newest-by-date/custom-field, and specific-post
+  relationship anchors, request-local newest-post caching, and an anchor override filter.
+- Fix Fit Map to Locations zooming out to the whole world on first load (wait for the
+  map projection before fitting bounds).
+### 11/17/26 v1.4.0
+- Google Maps Locations V2: add Related Posts with preview-aware relationship queries,
+  per-location stored coordinates, bounded server geocoding, and builder write-back.
+- Add opt-in Fit Map to Locations and remove the hidden Post ID debug output.
 ### 11/16/26 v1.3.25
 - Verify CF Turnstile before Breakdance runs any submission actions whenever the form selects CF Turnstile.
 - Require a valid token for the site's WordPress Home URL hostname, and verify it once per submission. Existing forms use their current Turnstile keys.

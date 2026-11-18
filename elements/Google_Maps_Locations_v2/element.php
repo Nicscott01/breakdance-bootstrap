@@ -70,7 +70,21 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
 
     static function defaultProperties()
     {
-        return false;
+        return [
+            'content' => [ 'data' => [
+                'posts' => [
+                    'post_type' => 'location',
+                    'relationship' => 'points_to_current',
+                    'anchor' => 'current',
+                    'anchor_newest_by' => 'date',
+                    'anchor_field_type' => 'number',
+                    'address_field' => 'address',
+                    'order_by' => 'relationship_order',
+                    'order' => 'ASC',
+                ],
+                'fit_locations' => false,
+            ] ],
+        ];
     }
 
     static function defaultChildren()
@@ -234,10 +248,114 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
         "data_source",
         "Data Source",
         [],
-        ['type' => 'button_bar', 'layout' => 'vertical', 'items' => [['value' => 'builder', 'text' => 'Builder'], ['text' => 'ACF', 'value' => 'acf']], 'buttonBarOptions' => ['size' => 'small', 'layout' => 'default']],
+        ['type' => 'button_bar', 'layout' => 'vertical', 'items' => [['value' => 'builder', 'text' => 'Builder'], ['text' => 'ACF', 'value' => 'acf'], ['text' => 'Related Posts', 'value' => 'posts']], 'buttonBarOptions' => ['size' => 'small', 'layout' => 'default']],
         false,
         false,
         [],
+      ), c(
+        "posts",
+        "Related Posts",
+        [c(
+            "post_type", "Post Type", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'placeholder' => 'location', 'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'bric_maps_get_public_post_types']]],
+            false, false, []
+        ), c(
+            "relationship", "Relationship", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [
+                ['value' => 'points_to_current', 'text' => 'Each location links to the anchor post'],
+                ['value' => 'listed_on_current', 'text' => 'The anchor post lists its locations'],
+                ['value' => 'all', 'text' => 'All published posts of this type'],
+            ]],
+            false, false, []
+        ), c(
+            "anchor", "Anchor", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [
+                ['value' => 'current', 'text' => 'The post being viewed'],
+                ['value' => 'latest', 'text' => 'Newest post of a type'],
+                ['value' => 'specific', 'text' => 'A specific post'],
+            ], 'condition' => [[['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all']]]],
+            false, false, []
+        ), c(
+            "anchor_post_type", "Anchor Post Type", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'placeholder' => 'trents_tree',
+                'dropdownOptions' => ['populate' => ['path' => '', 'text' => '', 'value' => '', 'fetchDataAction' => 'bric_maps_get_public_post_types']],
+                'condition' => [[
+                    ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                    ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'latest'],
+                ]]],
+            false, false, []
+        ), c(
+            "anchor_newest_by", "Newest By", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [
+                ['value' => 'date', 'text' => 'Publish date'],
+                ['value' => 'meta', 'text' => 'Custom field'],
+            ], 'condition' => [[
+                ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'latest'],
+            ]]],
+            false, false, []
+        ), c(
+            "anchor_field_name", "Field Name", [],
+            ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'start_date', 'condition' => [[
+                ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'latest'],
+                ['path' => 'content.data.posts.anchor_newest_by', 'operand' => 'equals', 'value' => 'meta'],
+            ]]],
+            false, false, []
+        ), c(
+            "anchor_field_type", "Field Type", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [
+                ['value' => 'number', 'text' => 'Number or ACF date (Ymd)'],
+                ['value' => 'text', 'text' => 'Text / date-time string'],
+            ], 'condition' => [[
+                ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'latest'],
+                ['path' => 'content.data.posts.anchor_newest_by', 'operand' => 'equals', 'value' => 'meta'],
+            ]]],
+            false, false, []
+        ), c(
+            "anchor_post_id", "Anchor Post ID", [],
+            ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'Post ID or dynamic data', 'condition' => [[
+                ['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all'],
+                ['path' => 'content.data.posts.anchor', 'operand' => 'equals', 'value' => 'specific'],
+            ]]],
+            false, false, []
+        ), c(
+            "relationship_field", "Relationship Field", [],
+            ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'trents_tree', 'condition' => [[['path' => 'content.data.posts.relationship', 'operand' => 'not equals', 'value' => 'all']]]],
+            false, false, []
+        ), c(
+            "name_field", "Name Field", [],
+            ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'Leave empty to use the post title'],
+            false, false, []
+        ), c(
+            "address_field", "Address Field", [],
+            ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'address'],
+            false, false, []
+        ), c(
+            "map_field", "Map Field", [],
+            ['type' => 'text', 'layout' => 'vertical', 'placeholder' => 'Optional Google Map field, e.g. location'],
+            false, false, []
+        ), c(
+            "order_by", "Order By", [],
+            ['type' => 'dropdown', 'layout' => 'vertical', 'items' => [
+                ['value' => 'menu_order', 'text' => 'Menu order'],
+                ['value' => 'title', 'text' => 'Title'],
+                ['value' => 'date', 'text' => 'Date'],
+                ['value' => 'relationship_order', 'text' => 'Relationship order (anchor lists locations)'],
+            ]],
+            false, false, []
+        ), c(
+            "order", "Order", [],
+            ['type' => 'dropdown', 'layout' => 'inline', 'items' => [['value' => 'ASC', 'text' => 'ASC'], ['value' => 'DESC', 'text' => 'DESC']]],
+            false, false, []
+        ), c(
+            "limit", "Limit", [],
+            ['type' => 'number', 'layout' => 'inline', 'placeholder' => 'No limit (up to 200)', 'rangeOptions' => ['min' => 1, 'max' => 200, 'step' => 1]],
+            false, false, []
+        )],
+        ['type' => 'section', 'condition' => [[['path' => 'content.data.data_source', 'operand' => 'equals', 'value' => 'posts']]]],
+        false, false, []
       ), c(
         "locations_acf",
         "Locations ACF",
@@ -266,7 +384,7 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
         "map_field",
         "Map Field",
         [],
-        ['type' => 'text', 'layout' => 'vertical', 'condition' => [[['path' => 'content.data.map_field_type', 'operand' => 'equals', 'value' => 'acf_map']]]],
+        ['type' => 'text', 'layout' => 'vertical', 'condition' => [[['path' => 'content.data.map_field_type', 'operand' => 'equals', 'value' => 'acf_map'], ['path' => 'content.data.data_source', 'operand' => 'equals', 'value' => 'acf']]]],
         false,
         false,
         [],
@@ -367,6 +485,14 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
         false,
         [],
       ), c(
+        "fit_locations",
+        "Fit Map to Locations",
+        [],
+        ['type' => 'toggle', 'layout' => 'inline'],
+        false,
+        false,
+        [],
+      ), c(
         "center_info",
         "Center Info",
         [],
@@ -443,6 +569,8 @@ class GoogleMapsLocationsv2 extends \Breakdance\Elements\Element
   margin-right:1rem;
   font-weight: 400;
 }'],],'3' =>  ['title' => 'Frontend Init','inlineScripts' => ['var GoogleMapsOptions = {
+    "dataSource": {{ content.data.data_source|json_encode|raw }},
+    "fitMapToLocations": {{ content.data.fit_locations|default(false)|json_encode|raw }},
     "center": {{ content.data.center|json_encode|raw }},
     "zoom": {{ content.data.zoom|json_encode|raw }},
     "type": {{ content.data.type|json_encode|raw }},
@@ -478,6 +606,9 @@ window.BricGoogleMapsLocations().update({
 
     static public function actions()
     {
+        // Actions are builder-only; never put the write nonce in frontend dependencies.
+        $coords_nonce = wp_json_encode( wp_create_nonce( \BricBreakdance\GoogleMapsLocations\LOCATION_COORDS_NONCE_ACTION ) );
+        $coords_ajax_url = wp_json_encode( admin_url( 'admin-ajax.php' ) );
         return [
 
 'onPropertyChange' => [['script' => 'var bricGoogleMapsRuntime = window.BricGoogleMapsLocations ? window.BricGoogleMapsLocations() : null;
@@ -489,6 +620,8 @@ var shouldSkipMapRefresh = Boolean(
 
 if (!shouldSkipMapRefresh) {
 var GoogleMapsOptions = {
+    "dataSource": {{ content.data.data_source|json_encode|raw }},
+    "fitMapToLocations": {{ content.data.fit_locations|default(false)|json_encode|raw }},
     "center": {{ content.data.center|json_encode|raw }},
     "zoom": {{ content.data.zoom|json_encode|raw }},
     "type": {{ content.data.type|json_encode|raw }},
@@ -501,7 +634,9 @@ var GoogleMapsOptions = {
    "iconsSize" : {{ design.icons and design.icons.size and design.icons.size.number ? design.icons.size.number : \'null\' }},
 	    "iconsColor" : "{{ design.icons.color|raw }}",
 		"postId": "%%POSTID%%",
-		"allowLiveGeocoding": true	
+		"locationCoordsNonce": ' . $coords_nonce . ',
+        "locationCoordsAjaxUrl": ' . $coords_ajax_url . ',
+        "allowLiveGeocoding": true
 };
 
 window.BricGoogleMapsLocations().update({
@@ -513,6 +648,8 @@ window.BricGoogleMapsLocations().update({
 ],],
 
 'onMountedElement' => [['script' => 'var GoogleMapsOptions = {
+    "dataSource": {{ content.data.data_source|json_encode|raw }},
+    "fitMapToLocations": {{ content.data.fit_locations|default(false)|json_encode|raw }},
     "center": {{ content.data.center|json_encode|raw }},
     "zoom": {{ content.data.zoom|json_encode|raw }},
     "type": {{ content.data.type|json_encode|raw }},
@@ -525,7 +662,9 @@ window.BricGoogleMapsLocations().update({
    "iconsSize" : {{ design.icons and design.icons.size and design.icons.size.number ? design.icons.size.number : \'null\' }},
 	    "iconsColor" : "{{ design.icons.color|raw }}",
 		"postId": "%%POSTID%%",
-		"allowLiveGeocoding": true	
+		"locationCoordsNonce": ' . $coords_nonce . ',
+        "locationCoordsAjaxUrl": ' . $coords_ajax_url . ',
+        "allowLiveGeocoding": true
 };
 
 window.BricGoogleMapsLocations().update({
@@ -566,7 +705,7 @@ window.BricGoogleMapsLocations().update({
 
     static function dynamicPropertyPaths()
     {
-        return [['accepts' => 'repeater', 'path' => 'content.data.locations_acf'], ['accepts' => 'repeater', 'path' => 'content.data.locations']];
+        return [['accepts' => 'repeater', 'path' => 'content.data.locations_acf'], ['accepts' => 'repeater', 'path' => 'content.data.locations'], ['accepts' => 'string', 'path' => 'content.data.posts.anchor_post_id']];
     }
 
     static function additionalClasses()

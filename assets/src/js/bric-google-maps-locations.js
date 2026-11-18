@@ -193,6 +193,49 @@
         });
     }
 
+    function queueLocationCoordinatesWrite(location, coordinates, runtimeOptions) {
+      const ajaxUrl = runtimeOptions.locationCoordsAjaxUrl || getAjaxUrl();
+      if (
+        !runtimeOptions.allowLiveGeocoding || !ajaxUrl || !runtimeOptions.locationCoordsNonce ||
+        !location.postId || !location.addressHash
+      ) {
+        return;
+      }
+
+      // Builder actions pass an explicit flag, URL and nonce, including when
+      // BreakdanceFrontend's builder detection is unavailable in the iframe.
+      const body = new URLSearchParams({
+        action: "bric_maps_location_coords_set",
+        nonce: runtimeOptions.locationCoordsNonce,
+        post_id: String(location.postId),
+        address: location.address,
+        address_hash: location.addressHash,
+        lat: String(coordinates.lat),
+        lng: String(coordinates.lng),
+      });
+
+      fetch(ajaxUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+        body: body.toString(),
+      })
+        .then(async (response) => {
+          const json = await response.json().catch(() => null);
+          if (!json?.success) {
+            console.warn("[BricGoogleMapsLocations] Failed to save location coordinates.", {
+              postId: location.postId,
+              response: json,
+            });
+          }
+        })
+        .catch(() => {
+          console.warn("[BricGoogleMapsLocations] Error while saving location coordinates.", {
+            postId: location.postId,
+          });
+        });
+    }
+
     async function fetchServerCachedCoordinates(addresses, postId) {
       const ajaxUrl = getAjaxUrl();
       if (!ajaxUrl || !postId || !addresses.length) {
@@ -674,7 +717,8 @@
         if (location.icon_color) {
           return location.icon_color;
         } else if (options.iconsColor) {
-          return getColorValue(options.iconsColor);
+          return getColorValue(options.iconsColor) ||
+            (options.dataSource === "posts" ? options.iconsColor : false);
         }
 
         return false;
@@ -740,6 +784,30 @@
       delete markersStore[id];
     }
 
+    function fitMapToMarkers(map, id, options) {
+      if (!options.fitMapToLocations) {
+        return;
+      }
+
+      // fitBounds() on a map that has not finished initialising (no projection
+      // yet) computes a world-level zoom. Wait for the projection; unlike
+      // "idle", it does not depend on map tiles loading.
+      if (!map.getProjection()) {
+        google.maps.event.addListenerOnce(map, "projection_changed", () => fitMapToMarkers(map, id, options));
+        return;
+      }
+
+      const markers = getGlobalMapStore("googleMapsMarkers", {})[id] || [];
+      if (markers.length === 1) {
+        map.setCenter(markers[0].position);
+        map.setZoom(options.singleLocationZoom);
+      } else if (markers.length > 1) {
+        const bounds = new google.maps.LatLngBounds();
+        markers.forEach((marker) => bounds.extend(marker.position));
+        map.fitBounds(bounds);
+      }
+    }
+
     function plotMarker(map, position, location, options, id) {
       const markerOptions = {
         position,
@@ -787,6 +855,8 @@
           name: location.getAttribute("data-name"),
           address: location.getAttribute("data-address"),
           coordinates: location.getAttribute("data-coordinates"),
+          postId: parsePostId(location.getAttribute("data-post-id")),
+          addressHash: location.getAttribute("data-address-hash"),
           icon: svgElement ? svgElement.outerHTML : null,
           icon_color: svgColor,
           icon_size: location.getAttribute("data-icon-size"),
@@ -803,6 +873,8 @@
             location.getAttribute("data-name") || "",
             location.getAttribute("data-address") || "",
             location.getAttribute("data-coordinates") || "",
+            location.getAttribute("data-post-id") || "",
+            location.getAttribute("data-address-hash") || "",
             location.getAttribute("data-icon-color") || "",
             location.getAttribute("data-icon-size") || "",
             location.innerHTML || "",
@@ -871,6 +943,7 @@
     ) {
       const allowLiveGeocoding = Boolean(runtimeOptions.allowLiveGeocoding);
       const postId = parsePostId(runtimeOptions.postId);
+      const isRelatedPosts = runtimeOptions.dataSource === "posts";
 
       if (!locations.length) {
         locations = getLocations(id);
@@ -880,7 +953,7 @@
         return;
       }
 
-      if (allowLiveGeocoding && shouldForceRegeocodeForDuplicateCoordinates(locations)) {
+      if (!isRelatedPosts && allowLiveGeocoding && shouldForceRegeocodeForDuplicateCoordinates(locations)) {
         locations.forEach((location) => {
           location.coordinates = "";
           location._plotted = false;
@@ -910,7 +983,11 @@
         addressesNeedingLookup.push(location.address);
       });
 
-      const serverCache = await fetchServerCachedCoordinates(addressesNeedingLookup, postId);
+      // Related Posts coordinates arrive in SSR HTML. Never consult the host
+      // document's cache, including for locations still awaiting geocoding.
+      const serverCache = isRelatedPosts
+        ? {}
+        : await fetchServerCachedCoordinates(addressesNeedingLookup, postId);
 
       locations.forEach((location) => {
         if (location._plotted || !location.address) {
@@ -923,12 +1000,13 @@
         }
       });
 
-      if (allowLiveGeocoding) {
+      if (allowLiveGeocoding && !isRelatedPosts) {
         syncBuilderLocationCoordinates(id, locations);
       }
 
       // Frontend should only consume cached coordinates; geocoding is editor-only.
       if (!allowLiveGeocoding) {
+        fitMapToMarkers(mapInstance, id, options);
         return;
       }
 
@@ -950,7 +1028,10 @@
       });
 
       if (!uniqueAddressesToGeocode.length) {
-        syncBuilderLocationCoordinates(id, locations);
+        if (!isRelatedPosts) {
+          syncBuilderLocationCoordinates(id, locations);
+        }
+        fitMapToMarkers(mapInstance, id, options);
         return;
       }
 
@@ -962,13 +1043,18 @@
         try {
           const coordinates = await geocodeAddress(geocoder, address);
           serverCache[normalizedAddress] = coordinates;
-          queueServerCacheWrite(address, coordinates, postId);
+          if (!isRelatedPosts) {
+            queueServerCacheWrite(address, coordinates, postId);
+          }
 
           locations.forEach((location) => {
             if (
               !location._plotted &&
               normalizeAddress(location.address) === normalizedAddress
             ) {
+              if (isRelatedPosts && location.postId) {
+                queueLocationCoordinatesWrite(location, coordinates, runtimeOptions);
+              }
               markAndPlotLocation(location, coordinates, mapInstance, options, id);
             }
           });
@@ -981,7 +1067,10 @@
         }
       }
 
-      syncBuilderLocationCoordinates(id, locations);
+      if (!isRelatedPosts) {
+        syncBuilderLocationCoordinates(id, locations);
+      }
+      fitMapToMarkers(mapInstance, id, options);
     }
 
     function getCustomGlobalIcon(selector) {
@@ -1024,6 +1113,7 @@
       };
 
       const userOptions = {
+        dataSource: options.dataSource,
         zoom: getZoomNumber(options.zoom, 8),
         mapTypeId: options.type || "roadmap",
         streetViewControl: options.streetViewControl || false,
@@ -1035,6 +1125,8 @@
         iconsColor: options.iconsColor || false,
         iconsSize: options.iconsSize || false,
         customIcon: getCustomGlobalIcon(selector),
+        fitMapToLocations: Boolean(options.fitMapToLocations),
+        singleLocationZoom: getZoomNumber(options.zoom, 14) || 14,
       };
 
       const userCenter = parseCoordinates(options.center);
@@ -1082,7 +1174,12 @@
         addLocations(mapInstance, locations, mapOptions, id, {
           allowLiveGeocoding,
           postId,
+          dataSource: options.dataSource,
+          locationCoordsNonce: options.locationCoordsNonce,
+          locationCoordsAjaxUrl: options.locationCoordsAjaxUrl,
         });
+      } else {
+        fitMapToMarkers(mapInstance, id, mapOptions);
       }
 
       stateStore[id] = {
