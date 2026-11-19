@@ -1,4 +1,8 @@
-# Breakdance 2 to 3 preflight
+# Breakdance 2 to 3 upgrade toolkit
+
+Use the [terminal staging runner](#run-the-upgrade-on-isolated-staging) to
+checkpoint, upgrade, verify, and roll back a restored site. The read-only
+preflight below can also run independently.
 
 This portable Python script checks a WordPress/Bedrock checkout, public pages,
 existing HTML/CSS snapshots, and optional native document exports. It reports
@@ -178,6 +182,150 @@ icon schemas/data, fallback IDs/settings, documents, globals and design switches
 There is intentionally no automatic activation, reset or guessed-version repair.
 Never synchronize a staged commerce database back over live transactions.
 
+## Run the upgrade on isolated staging
+
+Restore the latest available full database and file backups to a fresh local
+staging copy while its original v2 package is still installed. Use the deployed
+code revision, theme, and plugin versions from the source site. If the file
+backup predates the database, reconcile the changed files before recording the
+baseline. At Perkins Cove this included recent uploads referenced by the newer
+database. Include the original CSS, fonts, and images. Use a serialization-aware
+URL rewrite, and check for escaped URLs in saved markup and CSS that may still
+point at the source site or an older staging port.
+
+Serve the copy on a literal loopback address and use a dedicated socket-only
+MySQL or MariaDB instance inside the staging root. Make outgoing mail, payment
+credentials, webhooks, POS integrations, shared cache backends, and scheduled
+workers inert before letting WordPress boot. Use a staging administrator. Pause
+other editors and background workers while taking the checkpoint or changing
+packages and restoring the database.
+
+The staging runner requires Python 3.9+, WP-CLI 2.12 or later with its SQL
+clients, curl, Node.js 18+, and Chromium or Chrome. It launches a private
+headless profile from the terminal. The HTTP server must serve the same
+WordPress directory that WP-CLI uses, which the runner checks with a temporary
+local file. In the clone's `wp-config.php`, set these literal constants. For a
+Bedrock clone, use the local `web/wp-config.php` that loads `web/wp` and serves
+`web/app` as the content directory.
+
+```php
+define('CREARE_BD_UPGRADE_STAGING', true);
+define('WP_ENVIRONMENT_TYPE', 'staging');
+define('DISABLE_WP_CRON', true);
+define('WP_HTTP_BLOCK_EXTERNAL', true);
+define('DB_NAME', 'shop_bd_stage');
+define('DB_HOST', 'localhost:/private/tmp/shop-bd-stage/mysql.sock');
+define('WP_HOME', 'http://127.0.0.1:8802');
+define('WP_SITEURL', 'http://127.0.0.1:8802/wp');
+```
+
+Use the same HOME and SITEURL for a conventional install at the root URL.
+Create a private JSON configuration outside the webroot. Adjust the selectors,
+routes, upload URL, and the font families to match the restored v2 design. Set
+`chrome` to the executable path if needed. Otherwise the runner uses `chromium`
+on PATH. Supply the trusted extracted vendor package and optionally the intended
+Bootstrap source package. Keep both packages and the run directory outside the
+staging root.
+
+```json
+{
+  "stage_root": "/private/tmp/shop-bd-stage",
+  "wordpress": "web/wp",
+  "db_socket": "mysql.sock",
+  "db_name": "shop_bd_stage",
+  "url": "http://127.0.0.1:8802",
+  "admin": "staging-admin",
+  "breakdance_package": "/private/tmp/packages/breakdance-3.0.2",
+  "bootstrap_package": "/private/tmp/packages/breakdance-bootstrap-1.4.3",
+  "snapshot_source": {
+    "database_at": "2026-11-19T06:00:00Z",
+    "files_at": "2026-11-18T06:00:00Z",
+    "notes": "Matched staging code and reconciled uploads to the database backup."
+  },
+  "visual": {
+    "viewports": {"desktop": [1280, 800], "mobile": [390, 844]},
+    "geometry_tolerance_px": 0.5,
+    "routes": [
+      {
+        "name": "home",
+        "path": "/",
+        "checks": {
+          "h1": ["font-family", "font-size", "height"],
+          ".bde-header-builder": ["y", "height"],
+          ".bde-header-builder__header-builder-border-bottom": ["display"],
+          ".bde-button a": ["color", "background-color"]
+        },
+        "fonts": ["Gilda Display", "Raleway"],
+        "required_assets": ["/app/uploads/2026/11/hero.jpeg"],
+        "max_changed_pixels_percent": 1,
+        "mobile_menu": {"button": ".breakdance-menu-toggle", "open": ".site-menu.is-open"}
+      },
+      {
+        "name": "shop",
+        "path": "/shop/",
+        "checks": {
+          ".bde-header-builder__header-builder-border-bottom": ["display"],
+          ".woocommerce-loop-product__title": ["font-family", "font-size"]
+        }
+      }
+    ]
+  }
+}
+```
+
+Run the commands in order through `upgrade`, then use `verify` or `rollback`
+as needed. Keep the run directory private. It contains a full SQL dump, original
+plugin directories, screenshots, HTML, and CSS from the local copy.
+
+```sh
+tool=tools/breakdance-upgrade/staging.py
+config=/private/tmp/shop-bd-stage.json
+run=/private/tmp/shop-bd-2-to-3-checkpoint
+
+python3 "$tool" --config "$config" --run-dir "$run" snapshot
+python3 "$tool" --config "$config" --run-dir "$run" upgrade
+python3 "$tool" --config "$config" --run-dir "$run" verify
+python3 "$tool" --config "$config" --run-dir "$run" rollback --yes
+```
+
+- `snapshot` checks registered uploads and derivatives, the installed v2
+  version, and genuine native markers. It records active plugin and theme
+  versions, captures the v2 baseline, and saves the entire staging database
+  and the plugin trees that will change, with SHA-256 hashes. The backup
+  timestamps are your source provenance.
+- `upgrade` verifies the checkpoint, replaces the selected plugin packages,
+  lets Breakdance run its native upgrade, and regenerates native CSS. It
+  checks saved documents, design settings, fallbacks, and icon data. It
+  attempts to restore the checkpoint if installation, native initialization,
+  or CSS regeneration fails.
+- `verify` compares the configured computed styles and geometry, loaded fonts,
+  required assets, mobile menu, HTTP responses, and overflow. It saves paired
+  screenshots and runs the CSS audit against captured HTML and CSS. The optional
+  screenshot threshold flags the percentage of visible viewport pixels whose
+  RGB channels changed by more than 12 levels. Use this for stable routes.
+  The headless renderer blocks other origins. Serve critical assets locally so
+  missing external stylesheets and fonts cannot silently pass.
+- `rollback --yes` restores the saved database and plugin trees, removes
+  tables created by the upgrade inside the dedicated staging prefix, regenerates
+  v2 CSS, and reruns the visual checks. The checkpoint remains available. Keep
+  the supplied full file snapshot for any independent filesystem changes made
+  during testing.
+
+Exit status 0 means the requested step passed. Status 2 means review is needed
+and points to the verification report. After an upgrade it leaves the clone on
+v3 so you can inspect the differences, make targeted builder edits, and rerun
+`verify`. Status 1 indicates a failed or refused operation. If a run was
+interrupted during an upgrade or rollback, use the same configuration and
+checkpoint for recovery.
+
+For a store, include the homepage and interior header, shop filters, a product,
+cart and checkout in the route set. Separately test the editor preview and
+native re-save on the affected documents, and use synthetic items and an inert
+gateway to compare a populated cart and checkout. Compare tax and shipping
+as well as line totals. At Perkins Cove the home header border needed one
+authored selector correction, while the interior border and reused icon IDs
+could retain their native settings.
+
 ## Repeatable isolated fixture
 
 `staging-fixture.php` is a separate, mutating test helper. Use a new disposable
@@ -204,7 +352,7 @@ Read WebMCP tools afresh after navigation, and use `builder_get_document_info` b
 acting. Inspect stored values afterward and distinguish valid parent-reference
 normalization from actual control/ID/content changes.
 
-## Reusable upgrade procedure
+## Manual compatibility checklist
 
 1. Capture a restorable code/database backup and a representative desktop/mobile
    visual baseline in staging. Record native plugin, migration, and selector state.
@@ -214,8 +362,7 @@ normalization from actual control/ID/content changes.
    workflow, scoped to Breakdance and the shared Bootstrap release. Verify actual
    installed versions against the lock. On tested V3, `wp breakdance clear_cache`
    is the native CLI cache operation; inspect the installed help before using it.
-   Run writes through an authorized API or normal deployment helper, then purge
-   the site's external page/optimization caches and warm representative pages.
+   Purge staging page and optimization caches and warm representative pages.
    Keep native legacy selectors unless conversion is independently wanted.
 4. Fix confirmed extension conflicts at their owning source. Change only verified
    authored CSS fields through supported content APIs with revision/precondition
@@ -224,8 +371,8 @@ normalization from actual control/ID/content changes.
 5. Run preflight again. Verify computed styles plus desktop/tablet/mobile navigation,
    shop filters, products, populated cart/checkout, forms, and browser errors. Check
    editor preview and re-save behavior. HTTP 200 and asset checks alone are insufficient.
-6. Deploy the reviewed changes, warm representative pages, and verify the actual
-   runtime revision. Retain the baseline and the per-site changes for rollback.
+6. Record the tested staging revision and the site-specific changes. Retain the
+   baseline and checkpoint for recovery.
 
 Rollback means restoring the reviewed code/content state through normal recovery
 paths, regenerating the native CSS/dependency caches, purging external caches, and
