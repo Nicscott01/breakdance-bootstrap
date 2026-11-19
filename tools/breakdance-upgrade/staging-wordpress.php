@@ -48,6 +48,12 @@ if ($operation === 'target') {
         }
         $activePlugins[$entry] = $file && is_readable($file) ? get_file_data($file, ['version' => 'Version'])['version'] : null;
     }
+    $identity = $target + ['plugins' => $plugins, 'prefix' => $wpdb->prefix, 'site_url' => site_url()];
+    echo wp_json_encode(['identity' => $identity, 'tables' => $tables, 'active_plugins' => $activePlugins]);
+    return;
+}
+
+if ($operation === 'themes') {
     $theme = wp_get_theme();
     $themes = [];
     foreach (array_filter([$theme, $theme->parent()]) as $currentTheme) {
@@ -57,9 +63,7 @@ if ($operation === 'target') {
         }
         $themes[$currentTheme->get_stylesheet()] = $currentTheme->exists() && $directory ? $currentTheme->get('Version') : null;
     }
-    $identity = $target + ['plugins' => $plugins, 'prefix' => $wpdb->prefix, 'site_url' => site_url()];
-    echo wp_json_encode(['identity' => $identity, 'tables' => $tables,
-        'components' => ['plugins' => $activePlugins, 'themes' => $themes]]);
+    echo wp_json_encode((object) $themes);
     return;
 }
 
@@ -74,8 +78,9 @@ if ($operation !== 'content') {
     WP_CLI::error('Unknown staging inspection operation.');
 }
 
-$prefix = \Breakdance\BreakdanceOxygen\Strings\__bdox('meta_prefix');
-$metaNames = [$prefix . 'data', $prefix . 'template_settings', $prefix . 'futurelayer_meta'];
+$postMetaPrefix = \Breakdance\BreakdanceOxygen\Strings\__bdox('_meta_prefix');
+$optionPrefix = \Breakdance\BreakdanceOxygen\Strings\__bdox('meta_prefix');
+$metaNames = [$postMetaPrefix . 'data', $postMetaPrefix . 'template_settings', $postMetaPrefix . 'futurelayer_meta'];
 $options = [
     'global_settings_json_string', 'presets_json_string', 'breakdance_classes_json_string',
     'oxy_selectors', 'variables_json_string',
@@ -91,7 +96,7 @@ if ($wpdb->last_error) {
 $globals = $wpdb->get_results($wpdb->prepare(
     "SELECT option_name, SHA2(option_value, 256) AS digest FROM $wpdb->options
      WHERE option_name IN (%s, %s, %s, %s, %s) ORDER BY option_name",
-    ...array_map(static fn($name) => $prefix . $name, $options)
+    ...array_map(static fn($name) => $optionPrefix . $name, $options)
 ), ARRAY_A);
 if ($wpdb->last_error) {
     WP_CLI::error('Could not read saved Breakdance settings.');

@@ -28,6 +28,15 @@ class StagingTests(unittest.TestCase):
             staging.Stage.gate(stage)
         stage.info.assert_not_called()
 
+    def test_theme_inventory_loads_plugin_registrations_after_target_checks(self):
+        plugins = {"breakdance/plugin.php": "2.8.3"}
+        themes = {"breakdance-zero": "1.0.0"}
+        stage = Mock()
+        stage.info.return_value = themes
+        self.assertEqual(staging.Stage.components(stage, {"active_plugins": plugins}),
+                         {"plugins": plugins, "themes": themes})
+        stage.info.assert_called_once_with("themes", "--skip-themes")
+
     def test_evidence_filenames_and_routes_stay_in_scope(self):
         for name, path in (
             ("../shop", "/shop/"),

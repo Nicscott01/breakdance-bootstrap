@@ -211,11 +211,14 @@ class Stage:
         require(networking_disabled in ("1", "ON") and Path(socket).resolve() == self.socket
                 and Path(datadir).is_dir() and inside(Path(datadir).resolve(), self.root),
                 "The database service must use the staging socket and a staging data directory with networking disabled.")
-        return self.info("target", skip_plugins=True)
+        return self.info("target", "--skip-plugins", "--skip-themes")
 
-    def info(self, action, skip_plugins=False):
-        prefix = ("--skip-plugins", "--skip-themes") if skip_plugins else ()
-        return self.wp_json(*prefix, "eval-file", str(TOOL / "staging-wordpress.php"), action)
+    def info(self, action, *flags):
+        return self.wp_json(*flags, "eval-file", str(TOOL / "staging-wordpress.php"), action)
+
+    def components(self, target):
+        # Breakdance registers its bundled Zero Theme when the plugin loads.
+        return {"plugins": target["active_plugins"], "themes": self.info("themes", "--skip-themes")}
 
     def observations(self):
         return self.wp_json("eval-file", str(TOOL / "wordpress-observations.php"))
@@ -353,7 +356,6 @@ def target_matches(stage, record):
 
 def snapshot(stage):
     target = stage.gate()
-    components = target["components"]
     packages = stage.package_inputs()
     source = check_source(stage.config)
     plugins = Path(target["identity"]["plugins"])
@@ -361,6 +363,7 @@ def snapshot(stage):
     require(versions["breakdance"].startswith("2."), "A new snapshot must start on Breakdance v2.")
     runtime = stage.observations()
     observed_version(runtime, versions["breakdance"])
+    components = stage.components(target)
     require(all(version is not None for group in components.values() for version in group.values()),
             "An active plugin or theme is missing from the staging files.")
     if "breakdance-bootstrap" in versions:
@@ -383,8 +386,8 @@ def snapshot(stage):
         require(tree_fingerprint(originals / slug) == trees[slug], f"{slug} changed during its backup.")
     database = stage.run_dir / "database.sql.gz"
     with pause_http(stage):
-        target = stage.info("target", skip_plugins=True)
-        require(target["components"] == components, "Staging plugins or themes changed during the baseline.")
+        target = stage.info("target", "--skip-plugins", "--skip-themes")
+        require(stage.components(target) == components, "Staging plugins or themes changed during the baseline.")
         require(not content_changed(content, stage.info("content")),
                 "Saved Breakdance data changed during the baseline. Pause other editors and start a new run.")
         db_snapshot(stage, database)
@@ -480,7 +483,7 @@ def verify(stage, record, rollback=False):
     expected_plugins = dict(components["plugins"])
     for slug, version in expected.items():
         expected_plugins[f"{slug}/{PLUGINS[slug]}"] = version
-    if target["components"] != {"plugins": expected_plugins, "themes": components["themes"]}:
+    if stage.components(target) != {"plugins": expected_plugins, "themes": components["themes"]}:
         changes.append("Active plugin or theme versions differ from the versions expected for this phase.")
     if not rollback:
         native_changes = set(record.get("native_changes", []))
@@ -539,7 +542,7 @@ def upgrade(stage, record):
     validate_checkpoint(stage, record)
     packages = stage.package_inputs()
     require(packages.keys() == record["trees"].keys(), "The package selection differs from the checkpoint.")
-    require(target["components"] == record["components"],
+    require(stage.components(target) == record["components"],
             "Active plugins or themes changed after the checkpoint. Capture a new baseline.")
     plugins = Path(target["identity"]["plugins"])
     require(all(tree_fingerprint(plugins / slug) == digest for slug, digest in record["trees"].items()),
