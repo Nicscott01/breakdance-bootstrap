@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "validated_date": "2026-11-19",
+  "scope": "Disposable native WordPress fixtures; no production database or site deployment",
+  "packages": {
+    "wordpress": "7.1.2",
+    "breakdance": [
+      "2.8.3",
+      "3.0.2"
+    ],
+    "bootstrap_candidate": "1.4.3"
+  },
+  "shared_spacing": {
+    "desktop": {
+      "controls": [
+        {
+          "fontSize": "35px",
+          "id": "fixture-heading-override",
+          "marginBottom": "35px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-button-override",
+          "marginBottom": "32px"
+        },
+        {
+          "fontSize": "35px",
+          "id": "fixture-heading-default",
+          "marginBottom": "17.5px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-paragraphs",
+          "marginBottom": "0px"
+        }
+      ],
+      "paragraphs": [
+        "9px",
+        "9px"
+      ],
+      "viewport": 1264
+    },
+    "phone": {
+      "controls": [
+        {
+          "fontSize": "28px",
+          "id": "fixture-heading-override",
+          "marginBottom": "35px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-button-override",
+          "marginBottom": "24px"
+        },
+        {
+          "fontSize": "28px",
+          "id": "fixture-heading-default",
+          "marginBottom": "14px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-paragraphs",
+          "marginBottom": "0px"
+        }
+      ],
+      "paragraphs": [
+        "9px",
+        "9px"
+      ],
+      "viewport": 400
+    },
+    "v2_original_desktop": {
+      "controls": [
+        {
+          "fontSize": "35px",
+          "id": "fixture-heading-override",
+          "marginBottom": "35px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-button-override",
+          "marginBottom": "32px"
+        },
+        {
+          "fontSize": "35px",
+          "id": "fixture-heading-default",
+          "marginBottom": "17.5px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-paragraphs",
+          "marginBottom": "0px"
+        }
+      ],
+      "overflow": 0,
+      "paragraphs": [
+        "9px",
+        "9px"
+      ],
+      "viewport": 1280
+    },
+    "v2_corrected_desktop": {
+      "controls": [
+        {
+          "fontSize": "35px",
+          "id": "fixture-heading-override",
+          "marginBottom": "35px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-button-override",
+          "marginBottom": "32px"
+        },
+        {
+          "fontSize": "35px",
+          "id": "fixture-heading-default",
+          "marginBottom": "17.5px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-paragraphs",
+          "marginBottom": "0px"
+        }
+      ],
+      "overflow": 0,
+      "paragraphs": [
+        "9px",
+        "9px"
+      ],
+      "viewport": 1280
+    },
+    "v2_template_byte_equivalence": true,
+    "editor_native_mcp_save": true,
+    "editor_reload_parity": true,
+    "subsequent_client_save_tree_stable": true,
+    "v2_nonempty_editor_metadata_preserved": true
+  },
+  "upgrade_replay": {
+    "before": "2.8.3",
+    "after": "3.0.2",
+    "saved_tree_preserved": true,
+    "native_markers": {
+      "breakdance_last_migrated_version": "3.0.2",
+      "breakdance_plugin_has_already_been_activated": "yes"
+    },
+    "desktop": {
+      "controls": [
+        {
+          "fontSize": "35px",
+          "id": "fixture-heading-override",
+          "marginBottom": "35px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-button-override",
+          "marginBottom": "32px"
+        },
+        {
+          "fontSize": "35px",
+          "id": "fixture-heading-default",
+          "marginBottom": "17.5px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-paragraphs",
+          "marginBottom": "0px"
+        }
+      ],
+      "overflow": 0,
+      "paragraphs": [
+        "9px",
+        "9px"
+      ],
+      "viewport": 1280
+    },
+    "phone": {
+      "controls": [
+        {
+          "fontSize": "28px",
+          "id": "fixture-heading-override",
+          "marginBottom": "35px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-button-override",
+          "marginBottom": "24px"
+        },
+        {
+          "fontSize": "28px",
+          "id": "fixture-heading-default",
+          "marginBottom": "14px"
+        },
+        {
+          "fontSize": "16px",
+          "id": "fixture-paragraphs",
+          "marginBottom": "0px"
+        }
+      ],
+      "overflow": 0,
+      "paragraphs": [
+        "9px",
+        "9px"
+      ],
+      "viewport": 390
+    }
+  },
+  "initialization": {
+    "native_reset_left_both_markers_missing": true,
+    "cache_refresh_did_not_repair_markers": true,
+    "custom_icon_sets_before": 1,
+    "custom_icon_sets_after_native_initialization": 0,
+    "native_initialization_forced_switches": {
+      "is_theme_disabled": true,
+      "enable_skip_link": true,
+      "modern_normalize_enabled": true
+    },
+    "native_initialization_replaced_fallback_ids": true,
+    "snapshot_rollback_verified": true,
+    "historical_cause_on_other_sites": "Not established; do not infer a site ran Total Reset"
+  },
+  "fixture_guards": {
+    "clean_install_seed_allowed": true,
+    "authored_header_blocks_seed": true
+  },
+  "limits": [
+    "This validates shared Bootstrap/native controls, not arbitrary authored site CSS or a site-specific render adapter.",
+    "No automatic marker repair, reset/reactivation, fleet rollout, or actual order/payment is included.",
+    "New Breakdance releases need their own contract and staging checks."
+  ]
+}

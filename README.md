@@ -1,6 +1,19 @@
 # Breakdance Bootstrap Plugin
 Bootstrap features for Breakdance sites
 
+## Breakdance 2 to 3 upgrades
+
+Version 1.4.3 keeps the existing spacing defaults on V2 and lets native element
+controls override those defaults on V3. Palette scope and other extensions' CSS
+are preserved. The source change was validated with native controls, the live
+builder preview, editor re-saving, and a real 2.8.3 to 3.0.2 upgrade on isolated
+WordPress 7.1.2 fixtures.
+
+See [the reusable upgrade workflow](tools/breakdance-upgrade/README.md) for the
+read-only preflight, runtime observations, guarded fixture, cache/rollback steps,
+and missing-initialization-marker recovery gate. These tools do not automatically
+rewrite a site's custom CSS, activate/reset Breakdance, or deploy other sites.
+
 ## Google Maps Locations V2: Related Posts
 
 Choose **Related Posts** in the element's Data Source control to build pins from
