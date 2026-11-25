@@ -4,21 +4,21 @@
     {% endfor %}
 }
 
-.breakdance p,
+%%BOOTSTRAP_DEFAULT_SCOPE%% p,
 .breakdance-rich-text-styles>p:last-child  {
     {{ macros.spacing_margin_y(settings.bric_global_spacing.spacing.paragraphs) }}
 }
 
-.breakdance .bde-heading,
-.breakdance .bde-rich-text h2,
-.breakdance .bde-rich-text h3,
-.breakdance .bde-rich-text h4,
-.breakdance .bde-rich-text h5,
-.breakdance .bde-rich-text h6 {
+%%BOOTSTRAP_DEFAULT_SCOPE%% .bde-heading,
+%%BOOTSTRAP_DEFAULT_SCOPE%% .bde-rich-text h2,
+%%BOOTSTRAP_DEFAULT_SCOPE%% .bde-rich-text h3,
+%%BOOTSTRAP_DEFAULT_SCOPE%% .bde-rich-text h4,
+%%BOOTSTRAP_DEFAULT_SCOPE%% .bde-rich-text h5,
+%%BOOTSTRAP_DEFAULT_SCOPE%% .bde-rich-text h6 {
     {{ macros.spacing_margin_y(settings.bric_global_spacing.spacing.headings) }}
 }
 
-.breakdance .bde-button {
+%%BOOTSTRAP_DEFAULT_SCOPE%% .bde-button {
     {{ macros.spacing_margin_y(settings.bric_global_spacing.spacing.buttons) }}
 }
 

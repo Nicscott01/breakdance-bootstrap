@@ -164,6 +164,14 @@ add_filter('breakdance_global_settings_css_twig_template_append', function ($app
 
     $global_css_twig = file_get_contents( __DIR__ . '/global-settings/css.twig' );
 
+    // V2 needs its original scope to beat the legacy element resets. V3 removes
+    // that element scope, so shared spacing must become a lower-specificity default.
+    $use_v3_spacing_scope = defined('__BREAKDANCE_VERSION')
+        && version_compare(__BREAKDANCE_VERSION, '3.0', '>=')
+        && version_compare(__BREAKDANCE_VERSION, '4.0', '<');
+    $default_spacing_scope = $use_v3_spacing_scope ? ':where(.breakdance)' : '.breakdance';
+    $global_css_twig = str_replace('%%BOOTSTRAP_DEFAULT_SCOPE%%', $default_spacing_scope, $global_css_twig);
+
     if ( ! class_exists( '\\FluentBooking\\App\\App' ) ) {
         return $appendedTwigTemplate . $global_css_twig;
     }
