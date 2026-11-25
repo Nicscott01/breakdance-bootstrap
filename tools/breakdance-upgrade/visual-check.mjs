@@ -130,8 +130,49 @@ async function until(check, subject) {
     throw Error('Timed out waiting for ' + subject);
 }
 
-async function measure(checks) {
-    await Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 3500))]);
+async function waitForCaptureAssets() {
+    const timeoutMs = 3500;
+    const timeout = () => new Promise(resolve => setTimeout(resolve, timeoutMs));
+    await Promise.race([document.fonts.ready, timeout()]);
+
+    const pending = new Set([...document.images].filter(image => {
+        const rect = image.getBoundingClientRect();
+        const hasSource = image.currentSrc || image.getAttribute('src') || image.getAttribute('srcset')
+            || image.closest('picture')?.querySelector('source[srcset]');
+        return hasSource && rect.width > 0 && rect.height > 0
+            && rect.right > 0 && rect.bottom > 0 && rect.left < innerWidth && rect.top < innerHeight
+            && image.checkVisibility({ opacityProperty: true, visibilityProperty: true });
+    }));
+    if (!pending.size) return [];
+
+    const decoded = Promise.all([...pending].map(async image => {
+        if (!image.complete) {
+            await new Promise(resolve => {
+                image.addEventListener('load', resolve, { once: true });
+                image.addEventListener('error', resolve, { once: true });
+            });
+        }
+        try {
+            await image.decode();
+            pending.delete(image);
+        } catch {
+            // Report images the browser could not decode.
+        }
+    }));
+    const painted = decoded.then(() => new Promise(resolve => {
+        requestAnimationFrame(() => requestAnimationFrame(resolve));
+    }));
+    await Promise.race([painted, timeout()]);
+    return [...pending].map(image => {
+        const source = image.currentSrc || image.src;
+        if (!source || /^(data|blob|about):/.test(source)) return '(inline or unresolved source)';
+        if (!URL.canParse(source)) return '(invalid source)';
+        const url = new URL(source);
+        return url.origin === location.origin ? url.pathname : null;
+    }).filter(Boolean);
+}
+
+function measure(checks) {
     const elements = {};
     for (const [selector, properties] of Object.entries(checks)) {
         const element = document.querySelector(selector);
@@ -191,6 +232,11 @@ try {
         if (exceptionDetails) throw Error(exceptionDetails.text);
         return value.value;
     };
+    const waitForCapture = async label => {
+        for (const source of await evaluate('(' + waitForCaptureAssets.toString() + ')()')) {
+            result.issues.push(label + ' did not render visible image ' + source);
+        }
+    };
     await cdp('Page.enable');
     await cdp('Page.setLifecycleEventsEnabled', { enabled: true });
     await cdp('Network.enable', { maxTotalBufferSize: 50 * 1024 * 1024 });
@@ -215,6 +261,7 @@ try {
             if (!await evaluate('location.origin === ' + JSON.stringify(origin))) {
                 throw Error('Navigation left the staging origin.');
             }
+            await waitForCapture(label);
             const checks = route.checks || { body: ['font-family'] };
             const metrics = await evaluate('(' + measure.toString() + ')(' + JSON.stringify(checks) + ')');
             const document = [...resources.values()].find(item => item.type === 'Document'
@@ -282,6 +329,7 @@ try {
                     await until(() => evaluate('(() => { const item = document.querySelector('
                         + JSON.stringify(menu.open) + '); return !!item && item.getClientRects().length > 0'
                         + ' && getComputedStyle(item).visibility === "visible"; })()'), 'mobile menu');
+                    await waitForCapture(label + ' mobile menu');
                     metrics.mobile_menu_opened = true;
                     const menuScreenshot = await cdp('Page.captureScreenshot', { format: 'png', fromSurface: true });
                     await writeFile(join(directory, label + '-menu-open.png'), Buffer.from(menuScreenshot.data, 'base64'));

@@ -315,6 +315,9 @@ python3 "$tool" --config "$config" --run-dir "$run" rollback --yes
   screenshots and runs the CSS audit against captured HTML and CSS. The optional
   screenshot threshold flags the percentage of visible viewport pixels whose
   RGB channels changed by more than 12 levels. Use this for stable routes.
+  Before each screenshot, the browser gives images intersecting the viewport
+  up to 3.5 seconds to load and decode, including lazy-loaded images. It reports
+  visible local and inline images that fail to render by then.
   The headless renderer blocks other origins. Serve critical assets locally so
   missing external stylesheets and fonts cannot silently pass.
 - `rollback --yes` restores the saved database and plugin trees, removes
