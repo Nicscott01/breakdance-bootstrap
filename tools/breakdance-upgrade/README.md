@@ -117,10 +117,22 @@ without inspecting the intended design.
 | Local code differs from lockfile or reviewed runtime | Deployment review prerequisite; inspect the exact package first. |
 | Shared spacing defaults outweigh element controls | Creare Bootstrap extension; fix its source with deliberately low-specificity defaults. |
 | Broad link color or weak SVG custom rule | Authored CSS; inspect computed styles and propose a scoped source correction. |
+| Inherited text color or alignment changes | Authored CSS and native element defaults; compare the winning declarations at each viewport. |
 | Body class concatenated with `%%SELECTOR%%` | Authored CSS; verify the body ancestor, then correct the smallest saved CSS field. |
 | Unresolved legacy Google font slug | Font registry issue; may predate v3. Confirm custom registrations before mapping it. |
 | Missing search widget initialization | Dependency/rendering issue; the Search Form V1 JavaScript was identical in 2.8.3 and 3.0.2. |
 | Custom FacetWP checkbox, calendar link, zero-price wallet error | Site/integration maintenance; never general migration defaults. |
+
+Check whether a broad `color: inherit` declaration starts overriding semantic
+text colors after V3 removes the `.breakdance` prefix from generated selectors.
+For native Text and Rich Text elements that consume `--bde-text-color` in both
+installed versions, `--bde-text-color: currentColor` can preserve inherited color
+as a fallback while explicit element colors remain free to win. Confirm the
+compiled declarations and computed colors in both versions before saving.
+
+Check the element that actually renders the text when inherited alignment changes.
+Set the intended alignment on that element at the affected breakpoints. Compare
+both a single line and wrapped text before saving the smallest authored rule.
 
 The shared 1.4.3 correction is version-aware. Its own template uses
 `%%BOOTSTRAP_DEFAULT_SCOPE%%`, resolved by its append callback to `.breakdance` on
