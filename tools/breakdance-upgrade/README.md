@@ -326,7 +326,10 @@ python3 "$tool" --config "$config" --run-dir "$run" rollback --yes
   the supplied full file snapshot for any independent filesystem changes made
   during testing.
 
-After native CSS regeneration, `upgrade` and `rollback` send two bounded GET
+`upgrade` and `rollback` complete Breakdance's pending admin-only CSS cache
+migration before capture. An admin or AJAX request can otherwise reset the
+cache between two public requests after a package swap. After native CSS
+regeneration, the runner sends two bounded GET
 requests to each configured route on the verified loopback site before the
 browser comparison. Each verification directory keeps the first response body
 and both request statuses under `warmup/`. Redirect responses are recorded

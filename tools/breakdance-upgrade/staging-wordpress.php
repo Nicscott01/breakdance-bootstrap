@@ -68,8 +68,26 @@ if ($operation === 'themes') {
 }
 
 if ($operation === 'clear-css') {
-    \Breakdance\Render\clearAllCssCachesAndDeleteCachedFiles();
-    \Breakdance\Render\generateCacheForGlobalSettings();
+    $cacheFlag = 'last_clear_css_cache_flag_value';
+    if (function_exists('\\Breakdance\\Setup\\cleanCacheWhenCacheCountChanges')
+        && defined('__BREAKDANCE_CLEAR_CSS_CACHE_FLAG__')
+        && (int) \Breakdance\Data\get_global_option($cacheFlag) !== __BREAKDANCE_CLEAR_CSS_CACHE_FLAG__) {
+        // Complete the deferred admin cache migration before warming public routes.
+        require_once ABSPATH . 'wp-admin/includes/class-wp-screen.php';
+        $previousScreen = $GLOBALS['current_screen'] ?? null;
+        $GLOBALS['current_screen'] = WP_Screen::get('dashboard');
+        try {
+            \Breakdance\Setup\cleanCacheWhenCacheCountChanges();
+        } finally {
+            $GLOBALS['current_screen'] = $previousScreen;
+        }
+        if ((int) \Breakdance\Data\get_global_option($cacheFlag) !== __BREAKDANCE_CLEAR_CSS_CACHE_FLAG__) {
+            WP_CLI::error('The native Breakdance CSS cache migration did not complete.');
+        }
+    } else {
+        \Breakdance\Render\clearAllCssCachesAndDeleteCachedFiles();
+        \Breakdance\Render\generateCacheForGlobalSettings();
+    }
     echo '{}';
     return;
 }
