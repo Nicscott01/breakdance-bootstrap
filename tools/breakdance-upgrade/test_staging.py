@@ -3,7 +3,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import staging
 
@@ -47,6 +47,39 @@ class StagingTests(unittest.TestCase):
                 staging.parse_visual({"routes": [{"name": name, "path": path}]})
         with self.assertRaises(staging.StageError):
             staging.parse_visual({"routes": [{"name": "shop", "path": "/", "max_changed_pixels_percent": 120}]})
+
+    def test_warmup_records_initial_response_without_following_redirects(self):
+        origin = staging.loopback_origin("http://127.0.0.1:8802")
+        visual = staging.parse_visual({"routes": [{"name": "home", "path": "/"}]})
+
+        with TemporaryDirectory() as directory:
+            evidence = Path(directory) / "warmup"
+            seen = []
+
+            def curl(command, **kwargs):
+                self.assertEqual(command[0:2], ["curl", "--disable"])
+                self.assertIn("--no-location", command)
+                self.assertNotIn("--location", command)
+                self.assertEqual(command[-2:], ["--", origin + "/"])
+                self.assertEqual(command[command.index("--max-time") + 1], "10")
+                seen.append(command[command.index("--output") + 1])
+                if len(seen) == 1:
+                    Path(seen[-1]).write_text("<p>Redirect response</p>")
+                    return SimpleNamespace(stdout="302", returncode=0)
+                return SimpleNamespace(stdout="200", returncode=0)
+
+            with patch("staging.subprocess.run", side_effect=curl):
+                staging.warm_visual_routes(origin, visual["routes"], evidence)
+
+            first = evidence / "home-first.html"
+            self.assertEqual(seen, [str(first), "/dev/null"])
+            self.assertEqual(first.read_text(), "<p>Redirect response</p>")
+            self.assertEqual(staging.read_json(evidence / "responses.json"), {
+                "home": {"first_response": first.name, "requests": [
+                    {"http_status": 302, "curl_exit_code": 0},
+                    {"http_status": 200, "curl_exit_code": 0},
+                ]},
+            })
 
     def test_pixel_geometry_and_font_regressions_are_reported(self):
         selector = ".bde-header-builder"

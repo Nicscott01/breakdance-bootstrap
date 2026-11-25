@@ -151,6 +151,29 @@ def package_version(slug, path):
     return version
 
 
+def warm_visual_routes(origin, routes, directory):
+    directory.mkdir(mode=0o700)
+    evidence = {}
+    for route in routes:
+        first_response = directory / f"{route['name']}-first.html"
+        responses = []
+        # Prime the template and page caches before taking a separate browser capture.
+        for output in (first_response, os.devnull):
+            response = subprocess.run(
+                ["curl", "--disable", "--noproxy", "*", "--globoff", "--no-location",
+                 "--proto", "=http", "--silent", "--max-time", "10", "--max-filesize", "10485760",
+                 "--write-out", "%{http_code}", "--output", str(output), "--", origin + route["path"]],
+                stdout=subprocess.PIPE, text=True, cwd="/",
+            )
+            responses.append({"http_status": int(response.stdout or 0) or None,
+                              "curl_exit_code": response.returncode})
+        evidence[route["name"]] = {
+            "first_response": first_response.name if first_response.is_file() else None,
+            "requests": responses,
+        }
+    write_json(directory / "responses.json", evidence)
+
+
 class Stage:
     def __init__(self, config_path, run_dir):
         self.config = config = read_json(config_path)
@@ -238,7 +261,7 @@ class Stage:
                 "The target Breakdance release must be v3.")
         return packages
 
-    def capture(self, directory, site_url, baseline=None):
+    def capture(self, directory, site_url, baseline=None, *, warmup=False):
         # Prove the HTTP listener serves this exact WordPress directory before rendering.
         token = secrets.token_urlsafe(24).encode()
         with tempfile.NamedTemporaryFile(dir=self.wp_path, prefix="creare-stage-", suffix=".txt") as sentinel:
@@ -253,6 +276,8 @@ class Stage:
             )
             require(found.returncode == 0 and found.stdout == token,
                     "The loopback HTTP server is not serving the verified WordPress staging directory.")
+        if warmup:
+            warm_visual_routes(self.url, self.visual["routes"], directory / "warmup")
         config = directory / "visual-config.json"
         write_json(config, self.visual)
         command = ["node", str(TOOL / "visual-check.mjs"), self.url, str(config), str(directory)]
@@ -462,7 +487,7 @@ def save_audit(target, directory, runtime):
     write_json(directory / "audit.json", report)
 
 
-def verify(stage, record, rollback=False):
+def verify(stage, record, rollback=False, *, warmup=False):
     target = target_matches(stage, record)
     group = "rollback-" if rollback else "verify-"
     directory = Path(tempfile.mkdtemp(prefix=group, dir=stage.run_dir))
@@ -474,7 +499,7 @@ def verify(stage, record, rollback=False):
                 "Bootstrap runtime does not match this phase.")
     content = stage.info("content")
     baseline = stage.run_dir / "before"
-    actual = stage.capture(directory, target["identity"]["site_url"], baseline)
+    actual = stage.capture(directory, target["identity"]["site_url"], baseline, warmup=warmup)
     before = read_json(baseline / "visual.json")
     changes = compare_visual(before, actual, float(stage.visual.get("geometry_tolerance_px", 0.5)))
     if content["media"]["missing_count"]:
@@ -533,7 +558,7 @@ def rollback(stage, record):
     write_json(stage.run_dir / "native-rollback.json", {"runtime": runtime, "content": restored, "changes": changes})
     require(not changes, "The restored native settings differ from the checkpoint. See native-rollback.json.")
     stage.info("clear-css")
-    return verify(stage, record, rollback=True)
+    return verify(stage, record, rollback=True, warmup=True)
 
 
 def upgrade(stage, record):
@@ -577,7 +602,7 @@ def upgrade(stage, record):
     record["state"] = "upgraded"
     record["native_changes"] = changes
     write_json(stage.run_dir / "checkpoint.json", record)
-    return verify(stage, record)
+    return verify(stage, record, warmup=True)
 
 
 def main(argv=None):

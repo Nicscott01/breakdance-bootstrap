@@ -311,6 +311,16 @@ python3 "$tool" --config "$config" --run-dir "$run" rollback --yes
   the supplied full file snapshot for any independent filesystem changes made
   during testing.
 
+After native CSS regeneration, `upgrade` and `rollback` send two bounded GET
+requests to each configured route on the verified loopback site before the
+browser comparison. Each verification directory keeps the first response body
+and both request statuses under `warmup/`. Redirect responses are recorded
+without following them. A cold Template Content Area can return HTTP 200 with
+an empty main area while Breakdance generates the template and page caches.
+This can occur on both v2 and v3. Review the saved first response separately
+from the warmed screenshots. Persistent missing content, assets or visual
+changes still fail the existing browser checks.
+
 Exit status 0 means the requested step passed. Status 2 means review is needed
 and points to the verification report. After an upgrade it leaves the clone on
 v3 so you can inspect the differences, make targeted builder edits, and rerun
@@ -362,7 +372,9 @@ normalization from actual control/ID/content changes.
    workflow, scoped to Breakdance and the shared Bootstrap release. Verify actual
    installed versions against the lock. On tested V3, `wp breakdance clear_cache`
    is the native CLI cache operation; inspect the installed help before using it.
-   Purge staging page and optimization caches and warm representative pages.
+   Purge staging page and optimization caches, then warm representative pages
+   after the final cache clear. Check whether the first and warmed requests
+   both contain the expected main content before interpreting visual differences.
    Keep native legacy selectors unless conversion is independently wanted.
 4. Fix confirmed extension conflicts at their owning source. Change only verified
    authored CSS fields through supported content APIs with revision/precondition
